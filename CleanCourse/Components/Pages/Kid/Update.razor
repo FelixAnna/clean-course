@@ -1,0 +1,74 @@
+﻿@page "/kids/{id:int}/update"
+@using Services.Kids
+@using Services.Kids.Models
+@using Services.Metadata
+@inject IKidService service
+@inject NavigationManager navigationManager
+
+
+<h3>宝宝</h3>
+
+<p>修改宝宝信息。<a href="/kids" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a></p>
+<hr class="hr" />
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="UpdateKid">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <table class="row gy-3 pe-1">
+        <thead>
+            <tr class="form-group">
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="form-group">
+                <td class="m-2">
+                    <label class="form-label">昵称：</label>
+                    <InputText @bind-Value="Model!.Name" class="form-control rounded" />
+                </td>
+                <td class="m-2">
+                    <label class="form-label">入学年龄：</label>
+                    <select @bind="Model.StartSchoolYear" class="form-select">
+                        @foreach (var year in Years)
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-primary my-2">保存</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    [SupplyParameterFromForm]
+    public AddKidModel Model { get; set; }
+
+    public int[] Years;
+
+    public Update()
+    {
+        Years = MetadataService.GetDefaultYears();
+        Model = MetadataService.GetDefaultKid();
+    }
+
+    protected override async void OnInitialized()
+    {
+        var kid = await service.GetByIdAsync(id);
+        Model = new AddKidModel()
+            {
+                Name = kid.Name,
+                StartSchoolYear = kid.StartSchoolYear
+            };
+    }
+
+    private async Task Submit()
+    {
+        await service.UpdateAsync(id, Model);
+        navigationManager.NavigateTo("/kids");
+    }
+}

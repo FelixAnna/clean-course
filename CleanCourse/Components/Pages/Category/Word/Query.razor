@@ -1,0 +1,210 @@
+﻿@page "/bookCategories/{sharedCode}/words"
+@using Services.Words
+@using Services.Words.Models
+@using Services.Metadata
+@inject IWordService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+@inject NavigationManager navigationManager
+
+<h3>字库</h3>
+
+<p>
+    查询字库单词/词语信息。
+    <a href="/bookCategories/@(sharedCode)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增/导入</a>
+    <a href="/bookCategories" class="btn btn-outline-primary " data-mdb-ripple-init>返回</a>
+</p>
+<hr class="hr" />
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputText @bind-Value="Model!.SharedCode" hidden="hidden" />
+    <table class="row gy-3 pe-1">
+        <thead>
+            <tr class="form-group">
+                <th ></th>
+                <th ></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="form-group">
+                <td class="m-2">
+                    <label class="form-label">课程：</label>
+                    <select @bind="Model.Course" class="form-select">
+                        @foreach (var course in Courses)
+                        {
+                            <option value="@course.Key">@course.Value</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                    <label class="form-label">
+                        单元：
+                    </label>
+                    <select @bind="Model.Unit" class="form-select">
+                        @foreach (var unit in Units)
+                        {
+                            <option value="@unit.Key">@unit.Value</option>
+                        }
+                    </select>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td class="m-2">
+                    <label class="form-label">单词/词语：</label>
+                    <InputText @bind-Value="Model!.Content" class="form-control rounded" />
+                </td>
+                <td>
+                    <label class="form-label">翻译/拼音：</label>
+                    <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
+                </td>
+             </tr>
+            <tr class="form-group">
+                <td class="m-2">
+                    <label class="form-label"></label>
+                    <button type="submit" class="btn btn-primary m-2" data-mdb-ripple-init>查询</button>
+                </td>
+                <td>
+                    
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</EditForm>
+<hr class="hr" />
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>单词/词语</th>
+                <th>翻译/拼音</th>
+                <th>课程/单元</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var x = 1;
+            }
+            @foreach (var word in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                    <td>@word.Explanation</td>
+                    <td>@word.Course/@word.Unit</td>
+                    <td>
+                        <a href="/bookCategories/@sharedCode/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
+                        <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (pageIndex > 1)
+            {
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+    [Parameter]
+    public string sharedCode { get; set; } = null!;
+
+    [SupplyParameterFromForm]
+    public SearchWordsCriteria Model { get; set; }
+
+    private SearchWordsResult result;
+
+    private Dictionary<string, string> Courses;
+    private Dictionary<int, string> Units;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<WordModel> currentItems;
+
+    public Query()
+    {
+        Courses = MetadataService.GetDefaultCourses();
+        Units = MetadataService.GetDefaultUnits();
+        Model = new SearchWordsCriteria();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageSize = appState.DefaultPageSize;
+        if (string.IsNullOrEmpty(sharedCode))
+        {
+            navigationManager.NavigateTo("/bookCategories", true);
+            return;
+        }
+
+        Model.SharedCode = sharedCode;
+
+        result = await service.GetWordsForBookCategoryAsync(Model);
+        Refresh(1);
+    }
+
+    private async Task Submit()
+    {
+        result = await service.GetWordsForBookCategoryAsync(Model);
+        Refresh(1);
+    }
+
+    private async Task Delete(int id, string content)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除字词也会清除所有与之关联的检查记录，您确定要删除： '{content}' 吗?"))
+            return;
+
+        if (await service.DeleteWordAsync(id))
+        {
+            result = new SearchWordsResult()
+                {
+                    Words = result.Words.Where(x => x.WordId != id).ToArray(),
+                    Count = result.Count - 1,
+                };
+            Refresh(pageIndex);
+        }
+    }
+
+    private void Refresh(int page)
+    {
+        totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
+        ChangePage(page);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = result.Words.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+}

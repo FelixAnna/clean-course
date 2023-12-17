@@ -1,0 +1,96 @@
+﻿@page "/bookCategories/{sharedCode}/words/{id:int}/update"
+@using Services.Words
+@using Services.Words.Models
+@using Services.Metadata
+@inject AppState appState
+@inject IWordService service
+@inject NavigationManager navigationManager
+
+
+<h3>单词/词语</h3>
+
+<p>为当前教材添加单词/词语。
+    <a href="/bookCategories/@(sharedCode)/words" class="btn btn-outline-primary " data-mdb-ripple-init>返回</a>
+</p>
+<hr class="hr" />
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="UpdateWord">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="row gy-3">
+        <div class="col-md-2">
+            <label class="form-label">
+                课程：
+            </label>
+            <select @bind="Model.Course" class="form-select">
+                @foreach (var course in Courses)
+                {
+                    <option value="@course.Key">@course.Value</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">单词/词语：</label>
+            <InputText @bind-Value="Model!.Content" class="form-control rounded" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">翻译/拼音：</label>
+            <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">
+                单元：
+            </label>
+            <select @bind="Model.Unit" class="form-select">
+                @foreach (var unit in Units)
+                {
+                    <option value="@unit.Key">@unit.Value</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label class="form-label"></label>
+        <button type="submit" class="form-control btn btn-outline-primary" data-mdb-ripple-init>保存</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string sharedCode { get; set; }=null!;
+
+    [Parameter]
+    public int id { get; set; }
+
+    [SupplyParameterFromForm]
+    public AddWordModel Model { get; set; }
+
+    private Dictionary<string, string> Courses;
+    private Dictionary<int, string> Units;
+
+    public Update()
+    {
+        Courses = MetadataService.GetDefaultCourses().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary();
+        Units = MetadataService.GetDefaultUnits().Where(x => x.Key > 0).ToDictionary();
+    }
+
+    protected override async void OnInitialized()
+    {
+        var word = await service.GetByIdAsync(id);
+        Model = new AddWordModel()
+            {
+                SharedCode = sharedCode,
+                Course = word.Course,
+                Unit = word.Unit,
+                Content = word.Content,
+                Explanation = word.Explanation,
+                Overwrite = "1",
+            };
+    }
+
+    private void Submit()
+    {
+        service.UpdateWordAsync(id, Model!);
+        navigationManager.NavigateTo($"/bookCategories/{sharedCode}/words");
+    }
+}

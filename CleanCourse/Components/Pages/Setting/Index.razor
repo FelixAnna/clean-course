@@ -1,0 +1,211 @@
+﻿@page "/settings"
+
+@using Services.Metadata
+@using Shared
+@using System.IO
+@inject IJSRuntime JS
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>设置</h3>
+
+<p>查看和修改设置</p>
+<hr class="hr" />
+@if(string.IsNullOrEmpty(dataFileLocation))
+{
+        <p><em> Loading...</em></p>
+}
+else
+{
+    <table class= "row gy-3 pe-1">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class= "form-group">
+            <td>
+                <label class= "col-form-label"> 每页显示：</label>
+            </td>
+            <td>
+                <div class= "col-form-label">
+                    <text @onclick = "@(e => ChangePageSize(-1))" class= "btn btn-secondary btn-sm px-3">
+                        -
+                    </text>
+                    <span class= "text-primary px-2">@(pageSize) </span>
+                    <text @onclick = "@(e => ChangePageSize(1))" class= "btn btn-secondary btn-sm px-3">
+                        +
+                    </text>
+                    <text class="text-info small">
+                        （表格每页最多显示条数）
+                    </text>
+                </div>
+            </td>
+        </tr>
+        <tr class= "form-group">
+            <td>
+                <label class= "col-form-label"> 最少检查：</label>
+            </td>
+            <td>
+                <div class= "col-form-label">
+                    <text @onclick = "@(e => ChangeCheckingThreshold(-1))" class= "btn btn-secondary btn-sm px-3">
+                        -
+                    </text>
+                    <span class= "text-primary px-2"> @(checkingThreshold) </span>
+                    <text @onclick = "@(e => ChangeCheckingThreshold(1))" class= "btn btn-secondary btn-sm px-3">
+                        +
+                    </text>
+                    <text class="text-info small">
+                        （每个单词/词语最少要检查的次数）
+                    </text>
+                </div>
+            </td>
+        </tr>
+        <tr class= "form-group">
+            <td>
+                <label class="col-form-label"> 最近检查：</label>
+            </td>
+            <td>
+                <div class= "col-form-label">
+                    <text @onclick = "@(e => ChangeRecentThreshold(-1))" class= "btn btn-secondary btn-sm px-3">
+                        -
+                    </text>
+                    <span class= "text-primary px-2"> @(recentThreshold) </span>
+                    <text @onclick = "@(e => ChangeRecentThreshold(1))" class= "btn btn-secondary btn-sm px-3">
+                        +
+                    </text>
+                    <text class="text-info small">
+                        （每个单词/词语最近检查需要全对的次数）
+                    </text>
+                </div>
+            </td>
+        </tr>
+        <tr class= "form-group row">
+            <td>
+                <label class= "col-form-label"> 数据文件：</label>
+            </td>
+            <td>
+                <div class= "col-form-label">
+                    <text class= "text-wrap text-break">@(dataFileLocation) </text>
+                </div>
+            </td>
+        </tr>
+        <tr class= "form-group">
+            <td>
+                <label class= "col-form-label"></label>
+            </td>
+            <td>
+                <div class= "col-form-label">
+                    <text @onclick = "@(e => Backup())" class= "btn btn-primary btn-sm">
+                        备份
+                    </text>
+                    <text @onclick = "@(e => Restore())" class= "btn btn-secondary btn-sm">
+                        恢复
+                    </text>
+                </div>
+            </td>
+        </tr>
+    </table>
+}
+
+@code {
+    private string dataFileLocation;
+    private int pageSize;
+    private int checkingThreshold;
+    private int recentThreshold;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dataFileLocation = Preferences.Get(Constants.DBFileLoacationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
+        pageSize = appState.DefaultPageSize;
+        checkingThreshold = appState.DefaultRecentThreshold;
+        recentThreshold = appState.DefaultRecentThreshold;
+    }
+
+    private void ChangePageSize(int delta)
+    {
+        appState.DefaultPageSize += delta;
+        if (appState.DefaultPageSize <1)
+        {
+            appState.DefaultPageSize = 1;
+        }
+
+        if (appState.DefaultPageSize> 100)
+        {
+            appState.DefaultPageSize = 100;
+        }
+
+        pageSize = appState.DefaultPageSize;
+    }
+
+    private void ChangeCheckingThreshold(int delta)
+    {
+        appState.DefaultCheckingThreshold += delta;
+        if (appState.DefaultCheckingThreshold <1)
+        {
+            appState.DefaultCheckingThreshold = 1;
+        }
+
+        if (appState.DefaultCheckingThreshold> 10)
+        {
+            appState.DefaultCheckingThreshold = 10;
+        }
+
+        checkingThreshold = appState.DefaultCheckingThreshold;
+    }
+
+    private void ChangeRecentThreshold(int delta)
+    {
+        appState.DefaultRecentThreshold += delta;
+        if (appState.DefaultRecentThreshold <1)
+        {
+            appState.DefaultRecentThreshold = 1;
+        }
+
+        if (appState.DefaultRecentThreshold> 10)
+        {
+            appState.DefaultRecentThreshold = 10;
+        }
+
+        recentThreshold = appState.DefaultRecentThreshold;
+    }
+
+    private async Task Restore()
+    {
+        await JSRuntime.InvokeAsync<object>("alert", "即将支持");
+    }
+
+    private Stream GetFileStream()
+    {
+
+        return File.OpenRead(dataFileLocation);
+    }
+
+    private async Task Backup()
+    {
+        var newFileName = dataFileLocation + "." + DateTime.Now.ToString("yyyyMMdd");
+        File.Copy(dataFileLocation, newFileName, true);
+        FileStream fileStream = new FileStream(newFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+        var fileName = $"backup-{DateTime.Now.ToString("yyyyMMdd")}.db";
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+
+        File.Delete(newFileName);
+        await JSRuntime.InvokeAsync<object>("alert", "已备份所有数据到下载(Download)文件夹, 文件名: " + fileName);
+    }
+}
+
+<script>
+    window.downloadFileFromStream = async (fileName, contentStreamReference) => {
+        const arrayBuffer = await contentStreamReference.arrayBuffer();
+        const blob = new Blob([arrayBuffer]);
+        const url = URL.createObjectURL(blob);
+        const anchorElement = document.createElement('a');
+        anchorElement.href = url;
+        anchorElement.download = fileName ?? '';
+        anchorElement.click();
+        anchorElement.remove();
+        URL.revokeObjectURL(url);
+    }
+</script>

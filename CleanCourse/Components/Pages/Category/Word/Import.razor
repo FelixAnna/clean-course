@@ -1,0 +1,194 @@
+﻿@page "/bookCategories/{sharedCode}/words/import"
+@using Services.Words
+@using Services.Words.Models
+@using Services.Metadata
+@using Services.Words.Services
+@inject AppState appState
+@inject IWordImportService importService
+@inject NavigationManager navigationManager
+
+
+<h3>单词/词语</h3>
+
+<p>为当前教材批量导入单词/词语。<a href="/bookCategories/@(sharedCode)/words" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a></p>
+<hr class="hr" />
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="ImportWord">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    
+    <table class="table">
+        <tr class="form-group">
+            <td class="m-2">
+                <label class="form-label">
+                    课程：
+                </label>
+                <select @bind="Model.Course" class="form-select">
+                    @foreach (var course in Courses)
+                    {
+                        <option value="@course.Key">@course.Value</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <label class="form-label">
+                    重复处理：
+                </label>
+                <select @bind="Model.Overwrite" class="form-select">
+                    @foreach (var option in DuplicateOptions)
+                    {
+                        <option value="@option.Key">@option.Value</option>
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+
+    <div class="form-group">
+        <label class="form-label">单词/词语：</label>
+        <textarea @bind="Model!.Content" class="form-control rounded" rows="8" placeholder="请从Excel/Csv复制多行粘贴到这里，每一行分别为：词语；注音；单元" />
+    </div>
+    <table class="table">
+        <tr class="form-group">
+            <td class="m-2">
+                <label class="form-label"></label>
+                <button type="button" @onclick="@(e => Preview())" class="form-control btn btn-outline-info m-1">
+                    预览
+                </button>
+            </td>
+            @if (previewWords != null)
+            {
+                <td>
+                    <label class="form-label"></label>
+                    <button type="button" @onclick="@(e => Clean())" class="form-control btn btn-outline-info m-2">
+                        清除
+                    </button>
+                </td>
+            }
+            <td>
+                <label class="form-label"></label>
+                <button type="submit" class="form-control btn btn-outline-primary m-1" data-mdb-ripple-init>
+                    保存
+                </button>
+            </td>
+        </tr>
+    </table>
+</EditForm>
+
+@if (previewWords != null && previewWords.Any())
+{
+    <hr class="hr" />
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>单词/词语</th>
+                <th>翻译/拼音</th>
+                <th>单元</th>
+                <th>课程</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var x = 1;
+            }
+            @foreach (var word in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td>@word.Content</td>
+                    <td>@word.Explanation</td>
+                    <td>@word.Unit</td>
+                    <td>@word.Course</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (pageIndex > 1)
+            {
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+    [Parameter]
+    public string sharedCode { get; set; } = null!;
+
+    [SupplyParameterFromForm]
+    public ImportWordsModel Model { get; set; }
+
+    private Dictionary<string, string> Courses;
+    private Dictionary<string, string> DuplicateOptions;
+    private IList<WordModel> previewWords;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<WordModel> currentItems;
+
+    public Import()
+    {
+        Courses = MetadataService.GetDefaultCourses().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary();
+        DuplicateOptions = MetadataService.GetDefaultDuplicateOption();
+    }
+
+    protected override void OnInitialized()
+    {
+        Model = new ImportWordsModel()
+            {
+                SharedCode = sharedCode,
+                Course = Courses.First().Key,
+                Overwrite = DuplicateOptions.First().Key,
+            };
+
+        pageSize = appState.DefaultPageSize;
+    }
+
+    private async Task Submit()
+    {
+        await importService.ImportWordsAsync(Model);
+        navigationManager.NavigateTo($"/bookCategories/{sharedCode}/words");
+    }
+
+    private async Task Preview()
+    {
+        if (string.IsNullOrWhiteSpace(Model.Content))
+        {
+            return;
+        }
+
+        previewWords = await importService.PreviewWordsAsync(Model);
+        totalPage = (int)Math.Ceiling(previewWords.Count * 1.0 / pageSize);
+        ChangePage(1);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = previewWords.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+
+    private void Clean()
+    {
+        currentItems.Clear();
+        previewWords.Clear();
+    }
+}

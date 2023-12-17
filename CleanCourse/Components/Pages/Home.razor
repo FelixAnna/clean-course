@@ -1,0 +1,100 @@
+﻿@page "/"
+
+@using Services.Kids
+@using Services.Kids.Models
+@using Services.BookCategories
+@using Services.BookCategories.Models
+@using Services.Metadata
+@using Shared
+@using System.IO
+@inject IJSRuntime JS
+@inject IBookCategoryService categoryService
+@inject IKidService kidService
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>我的</h3>
+
+<p>好好学习，劳逸结合。</p>
+<hr class="hr" />
+@if (string.IsNullOrEmpty(kidName) || string.IsNullOrEmpty(bookCategoryFullName))
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="row gy-3 pe-1">
+        <tr>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr class="form-group">
+            <td>
+                <label class="col-form-label">已选宝宝：</label>
+            </td>
+            <td>
+                <div class="col-form-label">
+                    <a href="/kids" class="link-primary"> @(kidName)</a>
+                </div>
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td>
+                <label class="col-form-label">已选教程：</label>
+            </td>
+            <td>
+                <div class="col-form-label">
+                    <a href="/bookCategories" class="link-primary "> @(bookCategoryFullName)</a>
+                </div>
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td>
+                <label class="col-form-label"></label>
+            </td>
+            <td>
+                <div class="col-form-label">
+                    <a href="/settings" class="btn btn-outline-primary">更多设置</a>
+                </div>
+            </td>
+        </tr>
+    </table>
+}
+@code {
+    private string kidName;
+    private string bookCategoryFullName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            KidModel kid;
+            BookCategoryModel category;
+            if (appState.KidId <= 0)
+            {
+                kid = await kidService.GetDefaultAsync();
+
+                appState.KidId = kid.Id;
+                appState.KidName = kid.Name;
+            }
+
+            if (string.IsNullOrEmpty(appState.SharedCode))
+            {
+                category = await categoryService.GetDefaultAsync();
+                appState.BookCategoryFullName = $"{category.CategoryName}-{category.Year}-{category.Grade}-{category.Semester}";
+                appState.SharedCode = category.SharedCode;
+            }
+        }catch(Exception ex)
+        {
+            Console.WriteLine(ex);
+            appState.KidId = -1;
+            appState.KidName = appState.KidName?? "设置";
+            appState.BookCategoryFullName = appState.BookCategoryFullName;
+        }
+        finally
+        {
+            kidName = appState.KidName;
+            bookCategoryFullName = appState.BookCategoryFullName;
+        }
+    }
+}

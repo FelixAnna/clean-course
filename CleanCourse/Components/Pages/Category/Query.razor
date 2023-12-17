@@ -1,0 +1,150 @@
+﻿@page "/bookCategories"
+@using Services.BookCategories
+@using Services.BookCategories.Models
+@inject IBookCategoryService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>教材</h3>
+
+<p>
+    这里显示所有已登记的教材信息。
+    <a href="/bookCategories/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
+</p>
+<hr class="hr" />
+
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>教材名</th>
+                <th>出版年</th>
+                <th>年级</th>
+                <th>学期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int x = 1;
+            }
+            @foreach (var category in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td>@category.CategoryName
+                        <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
+                    </td>
+                    <td>@category.Year</td>
+                    <td>@category.Grade</td>
+                    <td>@category.Semester</td>
+                    <td>
+                        <a href="/bookCategories/@(category.SharedCode)/words" class="btn btn-outline-primary m-1" data-mdb-ripple-init>字库</a>
+                        <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary m-1">更新</a>
+                        @if (!category.Selected)
+                        {
+                            <button @onclick="@(e => Select(category.Id, category.SharedCode, category.CategoryName))" class="btn btn-outline-info">
+                                设为默认
+                            </button>
+                            <button @onclick="@(e => Delete(category.Id, category.CategoryName))" class="btn btn-outline-danger m-2">
+                                删除
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if(pageIndex >1){
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+
+    private SearchBookCategoryResult result;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<BookCategoryModel> currentItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageSize = appState.DefaultPageSize;
+        result = await service.GetAllAsync();
+        Refresh(1);
+    }
+
+    private async Task Delete(int id, string name)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除教材也会清除所有关联字词和宝宝的检查记录，您确定要删除教材： '{name}' 吗?"))
+            return;
+
+        if (await service.DeleteAsync(id))
+        {
+
+            result = new SearchBookCategoryResult()
+                {
+                    Categories = result.Categories.Where(x => x.Id != id).ToArray(),
+                    Count = result.Count - 1,
+                };
+            Refresh(pageSize);
+        }
+    }
+
+    private async Task Select(int id, string code, string categoryName)
+    {
+        if (await service.SetDefaultAsync(id))
+        {
+            appState.SharedCode = code;
+            appState.CategoryName = categoryName;
+
+            result.Categories = result.Categories.Select(x =>
+            {
+                x.Selected = x.Id == id;
+                return x;
+            }); 
+            Refresh(pageSize);
+        }
+    }
+
+    private void Refresh(int page)
+    {
+        totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
+        ChangePage(page);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = result.Categories.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+}

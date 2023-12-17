@@ -1,0 +1,162 @@
+﻿@page "/history/{wordId:int}"
+@using Services.CheckingHistories
+@using Services.CheckingHistories.Models
+@inject ICheckingHistoryService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>检查记录</h3>
+
+<p>这里显示当前字的检查记录。<a href="/words" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a></p>
+<hr class="hr" />
+@if (historyRecords == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="row gy-3 pe-1">
+    <thead>
+        <tr class="form-group">
+            <th ></th>
+            <th ></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="form-group">
+            <td class="col-md-4">
+                <label class="form-label">宝宝：</label>
+                <span class="text-primary">@appState.KidName</span>
+            </td>
+            <td class="col-md-4">
+                <label class="form-label">课程：</label>
+                <span class="text-primary">@historyRecords.Word.Course</span>
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td class="col-md-4">
+                @if (historyRecords.Word.IsEnglish())
+                {
+                    <label class="form-label">单词：</label>
+                }
+                else
+                {
+                    <label class="form-label">词语：</label>
+                }
+                <span class="text-primary">@historyRecords.Word.Content</span>
+            </td>
+            <td class="col-md-4">
+                @if (historyRecords.Word.IsEnglish())
+                {
+                    <label class="form-label">翻译：</label>
+                }
+                else
+                {
+                    <label class="form-label">拼音：</label>
+                }
+                <span class="text-primary">@historyRecords.Word.Explanation</span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <hr class="hr" />
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">结果</th>
+                <th scope="col">备注</th>
+                <th scope="col">记录时间</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int x = 1;
+            }
+            @foreach (var history in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td>@(history.IsCorrect?"正确":"错误")</td>
+                    <td>@history.GetFormattedRemark()</td>
+                    <td>@history.CreatedTime</td>
+                    <td>
+                        <button @onclick="@(e => Delete(history.Id))" class="btn btn-outline-danger">
+                            删除
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if(pageIndex >1){
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+    [Parameter]
+    public int WordId { get; set; }
+
+    private CheckingHistoryModel historyRecords;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<CheckingHistory> currentItems;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageSize = appState.DefaultPageSize;
+        historyRecords = await service.GetByWordAndKidAsync(WordId, appState.KidId);
+        Refresh(1);
+    }
+
+    private async Task Delete(int id)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"您确定要删除检查记录： 'No={id}' 吗?"))
+            return;
+
+        if (await service.DeleteAsync(id))
+        {
+            historyRecords.Histories = historyRecords.Histories.Where(x => x.Id != id).ToArray();
+            historyRecords.Count = historyRecords.Count - 1;
+
+            Refresh(pageIndex);
+        }
+    }
+
+    private void Refresh(int page)
+    {
+        totalPage = (int)Math.Ceiling(historyRecords.Count * 1.0 / pageSize);
+        ChangePage(page);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = historyRecords.Histories.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+}

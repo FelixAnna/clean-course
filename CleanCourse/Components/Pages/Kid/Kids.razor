@@ -1,0 +1,150 @@
+﻿@page "/kids"
+@using Services.Kids
+@using Services.Kids.Models
+@inject IKidService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>宝宝</h3>
+
+<p>
+    这里显示所有已登记的宝宝信息。
+    <a href="/kids/add" class="btn btn-outline-primary" >新增</a>
+</p>
+<hr class="hr" />
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th>#</th>
+                <th>名字</th>
+                <th>入学</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int x = 1;
+            }
+
+            @foreach (var kid in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td>
+                        @kid.Name
+                        <span class="text-primary">@(kid.Selected == true ? "[默认]" : "")</span>
+                    </td>
+                    <td>@kid.StartSchoolYear</td>
+                    <td>
+                        <a href="/kids/@(kid.Id)/update" class="btn btn-outline-primary m-1">更新</a>
+                        @if (kid.Selected != true)
+                        {
+                            <span @onclick="@(e => Select(kid.Id, kid.Name))" class="btn btn-primary link-primary m-1">
+                                设为默认
+                            </span>
+                        }
+                        @if (kid.Selected != true)
+                        {
+                            <button @onclick="@(e => Delete(kid.Id, kid.Name))" class="btn btn-outline-danger m-1">
+                                取消登记
+                            </button>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (pageIndex > 1)
+            {
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">Previous</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+
+    private SearchKidResult result;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<KidModel> currentItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageSize = appState.DefaultPageSize;
+        result = await service.GetAllAsync();
+        Refresh(1);
+    }
+
+    private async Task Delete(int id, string name)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除有关联字词的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
+            return;
+
+        if (await service.FreeKidAsync(id))
+        {
+            result = new SearchKidResult()
+                {
+                    Kids = result.Kids.Where(x => x.Id != id).ToArray(),
+                    Count = result.Count - 1,
+                };
+            Refresh(pageSize);
+        }
+    }
+
+    private async Task Select(int id, string name)
+    {
+        if (await service.SetDefaultAsync(id))
+        {
+            appState.KidId = id;
+            appState.KidName = name;
+
+            result.Kids = result.Kids.Select(x =>
+                    {
+                        x.Selected = x.Id == id;
+                        return x;
+                    });
+            Refresh(pageSize);
+        }
+    }
+
+    private void Refresh(int page)
+    {
+        totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
+        ChangePage(page);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = result.Kids.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+}
