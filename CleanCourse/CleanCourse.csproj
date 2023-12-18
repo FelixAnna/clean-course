@@ -23,7 +23,7 @@
         <ApplicationTitle>CleanCourse</ApplicationTitle>
 
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.cleancourse</ApplicationId>
+        <ApplicationId>com.metadlw.cleancourse</ApplicationId>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -41,21 +41,7 @@
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
       <AndroidPackageFormat>apk</AndroidPackageFormat>
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
     </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-    </PropertyGroup>
-  
 
     <ItemGroup>
         <!-- App Icon -->
