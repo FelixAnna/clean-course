@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFrameworks>net8.0;net8.0-android</TargetFrameworks>
+      <TargetFrameworks>net8.0-android</TargetFrameworks>
+      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -34,65 +35,27 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</SupportedOSPlatformVersion>
         <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.19041.0</TargetPlatformMinVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-        <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-        <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-        <PackageCertificateThumbprint>22010314B2FCB59E43B556E21629DEF05B283015</PackageCertificateThumbprint>
-        <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
-        <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-        <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
-        <GenerateTestArtifacts>True</GenerateTestArtifacts>
-        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
-        <DefaultLanguage>zh-cn</DefaultLanguage>
-        <PlatformTarget>x64</PlatformTarget>
+        
         <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
     </PropertyGroup>
-  
-    <PropertyGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows' and '$(RuntimeIdentifierOverride)' != ''">
-      <RuntimeIdentifier>$(RuntimeIdentifierOverride)</RuntimeIdentifier>
-    </PropertyGroup>
-  
-    <PropertyGroup>
-      <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
-      <NeutralLanguage>zh</NeutralLanguage>
-    </PropertyGroup>
-  
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-      <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    </PropertyGroup>
-  
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-      <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    </PropertyGroup>
-  
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-      <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    </PropertyGroup>
-  
-    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
-      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
-      <GenerateAssemblyInfo>True</GenerateAssemblyInfo>
-    </PropertyGroup>
-  
+
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
       <AndroidPackageFormat>apk</AndroidPackageFormat>
-      <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
-      <DebugSymbols>True</DebugSymbols>
-      <AndroidKeyStore>False</AndroidKeyStore>
-      <AndroidSigningStorePass>Xsqj2310</AndroidSigningStorePass>
+      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
     </PropertyGroup>
-  
+
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
-      <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
-      <AndroidKeyStore>False</AndroidKeyStore>
-      <AndroidSigningStorePass>Xsqj2310</AndroidSigningStorePass>
+      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.19041.0|AnyCPU'">
+      <ApplicationId>com.metadlw.cleancourse</ApplicationId>
     </PropertyGroup>
   
-    <PropertyGroup>
-      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
-    </PropertyGroup>
 
     <ItemGroup>
         <!-- App Icon -->
@@ -113,21 +76,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Remove="appsettings.json" />
-      <Content Remove="Resources\Raw\appsettings.json" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Resources\Raw\CleanCourse.db" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Include="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -139,19 +87,6 @@
       <ProjectReference Include="..\Database.SQLite\Database.SQLite.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Properties\PublishProfiles\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <MauiAsset Update="Resources\Raw\appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </MauiAsset>
-      <MauiAsset Update="Resources\Raw\CleanCourse.db">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </MauiAsset>
     </ItemGroup>
 
 </Project>
