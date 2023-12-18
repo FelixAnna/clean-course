@@ -19,7 +19,7 @@ public static class DependencyInjections
         var courseDBFileName = configuration.GetConnectionString("CourseDB");
 
         var fileName = Task.Run(() => CopyFileToAppDataDirectory(courseDBFileName)).Result;
-        Preferences.Set(Constants.DBFileLoacationKey, fileName);
+        Preferences.Set(Constants.DBFileLocationKey, fileName);
 
         SQLiteDependencyInjections.Register(services, fileName);
         //SqlServerDependencyInjections.Register(services, configuration);

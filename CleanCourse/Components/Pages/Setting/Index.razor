@@ -115,7 +115,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        dataFileLocation = Preferences.Get(Constants.DBFileLoacationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
+        dataFileLocation = Preferences.Get(Constants.DBFileLocationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
         pageSize = appState.DefaultPageSize;
         checkingThreshold = appState.DefaultRecentThreshold;
         recentThreshold = appState.DefaultRecentThreshold;

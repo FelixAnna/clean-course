@@ -23,23 +23,23 @@ namespace Services.Words.Services
 
         public async Task<IList<CheckingHistory>> ImportHistoryAsync(ImportWordHistoryModel model)
         {
-            var tobeInserted = await GetWordWithHistoryAsync(model);
+            var toBeInserted = await GetWordWithHistoryAsync(model);
 
-            if (tobeInserted.Count <= 0)
+            if (toBeInserted.Count <= 0)
             {
                 return new List<CheckingHistory>();
             }
 
             if (model.IsOverwrite)
             {
-                await checkingService.RemoveAllByWordIdAsync(model.KidId, tobeInserted.Select(x => x.Id).ToArray());
+                await checkingService.RemoveAllByWordIdAsync(model.KidId, toBeInserted.Select(x => x.Id).ToArray());
             }
 
-            var historyList = tobeInserted.SelectMany(x =>
+            var historyList = toBeInserted.SelectMany(x =>
             {
                 var checkingList = new List<AddCheckingHistoryModel>();
 
-                for (var i = 0; i < x.CheckingHistories.Count(); i++)
+                for (var i = 0; i < x.CheckingHistories.Count; i++)
                 {
                     var remark = CheckingRemark.Incorrect;
                     if (Enum.TryParse(x.CheckingHistories[i], out CheckingRemark status))
@@ -79,14 +79,14 @@ namespace Services.Words.Services
 
         public async Task<IList<WordModel>> PreviewHistoryAsync(ImportWordHistoryModel model)
         {
-            var tobeInserted = await GetWordWithHistoryAsync(model);
+            var toBeInserted = await GetWordWithHistoryAsync(model);
 
-            if (tobeInserted.Count <= 0)
+            if (toBeInserted.Count <= 0)
             {
                 return new List<WordModel>();
             }
 
-            return tobeInserted.Select(x => new WordModel()
+            return toBeInserted.Select(x => new WordModel()
             {
                 Course = x.Course,
                 Content = x.Content,
@@ -94,7 +94,7 @@ namespace Services.Words.Services
                 Unit = x.Unit,
                 SharedCode = model.SharedCode,
                 WordId = x.Id,
-                CheckingHistorySummary = $"{x.History.Count(x => x == true)}/ {x.History.Count()}",
+                CheckingHistorySummary = $"{x.History.Count(x => x == true)}/ {x.History.Count}",
             }).ToList();
         }
 

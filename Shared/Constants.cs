@@ -2,7 +2,7 @@
 {
     public static class Constants
     {
-        public static string DBFileLoacationKey = nameof(DBFileLoacationKey);
-        public static string DefaultDBFileName = "CourseContext.db";
+        public static string DBFileLocationKey => nameof(DBFileLocationKey);
+        public static string DefaultDBFileName => "CourseContext.db";
     }
 }

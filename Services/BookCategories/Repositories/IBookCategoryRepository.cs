@@ -7,9 +7,9 @@ public interface IBookCategoryRepository
 {
     Task<IEnumerable<BookCategoryEntity>> GetAllAsync();
     Task<BookCategoryEntity> AddAsync(AddBookCategoryModel model);
-    Task<bool> RemoveAsync(int categorId);
-    Task<bool> SetDefaultAsync(int categorId);
+    Task<bool> RemoveAsync(int categoryId);
+    Task<bool> SetDefaultAsync(int categoryId);
     Task<BookCategoryEntity?> GetDefaultAsync();
-    Task<BookCategoryEntity?> GetByIdAsync(int categorId);
+    Task<BookCategoryEntity?> GetByIdAsync(int categoryId);
     Task<BookCategoryEntity> UpdateAsync(int id, AddBookCategoryModel model);
 }
