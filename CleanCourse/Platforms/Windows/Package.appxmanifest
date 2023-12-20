@@ -6,13 +6,13 @@
   xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
   IgnorableNamespaces="uap rescap">
 
-  <Identity Name="CleanCourse" Publisher="CN=航禾爸爸" Version="1.0.32.0" />
+  <Identity Name="CleanCourse" Publisher="CN=72A7008B-1BC1-4E91-B541-8A38F5C8C0C3" Version="1.0.1.0" />
 
-  <mp:PhoneIdentity PhoneProductId="B1620388-764A-4EAA-847D-0AB00943F943" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="9e5babac-60f6-4081-8152-86f6cae2f14a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>$placeholder$</DisplayName>
-    <PublisherDisplayName>User Name</PublisherDisplayName>
+    <DisplayName>学习助手</DisplayName>
+    <PublisherDisplayName>FelixAnna</PublisherDisplayName>
     <Logo>$placeholder$.png</Logo>
   </Properties>
 
@@ -28,7 +28,7 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="$placeholder$"
+        DisplayName="CleanCourse"
         Description="$placeholder$"
         Square150x150Logo="$placeholder$.png"
         Square44x44Logo="$placeholder$.png"

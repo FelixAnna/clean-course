@@ -37,6 +37,24 @@
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
         
         <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+        
+        <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+        
+        <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+        
+        <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+        
+        <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+        
+        <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+        
+        <GenerateTestArtifacts>True</GenerateTestArtifacts>
+        
+        <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+        
+        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+        
+        <DefaultLanguage>zh-cn</DefaultLanguage>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
