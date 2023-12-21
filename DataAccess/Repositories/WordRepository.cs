@@ -19,8 +19,12 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
     public async Task<IList<WordEntity>> FindAsync(SearchWordsCriteria request)
     {
-        var words = courseContext.Words.Where(x => x.SharedCode == request.SharedCode);
+        var words = courseContext.Words.AsQueryable();
 
+        if (!string.IsNullOrEmpty(request.SharedCode))
+        {
+            words = words.Where(x => x.SharedCode == request.SharedCode);
+        }
         if (request.Unit > 0)
         {
             words = words.Where(x => x.Unit == request.Unit);

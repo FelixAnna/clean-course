@@ -12,7 +12,10 @@
 
 <h3>单词/词语</h3>
 
-<p>查询所有单词/词语信息。<a href="/history/import" class="btn btn-outline-primary" data-mdb-ripple-init>导入检查记录</a></p>
+<p>查询所有单词/词语信息。
+    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
+    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
+</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
     <DataAnnotationsValidator />

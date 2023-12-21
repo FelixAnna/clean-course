@@ -9,6 +9,39 @@ namespace Services.Words.Services
     {
         private readonly IWordRepository repository = repository;
         private readonly ICheckingHistoryService checkingService = checkingService;
+
+        public async Task<string> ExportCheckingStatusAsync(ExportWordHistoryModel model)
+        {
+            var request = new SearchWordsCriteria()
+            {
+                KidId = model.KidId,
+                SharedCode = model.SharedCode
+            };
+
+            var words = await repository.FindAsync(request);
+
+            var index = 1;
+            var results = words.Select(x =>
+            {
+                var wordInfo = $"{index++}\t{x.Content}\t{x.Explanation}\t{x.Unit}\t{x.Course}";
+                var checkingInfo = x.CheckingHistories
+                                    .OrderBy(y => y.CreatedTime)
+                                    .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : (y.IsCorrect?1:0)) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
+                                    .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}\t{value}");
+                var data = new
+                {
+                    x.SharedCode,
+                    x.Course,
+                    x.Unit,
+                    Value = $"{wordInfo}\t{checkingInfo}"
+                };
+
+                return data;
+            }).OrderBy(x => x.SharedCode).ThenBy(x=>x.Course).ThenBy(x => x.Unit)
+            .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{Environment.NewLine}{value.Value}");
+
+            return results;
+        }
         public async Task SaveCheckingStatusAsync(int wordId, int kidId, CheckingRemark status)
         {
             var model = new AddCheckingHistoryModel()
