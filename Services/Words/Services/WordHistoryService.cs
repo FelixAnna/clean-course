@@ -72,35 +72,15 @@ namespace Services.Words.Services
             {
                 var checkingList = new List<AddCheckingHistoryModel>();
 
-                for (var i = 0; i < x.CheckingHistories.Count; i++)
+                for (var i = 0; i < x.CheckingRecords?.Count; i++)
                 {
-                    var remark = CheckingRemark.Incorrect;
-                    if (Enum.TryParse(x.CheckingHistories[i], out CheckingRemark status))
-                    {
-                        remark = status;
-                    }
-                    else if (int.TryParse(x.CheckingHistories[i], out int intStatus))
-                    {
-                        try
-                        {
-                            remark = (CheckingRemark)intStatus;
-                        }
-                        catch
-                        {
-                            remark = CheckingRemark.Incorrect;
-                        }
-                    }
-                    else
-                    {
-                        remark = CheckingRemark.Incorrect;
-                    }
-
                     checkingList.Add(new AddCheckingHistoryModel()
                     {
-                        IsCorrect = x.History[i],
+                        IsCorrect = x.CheckingHistories[i].Remark == CheckingRemark.Correct,
                         KidId = model.KidId,
                         WordId = x.Id,
-                        Remark = x.History[i] ? CheckingRemark.Correct.ToString() : status.ToString(),
+                        Remark = x.CheckingHistories[i].Remark.ToString(),
+                        CreatedTime = x.CheckingHistories[i].CreatedTime
                     });
                 }
                 return checkingList;
@@ -127,7 +107,7 @@ namespace Services.Words.Services
                 Unit = x.Unit,
                 SharedCode = model.SharedCode,
                 WordId = x.Id,
-                CheckingHistorySummary = $"{x.History.Count(x => x == true)}/ {x.History.Count}",
+                CheckingHistorySummary = $"{x.CheckingHistories.Count(x => x.Remark == CheckingRemark.Correct)}/ {x.CheckingHistories.Count}",
             }).ToList();
         }
 
@@ -137,8 +117,9 @@ namespace Services.Words.Services
             var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             for (int i = 0; i < wordsText?.Length; i++)
             {
+                //230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
                 var wordParts = wordsText[i].Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
-                if (wordParts.Length < 3 || !int.TryParse(wordParts[2], out int unit))
+                if (wordParts.Length < 4 || !int.TryParse(wordParts[3], out int unit))
                 {
                     continue;
                 }
@@ -147,19 +128,19 @@ namespace Services.Words.Services
                 {
                     SharedCode = model.SharedCode,
                     Course = model.Course,
-                    Content = wordParts[0],
-                    Explanation = wordParts[1],
-                    Unit = int.Parse(wordParts[2]),
+                    Content = wordParts[1],
+                    Explanation = wordParts[2],
+                    Unit = int.Parse(wordParts[3]),
                 };
 
-                if (wordParts.Length == 4)
+                if (wordParts.Length >= 5)
                 {
-                    addModel.Course = wordParts[3];
+                    addModel.Course = wordParts[4];
                 }
 
-                if (wordParts.Length > 4)
+                if (wordParts.Length > 5)
                 {
-                    addModel.CheckingHistories = wordParts.Skip(4).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                    addModel.CheckingRecords = wordParts.Skip(5).Where(x => !string.IsNullOrEmpty(x)).ToArray();
                 }
 
                 providedWords.Add(addModel);
@@ -191,10 +172,10 @@ namespace Services.Words.Services
                                  Unit = word.Unit,
                                  Explanation = word.Explanation,
                                  Overwrite = history.Overwrite,
-                                 CheckingHistories = history.CheckingHistories,
+                                 CheckingRecords = history.CheckingRecords,
                              }).ToList();
 
-            return providedWords.Where(x => x.History != null && x.History.Any()).ToList();
+            return providedWords.Where(x => x.CheckingHistories != null && x.CheckingHistories.Any()).ToList();
         }
     }
 }

@@ -46,7 +46,7 @@ public class CheckingHistoryRepository(AbstractCourseContext courseContext) : IC
                 KidId = x.KidId,
                 IsCorrect = x.IsCorrect,
                 Remark = x.Remark,
-                CreatedTime = time.AddDays(i++),
+                CreatedTime = x.CreatedTime ?? time.AddDays(i++),
             });
         });
 

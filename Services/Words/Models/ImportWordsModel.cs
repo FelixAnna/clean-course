@@ -14,7 +14,7 @@ public class ImportWordsModel
     public string Overwrite { get; set; }
 
     [Required]
-    [StringLength(8000, ErrorMessage = "Content is too long.")]
+    [StringLength(80000, ErrorMessage = "Content is too long.")]
     public string Content { get; set; }
 
     public bool IsOverwrite => Overwrite == "1";

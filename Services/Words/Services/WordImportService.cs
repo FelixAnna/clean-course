@@ -57,7 +57,7 @@ namespace Services.Words.Services
             for (int i = 0; i < wordsText?.Length; i++)
             {
                 var wordParts = wordsText[i].Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
-                if (wordParts.Length < 3 || !int.TryParse(wordParts[2], out int unit))
+                if (wordParts.Length < 4 || !int.TryParse(wordParts[3], out int unit))
                 {
                     continue;
                 }
@@ -66,14 +66,14 @@ namespace Services.Words.Services
                 {
                     SharedCode = model.SharedCode,
                     Course = model.Course,
-                    Content = wordParts[0],
-                    Explanation = wordParts[1],
-                    Unit = int.Parse(wordParts[2]),
+                    Content = wordParts[1],
+                    Explanation = wordParts[2],
+                    Unit = int.Parse(wordParts[3]),
                 };
 
-                if (wordParts.Length == 4)
+                if (wordParts.Length >= 5)
                 {
-                    addModel.Course = wordParts[3];
+                    addModel.Course = wordParts[4];
                 }
 
                 tobeInsertedNewWords.Add(addModel);
