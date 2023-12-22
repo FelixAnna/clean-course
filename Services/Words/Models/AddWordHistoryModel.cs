@@ -6,6 +6,9 @@ namespace Services.Words.Models
     {
         public int Id { get; set; }
         public IList<string>? CheckingRecords { get; set; }
+
+        public AddWordHistoryModel() { }
+        
         public IList<CheckingResult> CheckingHistories => CheckingRecords?.Select(x => new CheckingResult(x)).ToArray();
 
         public record CheckingResult
@@ -48,5 +51,48 @@ namespace Services.Words.Models
                 CreatedTime = createdTime;
             }
         };
+    }
+    public static class AddWordHistoryModelConvertor
+    {
+        const int contentIndex = 1;
+        const int explanationIndex = contentIndex + 1;
+        const int UnitIndex = contentIndex + 2;
+        const int CourseIndex = contentIndex + 3;
+        const int HistoryIndex = contentIndex + 4;
+
+        public static bool IsValid(string[] values)
+        {
+            if (values.Length < UnitIndex + 1 || !int.TryParse(values[UnitIndex], out int unit))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static AddWordHistoryModel FromLine(string shareCode, string course, string[] values)
+        {
+            var model = new AddWordHistoryModel()
+            {
+                SharedCode = shareCode,
+                Course = course,
+                Content = values[contentIndex],
+                Explanation = values[explanationIndex],
+                Unit = int.Parse(values[UnitIndex]),
+            };
+
+            if (values.Length > CourseIndex && !string.IsNullOrEmpty(values[CourseIndex]))
+            {
+                model.Course = values[CourseIndex];
+            }
+
+            if (values.Length > HistoryIndex)
+            {
+                model.CheckingRecords = values.Skip(HistoryIndex).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            }
+
+            return model;
+        }
+
     }
 }

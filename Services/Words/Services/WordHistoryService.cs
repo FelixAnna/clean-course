@@ -114,36 +114,19 @@ namespace Services.Words.Services
         private static List<AddWordHistoryModel> ParseWords(ImportWordHistoryModel model)
         {
             var providedWords = new List<AddWordHistoryModel>();
-            var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            for (int i = 0; i < wordsText?.Length; i++)
+            if (!string.IsNullOrEmpty(model.Content))
             {
-                //230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
-                var wordParts = wordsText[i].Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
-                if (wordParts.Length < 4 || !int.TryParse(wordParts[3], out int unit))
+                var wordsText = model.Content.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+                foreach(var line in wordsText)
                 {
-                    continue;
+                    //example: 230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
+                    var wordParts = line.Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
+                    if (AddWordHistoryModelConvertor.IsValid(wordParts))
+                    {
+                        var addModel = AddWordHistoryModelConvertor.FromLine(model.SharedCode, model.Course, wordParts);
+                        providedWords.Add(addModel);
+                    }
                 }
-
-                var addModel = new AddWordHistoryModel()
-                {
-                    SharedCode = model.SharedCode,
-                    Course = model.Course,
-                    Content = wordParts[1],
-                    Explanation = wordParts[2],
-                    Unit = int.Parse(wordParts[3]),
-                };
-
-                if (wordParts.Length >= 5)
-                {
-                    addModel.Course = wordParts[4];
-                }
-
-                if (wordParts.Length > 5)
-                {
-                    addModel.CheckingRecords = wordParts.Skip(5).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                }
-
-                providedWords.Add(addModel);
             }
 
             return providedWords;
