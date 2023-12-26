@@ -1,8 +1,8 @@
 ﻿@page "/history/export"
-@using Services.Words
-@using Services.Words.Models
-@using Services.Metadata
-@using Services.Words.Services
+@using Services.CheckingHistories;
+@using Services.Metadata;
+@using Services.CheckingHistories.Services;
+@using Services.CheckingHistories.Models;
 @inject AppState appState
 @inject IWordHistoryService service
 @inject NavigationManager navigationManager
@@ -44,7 +44,7 @@
 @code {
 
     [SupplyParameterFromForm]
-    public ExportWordHistoryModel Model { get; set; }
+    public ExportCheckingHistoryCriteria Model { get; set; }
 
     private Dictionary<string, string> Categories;
     private string Content;
@@ -61,7 +61,7 @@
             {"", "全部" },
             {appState.SharedCode, appState.BookCategoryFullName },
         };
-        Model = new ExportWordHistoryModel()
+        Model = new ExportCheckingHistoryCriteria()
             {
                 SharedCode = appState.SharedCode,
                 KidId = appState.KidId,

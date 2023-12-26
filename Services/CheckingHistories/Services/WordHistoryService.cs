@@ -1,16 +1,17 @@
 ﻿using Entities.Entities;
 using Services.CheckingHistories;
 using Services.CheckingHistories.Models;
+using Services.Words;
 using Services.Words.Models;
 
-namespace Services.Words.Services
+namespace Services.CheckingHistories.Services
 {
     public class WordHistoryService(IWordRepository repository, ICheckingHistoryService checkingService) : IWordHistoryService
     {
         private readonly IWordRepository repository = repository;
         private readonly ICheckingHistoryService checkingService = checkingService;
 
-        public async Task<string> ExportCheckingStatusAsync(ExportWordHistoryModel model)
+        public async Task<string> ExportCheckingStatusAsync(ExportCheckingHistoryCriteria model)
         {
             var request = new SearchWordsCriteria()
             {
@@ -26,7 +27,7 @@ namespace Services.Words.Services
                 var wordInfo = $"{index++}\t{x.Content}\t{x.Explanation}\t{x.Unit}\t{x.Course}";
                 var checkingInfo = x.CheckingHistories
                                     .OrderBy(y => y.CreatedTime)
-                                    .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : (y.IsCorrect?1:0)) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
+                                    .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
                                     .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}\t{value}");
                 var data = new
                 {
@@ -37,7 +38,7 @@ namespace Services.Words.Services
                 };
 
                 return data;
-            }).OrderBy(x => x.SharedCode).ThenBy(x=>x.Course).ThenBy(x => x.Unit)
+            }).OrderBy(x => x.SharedCode).ThenBy(x => x.Course).ThenBy(x => x.Unit)
             .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{Environment.NewLine}{value.Value}");
 
             return results;
@@ -54,7 +55,7 @@ namespace Services.Words.Services
             await checkingService.AddAsync(model);
         }
 
-        public async Task<IList<CheckingHistory>> ImportHistoryAsync(ImportWordHistoryModel model)
+        public async Task<IList<CheckingHistory>> ImportHistoryAsync(ImportCheckingHistoryModel model)
         {
             var toBeInserted = await GetWordWithHistoryAsync(model);
 
@@ -90,7 +91,7 @@ namespace Services.Words.Services
             return results.ToList();
         }
 
-        public async Task<IList<WordModel>> PreviewHistoryAsync(ImportWordHistoryModel model)
+        public async Task<IList<WordModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
         {
             var toBeInserted = await GetWordWithHistoryAsync(model);
 
@@ -111,13 +112,13 @@ namespace Services.Words.Services
             }).ToList();
         }
 
-        private static List<AddWordHistoryModel> ParseWords(ImportWordHistoryModel model)
+        private static List<AddWordHistoryModel> ParseWords(ImportCheckingHistoryModel model)
         {
             var providedWords = new List<AddWordHistoryModel>();
             if (!string.IsNullOrEmpty(model.Content))
             {
                 var wordsText = model.Content.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-                foreach(var line in wordsText)
+                foreach (var line in wordsText)
                 {
                     //example: 230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
                     var wordParts = line.Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
@@ -131,7 +132,7 @@ namespace Services.Words.Services
 
             return providedWords;
         }
-        private async Task<IList<AddWordHistoryModel>> GetWordWithHistoryAsync(ImportWordHistoryModel model)
+        private async Task<IList<AddWordHistoryModel>> GetWordWithHistoryAsync(ImportCheckingHistoryModel model)
         {
             var providedWords = ParseWords(model);
             var affectedExistingWords = new List<WordEntity>();

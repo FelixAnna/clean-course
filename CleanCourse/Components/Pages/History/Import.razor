@@ -1,8 +1,9 @@
 ﻿@page "/history/import"
-@using Services.Words
-@using Services.Words.Models
+@using Services.CheckingHistories
+@using Services.CheckingHistories.Models
 @using Services.Metadata
-@using Services.Words.Services
+@using Services.CheckingHistories.Services
+@using Services.Words
 @inject AppState appState
 @inject IWordHistoryService service
 @inject NavigationManager navigationManager
@@ -122,7 +123,7 @@
 @code {
 
     [SupplyParameterFromForm]
-    public ImportWordHistoryModel Model { get; set; }
+    public ImportCheckingHistoryModel Model { get; set; }
 
     private Dictionary<string, string> Courses;
     private Dictionary<string, string> ImportOptions;
@@ -141,7 +142,7 @@
 
     protected override void OnInitialized()
     {
-        Model = new ImportWordHistoryModel()
+        Model = new ImportCheckingHistoryModel()
             {
                 SharedCode = appState.SharedCode,
                 KidId = appState.KidId,

@@ -2,8 +2,8 @@
 {
     public class SearchBookCategoryResult
     {
-        public IEnumerable<BookCategoryModel> Categories { get; set; }
+        public required IEnumerable<BookCategoryModel> Categories { get; set; }
 
-        public int Count { get; set; }
+        public required int Count { get; set; }
     }
 }

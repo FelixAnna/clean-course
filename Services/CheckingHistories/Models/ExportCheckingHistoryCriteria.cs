@@ -1,6 +1,6 @@
-﻿namespace Services.Words.Models
+﻿namespace Services.CheckingHistories.Models
 {
-    public class ExportWordHistoryModel
+    public class ExportCheckingHistoryCriteria
     {
 
         public int KidId { get; set; }
