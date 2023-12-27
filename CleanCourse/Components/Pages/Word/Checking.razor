@@ -5,6 +5,7 @@
 @using Services.Metadata
 @using Services.CheckingHistories.Services
 @inject IWordService service
+@inject IWordHistoryService historyService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 @inject NavigationManager navigationManager
@@ -12,90 +13,45 @@
 <h3>单词/词语听写</h3>
 
 <p>查询所有单词/词语的听写信息。
-    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
-    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
+    <a href="/words" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a>
 </p>
 <hr class="hr" />
-<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <InputText @bind-Value="Model!.SharedCode" hidden="hidden"/>
-    <InputNumber @bind-Value="Model.KidId" hidden="hidden" />
-    <table class="row gy-3 pe-1">
-        <thead>
-            <tr class="form-group">
-                <th ></th>
-                <th ></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="form-group">
-                <td class="m-2">
-                    <div >
-                        <label class="form-label">课程：</label>
-                        <select @bind="Model.Course" class="form-select small">
-                            @foreach (var course in Courses)
-                            {
-                                <option value="@course.Key">@course.Value</option>
-                            }
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <label class="form-label">
-                            单元：
-                        </label>
-                        <select @bind="Model.Unit" class="form-select">
-                            @foreach (var unit in Units)
-                            {
-                                <option value="@unit.Key">@unit.Value</option>
-                            }
-                        </select>
-                    </div>
-                </td>
-            </tr>
-            <tr class="form-group">
-                <td class="m-2">
-                    <div>
-                        <label class="form-label">单词/词语：</label>
-                        <InputText @bind-Value="Model!.Content" class="form-control rounded" />
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <label class="form-label">翻译/拼音：</label>
-                        <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
-                    </div>
-                </td>
-            </tr>
-            <tr class="form-group">
-                <td class="m-2">
-                    <div>
-                        <label class="form-label">检查情况：</label>
-
-                        <select @bind="Model.CheckingResult" class="form-select" aria-describedby="search-addon">
-                            @{
-                                int index = 0;
-                            }
-                            @foreach (var status in CheckingStatuses)
-                            {
-                                <option value="@index">@status</option>
-                                index++;
-                            }
-                        </select>
-                    </div>
-                </td>
-                <td>
-                    <div>
-                        <label class="form-label"></label>
-                        <button type="submit" class="form-control btn btn-outline-primary" data-mdb-ripple-init>查询</button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</EditForm>
+<table class="row gy-3 pe-1">
+    <thead>
+        <tr class="form-group">
+            <th ></th>
+            <th ></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="form-group">
+            <td class="m-2">
+                <div >
+                    <label class="form-label">课程：</label>
+                    <select @bind="Model.Course" class="form-select small">
+                        @foreach (var course in Courses)
+                        {
+                            <option value="@course.Key">@course.Value</option>
+                        }
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <label class="form-label">
+                        单元：
+                    </label>
+                    <select @bind="Model.Unit" class="form-select">
+                        @foreach (var unit in Units)
+                        {
+                            <option value="@unit.Key">@unit.Value</option>
+                        }
+                    </select>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <hr class="hr" />
 @if (result == null)
 {
@@ -116,7 +72,7 @@ else
         </thead>
         <tbody>
             @{
-                var x = 1;
+                var Ax = 1;
             }
             @foreach (var word in currentItems)
             {
@@ -133,27 +89,44 @@ else
                 {
                     <tr>
                         <td>
-                            @if (!checkedWords.Contains(word.WordId))
-                            {
-                                <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success m-2 btn-sm">
-                                    准备检查
+                        </td>
+                        <td>
+                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Correct))" class="btn btn-success m-2 btn-sm">
+                                正确
+                            </button>
+                        </td>
+                        <td>
+                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning m-2 btn-sm">
+                                错误
+                            </button>
+                        </td>
+                        
+                        @if (word.IsEnglish())
+                        {
+                            <td>
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger m-1 btn-sm">
+                                    拼写 错误
                                 </button>
-                            }
-                            else
-                            {
-                                <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-success m-2 btn-sm">
-                                    取消准备
+                            </td>
+                            <td>
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Translation))" class="btn btn-danger m-1 btn-sm">
+                                    翻译 错误
                                 </button>
-                            }
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
+                            </td>
+                        }
+                        else if (word.IsChinese())
+                        {
+                            <td>
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Word))" class="btn btn-danger m-1 btn-sm">
+                                    文字 错误
+                                </button>
+                            </td>
+                            <td>
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Pinyin))" class="btn btn-danger m-1 btn-sm">
+                                    拼音 错误
+                                </button>
+                            </td>
+                        }
                     </tr>
                 }
             }
@@ -195,6 +168,7 @@ else
 
     public Words()
     {
+        checkedWords = new List<int>();
         toCheckedWords = new List<int>();
         Courses = MetadataService.GetDefaultCourses();
         Units = MetadataService.GetDefaultUnits();
@@ -226,9 +200,16 @@ else
 
     private async Task Submit()
     {
+        checkedWords = new List<int>();
         toCheckedWords = new List<int>();
         result = await service.GetWordsAsync(Model);
         Refresh(1);
+    }
+
+    private async Task SaveCheckingStatus(int id, CheckingRemark status)
+    {
+        await historyService.SaveCheckingStatusAsync(id, appState.KidId, status);
+        checkedWords.Add(id);
     }
 
     private async Task ToCheck(int id)
