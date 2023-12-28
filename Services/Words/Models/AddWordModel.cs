@@ -30,11 +30,10 @@ public static class AddWordModelConvertor
     const int explanationIndex = contentIndex + 1;
     const int UnitIndex = contentIndex + 2;
     const int CourseIndex = contentIndex + 3;
-    const int HistoryIndex = contentIndex + 4;
 
     public static bool IsValid(string[] values)
     {
-        if (values.Length < UnitIndex + 1 || !int.TryParse(values[UnitIndex], out int unit))
+        if (values.Length < UnitIndex + 1 || !int.TryParse(values[UnitIndex], out _))
         {
             return false;
         }

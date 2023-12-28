@@ -1,18 +1,22 @@
-﻿@page "/words"
+﻿@page "/words/checking"
 @using Services.CheckingHistories.Models
 @using Services.Words
 @using Services.Words.Models
 @using Services.Metadata
 @using Services.CheckingHistories.Services
+@using Services.Words.Services
 @inject IWordService service
 @inject IWordHistoryService historyService
+@inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 @inject NavigationManager navigationManager
 
 <h3>单词/词语听写</h3>
 
-<p>查询所有单词/词语的听写信息。
+<p>新增听写信息。
+    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
+    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
     <a href="/words" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a>
 </p>
 <hr class="hr" />
@@ -27,26 +31,16 @@
         <tr class="form-group">
             <td class="m-2">
                 <div >
-                    <label class="form-label">课程：</label>
-                    <select @bind="Model.Course" class="form-select small">
-                        @foreach (var course in Courses)
-                        {
-                            <option value="@course.Key">@course.Value</option>
-                        }
-                    </select>
+                    <label class="form-label">宝宝：</label>
+                    <span class="text-primary">@appState.KidName</span>
                 </div>
             </td>
             <td>
                 <div>
                     <label class="form-label">
-                        单元：
+                        教材：
                     </label>
-                    <select @bind="Model.Unit" class="form-select">
-                        @foreach (var unit in Units)
-                        {
-                            <option value="@unit.Key">@unit.Value</option>
-                        }
-                    </select>
+                    <span class="text-primary">@appState.BookCategoryFullName</span>
                 </div>
             </td>
         </tr>
@@ -72,7 +66,7 @@ else
         </thead>
         <tbody>
             @{
-                var Ax = 1;
+                var x = 1;
             }
             @foreach (var word in currentItems)
             {
@@ -147,18 +141,9 @@ else
 }
 
 @code {
-
-    [SupplyParameterFromForm]
-    public SearchWordsCriteria Model { get; set; }
-
     private SearchWordsResult result;
 
-    private Dictionary<string, string> Courses;
-    private Dictionary<int, string> Units;
-    private string[] CheckingStatuses;
-
     private List<int> checkedWords;
-    private List<int> toCheckedWords;
 
     private int pageIndex;
     private int totalPage;
@@ -166,14 +151,9 @@ else
     private IList<WordModel> currentItems;
 
 
-    public Words()
+    public Checking()
     {
         checkedWords = new List<int>();
-        toCheckedWords = new List<int>();
-        Courses = MetadataService.GetDefaultCourses();
-        Units = MetadataService.GetDefaultUnits();
-        CheckingStatuses = MetadataService.GetDefaultCheckingStatuses();
-        Model = new SearchWordsCriteria();
     }
 
     protected override async Task OnInitializedAsync()
@@ -191,18 +171,7 @@ else
             return;
         }
 
-        Model.SharedCode = appState.SharedCode;
-        Model.KidId = appState.KidId;
-
-        result = await service.GetWordsAsync(Model);
-        Refresh(1);
-    }
-
-    private async Task Submit()
-    {
-        checkedWords = new List<int>();
-        toCheckedWords = new List<int>();
-        result = await service.GetWordsAsync(Model);
+        result = preCheckService.GetAll(appState.KidId, appState.SharedCode);
         Refresh(1);
     }
 
@@ -210,16 +179,7 @@ else
     {
         await historyService.SaveCheckingStatusAsync(id, appState.KidId, status);
         checkedWords.Add(id);
-    }
-
-    private async Task ToCheck(int id)
-    {
-        toCheckedWords.Add(id);
-    }
-
-    private async Task CancelCheck(int id)
-    {
-        toCheckedWords.Remove(id);
+        preCheckService.Remove(appState.KidId, id);
     }
 
     private void Refresh(int page)

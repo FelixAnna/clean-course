@@ -18,6 +18,7 @@ public static class ServiceDependencyInjections
         services.AddSingleton<ICheckingHistoryService, CheckingHistoryService>();
         services.AddSingleton<IWordHistoryService, WordHistoryService>();
         services.AddSingleton<IWordImportService, WordImportService>();
+        services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
 
         return services;
     }
