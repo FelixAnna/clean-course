@@ -8,8 +8,8 @@ namespace DataAccess.Repositories;
 
 public class WordRepository(AbstractCourseContext courseContext, Func<int> checkingThreshold, Func<int> recentThreshold) : IWordRepository
 {
-    private Func<int> CheckingThreshold = checkingThreshold;
-    private Func<int> RecentThreshold = recentThreshold;
+    private readonly Func<int> CheckingThreshold = checkingThreshold;
+    private readonly Func<int> RecentThreshold = recentThreshold;
     private readonly AbstractCourseContext courseContext = courseContext;
 
     public async Task<WordEntity?> GetByIdAsync(int id)
