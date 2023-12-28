@@ -51,24 +51,30 @@
         <tr class="form-group">
             <td class="m-2">
                 <label class="form-label"></label>
-                <button type="button" @onclick="@(e => Preview())" class="form-control btn btn-outline-info m-1">
-                    预览
-                </button>
+                <div class="form-floating">
+                    <button type="button" @onclick="@(e => Preview())" class="form-control btn btn-outline-info m-1">
+                        预览
+                    </button>
+                </div>
             </td>
         @if(previewWords != null)
         {
             <td>
                 <label class="form-label"></label>
+                <div class="form-floating">
                     <button type="button" @onclick="@(e => Clean())" class="form-control btn btn-outline-info m-2">
-                    清除
-                </button>
+                        清除
+                    </button>
+                </div>
             </td>
         }
             <td>
                 <label class="form-label"></label>
-                <button type="submit" class="form-control btn btn-outline-primary m-1" data-mdb-ripple-init>
-                    保存
-                </button>
+                <div class="form-floating">
+                    <button type="submit" class="form-control btn btn-outline-primary m-1" data-mdb-ripple-init>
+                        保存
+                    </button>
+                </div>
             </td>
         </tr>
     </table>

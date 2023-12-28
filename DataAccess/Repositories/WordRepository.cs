@@ -38,7 +38,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         IList<WordEntity> results = await words.ToListAsync();
         if (request.KidId > 0)
         {
-            results = await words.Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId)).ToListAsync();
+            results = await words.AsNoTracking().Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId)).ToListAsync();
 
             if ((ECheckingResult)request.CheckingResult != ECheckingResult.None)
             {

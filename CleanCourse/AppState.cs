@@ -5,7 +5,6 @@ public class AppState
     public int KidId { get; set; }
     public string KidName { get; set; }
     public string SharedCode { get; set; }
-    public string CategoryName { get; set; }
     public string BookCategoryFullName { get; set; }
 
     public int DefaultPageSize

@@ -17,4 +17,6 @@ public class BookCategoryModel(BookCategoryEntity entity)
     public string Semester { get; set; } = entity.Semester;
 
     public bool Selected { get; set; } = entity.Selected;
+
+    public string BookCategoryFullName => $"{CategoryName}-{Year}-{Grade}-{Semester}";
 }

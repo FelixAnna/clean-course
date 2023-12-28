@@ -115,7 +115,7 @@ else
         if (await service.SetDefaultAsync(id))
         {
             appState.SharedCode = code;
-            appState.CategoryName = categoryName;
+            appState.BookCategoryFullName = result.Categories.First(x=>x.Id == id).BookCategoryFullName;
 
             result.Categories = result.Categories.Select(x =>
             {

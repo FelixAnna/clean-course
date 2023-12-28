@@ -81,7 +81,7 @@ else
             if (string.IsNullOrEmpty(appState.SharedCode))
             {
                 category = await categoryService.GetDefaultAsync();
-                appState.BookCategoryFullName = $"{category.CategoryName}-{category.Year}-{category.Grade}-{category.Semester}";
+                appState.BookCategoryFullName = category.BookCategoryFullName;
                 appState.SharedCode = category.SharedCode;
             }
         }catch(Exception ex)
