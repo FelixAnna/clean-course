@@ -6,6 +6,6 @@ namespace Services.WordAndHistory.Services
     {
         SearchWordAndHistoryResult GetAll(int kidId,string sharedCode);
         void Remove(int kidId, int id);
-        void Add(int kidId, WordModel word);
+        void Add(int kidId, WordHistoryModel word);
     }
 }

@@ -3,9 +3,8 @@
 @using Services.CheckingHistories.Models
 @using Services.Metadata
 @using Services.CheckingHistories.Services
-@using Services.WordAndHistory
 @inject AppState appState
-@inject IWordHistoryService service
+@inject IWordHistoryBatchService service
 @inject NavigationManager navigationManager
 
 
@@ -133,12 +132,12 @@
 
     private Dictionary<string, string> Courses;
     private Dictionary<string, string> ImportOptions;
-    private IList<WordModel> previewWords;
+    private IList<Services.WordAndHistory.WordHistoryModel> previewWords;
 
     private int pageIndex;
     private int totalPage;
     private int pageSize;
-    private IList<WordModel> currentItems;
+    private IList<Services.WordAndHistory.WordHistoryModel> currentItems;
 
     public Import()
     {

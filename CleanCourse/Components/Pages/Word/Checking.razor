@@ -5,8 +5,8 @@
 @using Services.Metadata
 @using Services.CheckingHistories.Services
 @using Services.WordAndHistory.Services
-@inject IWordService service
-@inject IWordHistoryService historyService
+@inject             Services.WordAndHistory.IWordHistoryService service
+@inject             Services.CheckingHistories.Services.IWordHistoryBatchService historyService
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -146,7 +146,7 @@ else
     private int pageIndex;
     private int totalPage;
     private int pageSize;
-    private IList<WordModel> currentItems;
+    private IList<WordHistoryModel> currentItems;
 
 
     public Checking()

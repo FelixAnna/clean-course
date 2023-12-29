@@ -3,7 +3,7 @@ using Services.WordAndHistory.Repositories;
 
 namespace Services.WordAndHistory;
 
-public class WordService(IWordRepository repository) : IWordService
+public class WordHistoryService(IWordRepository repository) : IWordHistoryService
 {
     private readonly IWordRepository repository = repository;
 
@@ -13,7 +13,7 @@ public class WordService(IWordRepository repository) : IWordService
 
         var results = words.Select(x =>
         {
-            return new WordModel(x);
+            return new WordHistoryModel(x);
         }).OrderBy(x => x.Course).ThenBy(x => x.Unit).ToList();
 
         return new SearchWordAndHistoryResult()

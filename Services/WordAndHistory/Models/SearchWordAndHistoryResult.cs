@@ -2,7 +2,7 @@
 
 public class SearchWordAndHistoryResult
 {
-    public IEnumerable<WordModel> Words { get; set; }
+    public IEnumerable<WordHistoryModel> Words { get; set; }
 
     public int Count { get; set; }
 }

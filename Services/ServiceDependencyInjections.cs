@@ -15,10 +15,10 @@ public static class ServiceDependencyInjections
     {
         services.AddSingleton<IBookCategoryService, BookCategoryService>();
         services.AddSingleton<IKidService, KidService>();
-        services.AddSingleton<IWordService, WordService>();
+        services.AddSingleton<WordAndHistory.IWordHistoryService, WordAndHistory.WordHistoryService>();
         services.AddSingleton<ICheckingHistoryService, CheckingHistoryService>();
-        services.AddSingleton<IWordHistoryService, WordHistoryService>();
-        services.AddSingleton<IWordImportService, WordImportService>();
+        services.AddSingleton<CheckingHistories.Services.IWordHistoryBatchService, CheckingHistories.Services.WordHistoryBatchService>();
+        services.AddSingleton<IWordBatchService, WordBatchService>();
         services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
 
         return services;

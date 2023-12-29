@@ -3,11 +3,11 @@ using Services.WordAndHistory;
 
 namespace Services.CheckingHistories.Services
 {
-    public interface IWordHistoryService
+    public interface IWordHistoryBatchService
     {
         Task<string> ExportCheckingStatusAsync(ExportCheckingHistoryCriteria model);
         Task SaveCheckingStatusAsync(int wordId, int kidId, CheckingRemark status);
         Task<IList<CheckingHistory>> ImportHistoryAsync(ImportCheckingHistoryModel model);
-        Task<IList<WordModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model);
+        Task<IList<WordHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model);
     }
 }

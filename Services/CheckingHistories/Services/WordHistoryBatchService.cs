@@ -1,5 +1,4 @@
 ﻿using Entities.Entities;
-using Services.CheckingHistories;
 using Services.CheckingHistories.Models;
 using Services.WordAndHistory;
 using Services.WordAndHistory.Models;
@@ -7,7 +6,7 @@ using Services.WordAndHistory.Repositories;
 
 namespace Services.CheckingHistories.Services
 {
-    public class WordHistoryService(IWordRepository repository, ICheckingHistoryService checkingService) : IWordHistoryService
+    public class WordHistoryBatchService(IWordRepository repository, ICheckingHistoryService checkingService) : IWordHistoryBatchService
     {
         private readonly IWordRepository repository = repository;
         private readonly ICheckingHistoryService checkingService = checkingService;
@@ -92,16 +91,16 @@ namespace Services.CheckingHistories.Services
             return results.ToList();
         }
 
-        public async Task<IList<WordModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
+        public async Task<IList<WordHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
         {
             var toBeInserted = await GetWordWithHistoryAsync(model);
 
             if (toBeInserted.Count <= 0)
             {
-                return new List<WordModel>();
+                return new List<WordHistoryModel>();
             }
 
-            return toBeInserted.Select(x => new WordModel()
+            return toBeInserted.Select(x => new WordHistoryModel()
             {
                 Course = x.Course,
                 Content = x.Content,

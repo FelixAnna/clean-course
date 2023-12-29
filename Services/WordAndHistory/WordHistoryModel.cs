@@ -4,10 +4,10 @@ using System.Globalization;
 
 namespace Services.WordAndHistory;
 
-public class WordModel : BaseWordModel
+public class WordHistoryModel : BaseWordModel
 {
-    public WordModel() { }
-    public WordModel(WordEntity entity)
+    public WordHistoryModel() { }
+    public WordHistoryModel(WordEntity entity)
     {
         WordId = entity.WordId;
         SharedCode = entity.SharedCode;

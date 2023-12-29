@@ -2,7 +2,7 @@
 
 namespace Services.WordAndHistory;
 
-public interface IWordService
+public interface IWordHistoryService
 {
     Task<SearchWordAndHistoryResult> GetWordsAsync(SearchWordAndHistoryCriteria request);
 }
