@@ -128,9 +128,10 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         return false;
     }
 
-    public async Task RemoveAllAsync(params WordEntity[] entities)
+    public async Task UpdateAllAsync(params WordEntity[] entities)
     {
-        courseContext.Words.RemoveRange(entities);
+        courseContext.Words.AttachRange(entities);
+        courseContext.Words.UpdateRange(entities);
         await courseContext.SaveChangesAsync();
     }
 }

@@ -10,6 +10,6 @@ namespace Services.Words
         Task<IEnumerable<WordEntity>> AddAsync(params AddWordModel[] models);
         Task<WordEntity> UpdateAsync(int id, AddWordModel model);
         Task<bool> RemoveAsync(int wordId);
-        Task RemoveAllAsync(params WordEntity[] entities);
+        Task UpdateAllAsync(params WordEntity[] entities);
     }
 }

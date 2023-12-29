@@ -15,11 +15,11 @@ namespace Services.Words.Services
                 SharedCode = model.SharedCode,
                 Course = model.Course,
                 Overwrite = model.Overwrite,
-                Content = $"{model.Content};{model.Explanation};{model.Unit}"
+                Content = $"1;{model.Content};{model.Explanation};{model.Unit};{model.Course}"
             };
-            var (tobeInserted, tobeDeleted) = await GetWords(importModel);
+            var (tobeInserted, tobeUpdated) = await GetWords(importModel);
 
-            await repository.RemoveAllAsync([.. tobeDeleted]);
+            await repository.UpdateAllAsync([.. tobeUpdated]);
             var result = await repository.AddAsync([.. tobeInserted]);
 
             return new WordModel(result.First());
@@ -27,9 +27,9 @@ namespace Services.Words.Services
 
         public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeDeleted) = await GetWords(model);
+            var (tobeInserted, tobeUpdated) = await GetWords(model);
 
-            await repository.RemoveAllAsync([.. tobeDeleted]);
+            await repository.UpdateAllAsync([.. tobeUpdated]);
             var results = await repository.AddAsync([.. tobeInserted]);
 
             return results.Select(x => new WordModel(x)).ToList();
@@ -37,9 +37,16 @@ namespace Services.Words.Services
 
         public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, _) = await GetWords(model);
+            var (tobeInserted, tobeUpdated) = await GetWords(model);
 
-            return tobeInserted.Select(x => new WordModel()
+            return tobeInserted.Concat(tobeUpdated.Select(x=>new AddWordModel()
+            {
+                Content = x.Content,
+                SharedCode = x.SharedCode,
+                Course = x.Course,
+                Unit = x.Unit,
+                Explanation = x.Explanation,
+            })).Select(x => new WordModel()
             {
                 Course = x.Course,
                 Content = x.Content,
@@ -70,7 +77,7 @@ namespace Services.Words.Services
         private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(ImportWordsModel model)
         {
             var tobeInsertedNewWords = ParseWords(model);
-            var tobeDeletedDuplicates = new List<WordEntity>();
+            var tobeUpdated = new List<WordEntity>();
 
             var existingWords = await repository.FindAsync(new SearchWordsCriteria()
             {
@@ -80,14 +87,24 @@ namespace Services.Words.Services
 
             if (model.IsOverwrite)
             {
-                tobeDeletedDuplicates = existingWords.Where(x => tobeInsertedNewWords.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content && y.Unit == x.Unit)).ToList();
+                foreach(var w in existingWords)
+                {
+                    var nw = tobeInsertedNewWords.Where(nw => w.SharedCode == nw.SharedCode && w.Course == nw.Course && w.Content == nw.Content && w.Unit == nw.Unit).FirstOrDefault();
+                    if(nw != null)
+                    {
+                        w.Explanation = nw.Explanation;
+                        tobeUpdated.Add(w);
+                    }
+                }
+
+                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content && y.Unit == x.Unit)).ToList();
             }
             else
             {
                 tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content && y.Unit == x.Unit)).ToList();
             }
 
-            return (tobeInsertedNewWords, tobeDeletedDuplicates);
+            return (tobeInsertedNewWords, tobeUpdated);
         }
     }
 }

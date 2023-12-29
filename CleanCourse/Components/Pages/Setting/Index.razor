@@ -171,7 +171,7 @@ else
 
     private async Task Restore()
     {
-        await JSRuntime.InvokeAsync<object>("alert", "即将支持");
+        await JSRuntime.InvokeAsync<object>("alert", "复制之前备份的数据文件到目前的数据文件位置，重命名以覆盖其即可（覆盖时你可能需要暂时退出本程序，自动恢复后续会支持）。");
     }
 
     private Stream GetFileStream()
