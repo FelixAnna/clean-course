@@ -1,6 +1,6 @@
 ﻿using Services.CheckingHistories.Models;
 using Services.CheckingHistories.Repositories;
-using Services.Words;
+using Services.WordAndHistory.Repositories;
 
 namespace Services.CheckingHistories;
 

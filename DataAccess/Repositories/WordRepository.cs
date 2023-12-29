@@ -1,8 +1,9 @@
 ﻿using Entities;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
-using Services.Words;
-using Services.Words.Models;
+using Services.BookCategoryWords.Models;
+using Services.WordAndHistory.Models;
+using Services.WordAndHistory.Repositories;
 
 namespace DataAccess.Repositories;
 
@@ -40,32 +41,35 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         {
             results = await words.AsNoTracking().Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId)).ToListAsync();
 
-            if ((ECheckingResult)request.CheckingResult != ECheckingResult.None)
+            if (request is SearchWordAndHistoryCriteria historyRequest)
             {
-                switch ((ECheckingResult)request.CheckingResult)
+                if ((ECheckingResult)historyRequest.CheckingResult != ECheckingResult.None)
                 {
-                    case ECheckingResult.Unchecked:
-                        results = results.Where(x => !x.CheckingHistories.Any()).ToList();
-                        break;
-                    case ECheckingResult.Success:
-                        results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.All(y => y.IsCorrect)).ToList();
-                        break;
-                    case ECheckingResult.LastFailed:
-                        results = results.Where(x => x.CheckingHistories.Any() && !x.CheckingHistories.Last().IsCorrect).ToList();
-                        break;
-                    case ECheckingResult.UsedFailed:
-                        results = results.Where(x => x.CheckingHistories.Any(y => !y.IsCorrect)).ToList();
-                        break;
-                    case ECheckingResult.InFrequent:
-                        var threshold = CheckingThreshold();
-                        results = results.Where(x => x.CheckingHistories.Count <= threshold && x.CheckingHistories.Count > 0).ToList();
-                        break;
-                    case ECheckingResult.RecentFailed:
-                        var threshold2 = RecentThreshold();
-                        results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.OrderByDescending(y => y.CreatedTime).Take(threshold2).Any(z => !z.IsCorrect)).ToList();
-                        break;
-                    default:
-                        break;
+                    switch ((ECheckingResult)historyRequest.CheckingResult)
+                    {
+                        case ECheckingResult.Unchecked:
+                            results = results.Where(x => !x.CheckingHistories.Any()).ToList();
+                            break;
+                        case ECheckingResult.Success:
+                            results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.All(y => y.IsCorrect)).ToList();
+                            break;
+                        case ECheckingResult.LastFailed:
+                            results = results.Where(x => x.CheckingHistories.Any() && !x.CheckingHistories.Last().IsCorrect).ToList();
+                            break;
+                        case ECheckingResult.UsedFailed:
+                            results = results.Where(x => x.CheckingHistories.Any(y => !y.IsCorrect)).ToList();
+                            break;
+                        case ECheckingResult.InFrequent:
+                            var threshold = CheckingThreshold();
+                            results = results.Where(x => x.CheckingHistories.Count <= threshold && x.CheckingHistories.Count > 0).ToList();
+                            break;
+                        case ECheckingResult.RecentFailed:
+                            var threshold2 = RecentThreshold();
+                            results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.OrderByDescending(y => y.CreatedTime).Take(threshold2).Any(z => !z.IsCorrect)).ToList();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }

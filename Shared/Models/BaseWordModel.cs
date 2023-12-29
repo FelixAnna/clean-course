@@ -4,7 +4,11 @@
     {
         public int WordId { get; set; }
 
+        public string SharedCode { get; set; }
+
         public string Course { get; set; }
+
+        public int Unit { get; set; }
 
         public string Content { get; set; }
 

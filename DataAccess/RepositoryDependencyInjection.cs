@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Services.BookCategories.Repositories;
 using Services.CheckingHistories.Repositories;
 using Services.Kids.Repositories;
-using Services.Words;
+using Services.WordAndHistory.Repositories;
 
 namespace DataAccess;
 

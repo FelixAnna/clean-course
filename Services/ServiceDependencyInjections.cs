@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services.BookCategories;
+using Services.BookCategoryWords;
 using Services.CheckingHistories;
 using Services.CheckingHistories.Services;
 using Services.Kids;
-using Services.Words;
-using Services.Words.Services;
+using Services.WordAndHistory;
+using Services.WordAndHistory.Services;
 
 namespace Services;
 

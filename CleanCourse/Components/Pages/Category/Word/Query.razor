@@ -1,8 +1,8 @@
 ﻿@page "/bookCategories/{sharedCode}/words"
-@using Services.Words
-@using Services.Words.Models
+@using Services.BookCategoryWords
+@using Services.BookCategoryWords.Models
 @using Services.Metadata
-@inject IWordService service
+@inject IWordImportService service
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 @inject NavigationManager navigationManager
@@ -18,7 +18,7 @@
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <InputText @bind-Value="Model!.SharedCode" hidden="hidden" />
+    <InputText @bind-Value="Model.SharedCode" hidden="hidden" />
     <table class="row gy-3 pe-1">
         <thead>
             <tr class="form-group">
@@ -159,7 +159,6 @@ else
         }
 
         Model.SharedCode = sharedCode;
-
         result = await service.GetWordsForBookCategoryAsync(Model);
         Refresh(1);
     }

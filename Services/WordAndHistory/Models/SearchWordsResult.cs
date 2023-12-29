@@ -1,6 +1,6 @@
-﻿namespace Services.Words.Models;
+﻿namespace Services.WordAndHistory.Models;
 
-public class SearchWordsResult
+public class SearchWordAndHistoryResult
 {
     public IEnumerable<WordModel> Words { get; set; }
 

@@ -2,7 +2,7 @@
 using Shared.Models;
 using System.Globalization;
 
-namespace Services.Words;
+namespace Services.WordAndHistory;
 
 public class WordModel : BaseWordModel
 {
@@ -19,9 +19,7 @@ public class WordModel : BaseWordModel
         SetHistorySummary(entity.CheckingHistories);
     }
 
-    public string SharedCode { get; set; }
-
-    public int Unit { get; set; }
+    
     public string? CheckingHistorySummary { get; set; }
 
     public void SetHistorySummary(IEnumerable<CheckingHistoryEntity> histories)

@@ -1,12 +1,12 @@
-﻿using Services.Words.Models;
+﻿using Services.WordAndHistory.Models;
 
-namespace Services.Words.Services
+namespace Services.WordAndHistory.Services
 {
     public class WordPreCheckService : IWordPreCheckService
     {
         private static Dictionary<int, List<WordModel>> _preCheckWordsForKids = [];
 
-        public SearchWordsResult GetAll(int kidId, string sharedCode)
+        public SearchWordAndHistoryResult GetAll(int kidId, string sharedCode)
         {
             if (!_preCheckWordsForKids.ContainsKey(kidId))
             {
@@ -15,7 +15,7 @@ namespace Services.Words.Services
 
             var words = _preCheckWordsForKids[kidId].Where(x=>x.SharedCode == sharedCode).ToList();
 
-            return new SearchWordsResult()
+            return new SearchWordAndHistoryResult()
             {
                 Words = words,
                 Count = words.Count()

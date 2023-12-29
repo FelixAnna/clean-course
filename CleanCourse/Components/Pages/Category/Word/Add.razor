@@ -1,10 +1,8 @@
 ﻿@page "/bookCategories/{sharedCode}/words/add"
-@using Services.Words
-@using Services.Words.Models
+@using Services.BookCategoryWords
+@using Services.BookCategoryWords.Models
 @using Services.Metadata
-@using Services.Words.Services
 @inject AppState appState
-@inject IWordService service
 @inject IWordImportService importService
 @inject NavigationManager navigationManager
 

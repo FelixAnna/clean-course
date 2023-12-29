@@ -1,10 +1,10 @@
 ﻿@page "/words/checking"
 @using Services.CheckingHistories.Models
-@using Services.Words
-@using Services.Words.Models
+@using Services.WordAndHistory
+@using Services.WordAndHistory.Models
 @using Services.Metadata
 @using Services.CheckingHistories.Services
-@using Services.Words.Services
+@using Services.WordAndHistory.Services
 @inject IWordService service
 @inject IWordHistoryService historyService
 @inject IWordPreCheckService preCheckService
@@ -139,7 +139,7 @@ else
 }
 
 @code {
-    private SearchWordsResult result;
+    private SearchWordAndHistoryResult result;
 
     private List<int> checkedWords;
 

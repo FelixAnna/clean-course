@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Services.Words.Models;
+namespace Services.BookCategoryWords.Models;
 
 public class SearchWordsCriteria
 {
@@ -19,18 +19,4 @@ public class SearchWordsCriteria
 
     [Required]
     public int KidId { get; set; }
-
-    [Required]
-    public int CheckingResult { get; set; }
-}
-
-public enum ECheckingResult
-{
-    None,
-    Unchecked,
-    Success,
-    LastFailed,
-    UsedFailed,
-    InFrequent,
-    RecentFailed
 }

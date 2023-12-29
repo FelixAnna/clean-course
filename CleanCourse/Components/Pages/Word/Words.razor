@@ -1,10 +1,10 @@
 ﻿@page "/words"
 @using Services.CheckingHistories.Models
-@using Services.Words
-@using Services.Words.Models
+@using Services.WordAndHistory
+@using Services.WordAndHistory.Models
 @using Services.Metadata
 @using Services.CheckingHistories.Services
-@using Services.Words.Services
+@using Services.WordAndHistory.Services
 @inject IWordService service
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
@@ -179,9 +179,9 @@ else
 @code {
 
     [SupplyParameterFromForm]
-    public SearchWordsCriteria Model { get; set; }
+    public SearchWordAndHistoryCriteria Model { get; set; }
 
-    private SearchWordsResult result;
+    private SearchWordAndHistoryResult result;
 
     private Dictionary<string, string> Courses;
     private Dictionary<int, string> Units;
@@ -201,7 +201,7 @@ else
         Courses = MetadataService.GetDefaultCourses();
         Units = MetadataService.GetDefaultUnits();
         CheckingStatuses = MetadataService.GetDefaultCheckingStatuses();
-        Model = new SearchWordsCriteria();
+        Model = new SearchWordAndHistoryCriteria();
     }
 
     protected override async Task OnInitializedAsync()

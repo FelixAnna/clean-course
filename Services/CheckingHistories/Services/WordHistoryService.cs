@@ -1,8 +1,9 @@
 ﻿using Entities.Entities;
 using Services.CheckingHistories;
 using Services.CheckingHistories.Models;
-using Services.Words;
-using Services.Words.Models;
+using Services.WordAndHistory;
+using Services.WordAndHistory.Models;
+using Services.WordAndHistory.Repositories;
 
 namespace Services.CheckingHistories.Services
 {
@@ -13,7 +14,7 @@ namespace Services.CheckingHistories.Services
 
         public async Task<string> ExportCheckingStatusAsync(ExportCheckingHistoryCriteria model)
         {
-            var request = new SearchWordsCriteria()
+            var request = new SearchWordAndHistoryCriteria()
             {
                 KidId = model.KidId,
                 SharedCode = model.SharedCode
@@ -112,9 +113,9 @@ namespace Services.CheckingHistories.Services
             }).ToList();
         }
 
-        private static List<AddWordHistoryModel> ParseWords(ImportCheckingHistoryModel model)
+        private static List<Models.WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)
         {
-            var providedWords = new List<AddWordHistoryModel>();
+            var providedWords = new List<Models.WordCheckingHistoriesModel>();
             if (!string.IsNullOrEmpty(model.Content))
             {
                 var wordsText = model.Content.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -132,12 +133,12 @@ namespace Services.CheckingHistories.Services
 
             return providedWords;
         }
-        private async Task<IList<AddWordHistoryModel>> GetWordWithHistoryAsync(ImportCheckingHistoryModel model)
+        private async Task<IList<Models.WordCheckingHistoriesModel>> GetWordWithHistoryAsync(ImportCheckingHistoryModel model)
         {
             var providedWords = ParseWords(model);
             var affectedExistingWords = new List<WordEntity>();
 
-            var existingWords = await repository.FindAsync(new SearchWordsCriteria()
+            var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
             {
                 SharedCode = model.SharedCode,
                 Course = model.Course,
@@ -147,7 +148,7 @@ namespace Services.CheckingHistories.Services
             providedWords = (from word in existingWords
                              from history in providedWords
                              where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && word.Unit == history.Unit
-                             select new AddWordHistoryModel()
+                             select new Models.WordCheckingHistoriesModel()
                              {
                                  Id = word.WordId,
                                  SharedCode = word.SharedCode,

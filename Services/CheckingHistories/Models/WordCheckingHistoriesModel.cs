@@ -1,14 +1,14 @@
-﻿using Services.CheckingHistories.Models;
+﻿using Services.BookCategoryWords.Models;
 
-namespace Services.Words.Models
+namespace Services.CheckingHistories.Models
 {
-    public class AddWordHistoryModel : AddWordModel
+    public class WordCheckingHistoriesModel : AddWordModel
     {
         public int Id { get; set; }
         public IList<string>? CheckingRecords { get; set; }
 
-        public AddWordHistoryModel() { }
-        
+        public WordCheckingHistoriesModel() { }
+
         public IList<CheckingResult> CheckingHistories => CheckingRecords?.Select(x => new CheckingResult(x)).ToArray();
 
         public record CheckingResult
@@ -70,9 +70,9 @@ namespace Services.Words.Models
             return true;
         }
 
-        public static AddWordHistoryModel FromLine(string shareCode, string course, string[] values)
+        public static WordCheckingHistoriesModel FromLine(string shareCode, string course, string[] values)
         {
-            var model = new AddWordHistoryModel()
+            var model = new WordCheckingHistoriesModel()
             {
                 SharedCode = shareCode,
                 Course = course,

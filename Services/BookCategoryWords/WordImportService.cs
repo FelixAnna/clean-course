@@ -1,13 +1,13 @@
 ﻿using Entities.Entities;
-using Services.CheckingHistories;
-using Services.Words.Models;
+using Services.BookCategoryWords.Models;
+using Services.WordAndHistory.Models;
+using Services.WordAndHistory.Repositories;
 
-namespace Services.Words.Services
+namespace Services.BookCategoryWords
 {
-    public class WordImportService(IWordRepository repository, ICheckingHistoryService checkingService) : IWordImportService
+    public class WordImportService(IWordRepository repository) : IWordImportService
     {
         private readonly IWordRepository repository = repository;
-        private readonly ICheckingHistoryService checkingService = checkingService;
         public async Task<WordModel> AddWordAsync(AddWordModel model)
         {
             var importModel = new ImportWordsModel
@@ -39,7 +39,7 @@ namespace Services.Words.Services
         {
             var (tobeInserted, tobeUpdated) = await GetWords(model);
 
-            return tobeInserted.Concat(tobeUpdated.Select(x=>new AddWordModel()
+            return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
             {
                 Content = x.Content,
                 SharedCode = x.SharedCode,
@@ -79,7 +79,7 @@ namespace Services.Words.Services
             var tobeInsertedNewWords = ParseWords(model);
             var tobeUpdated = new List<WordEntity>();
 
-            var existingWords = await repository.FindAsync(new SearchWordsCriteria()
+            var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
             {
                 SharedCode = model.SharedCode,
                 Course = model.Course,
@@ -87,10 +87,10 @@ namespace Services.Words.Services
 
             if (model.IsOverwrite)
             {
-                foreach(var w in existingWords)
+                foreach (var w in existingWords)
                 {
                     var nw = tobeInsertedNewWords.Where(nw => w.SharedCode == nw.SharedCode && w.Course == nw.Course && w.Content == nw.Content && w.Unit == nw.Unit).FirstOrDefault();
-                    if(nw != null)
+                    if (nw != null)
                     {
                         w.Explanation = nw.Explanation;
                         tobeUpdated.Add(w);
@@ -105,6 +105,38 @@ namespace Services.Words.Services
             }
 
             return (tobeInsertedNewWords, tobeUpdated);
+        }
+
+
+        public async Task<SearchWordsResult> GetWordsForBookCategoryAsync(SearchWordsCriteria criteria)
+        {
+            var words = await repository.FindAsync(criteria);
+
+            var results = words.Select(x =>
+            {
+                return new WordModel(x);
+            }).ToList();
+
+            return new SearchWordsResult()
+            {
+                Words = results,
+                Count = results.Count
+            };
+        }
+        public async Task<WordModel> UpdateWordAsync(int id, AddWordModel model)
+        {
+            var result = await repository.UpdateAsync(id, model);
+            return new WordModel(result);
+        }
+        public async Task<WordModel> GetByIdAsync(int id)
+        {
+            var result = await repository.GetByIdAsync(id);
+            return new WordModel(result!);
+        }
+
+        public async Task<bool> DeleteWordAsync(int wordId)
+        {
+            return await repository.RemoveAsync(wordId);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Services.CheckingHistories.Models;
-using Services.Words;
+using Services.WordAndHistory;
 
 namespace Services.CheckingHistories.Services
 {

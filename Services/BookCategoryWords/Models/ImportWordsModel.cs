@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Services.Words.Models;
+namespace Services.BookCategoryWords.Models;
 
 public class ImportWordsModel
 {

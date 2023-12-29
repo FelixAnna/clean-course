@@ -1,4 +1,4 @@
-﻿using Services.Words.Models;
+﻿using Services.BookCategoryWords.Models;
 
 namespace Services.CheckingHistories.Models
 {
