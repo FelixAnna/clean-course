@@ -1,0 +1,29 @@
+﻿@page "/help"
+
+@using Services.Metadata
+@using Shared
+@using System.IO
+@inject IJSRuntime JS
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>帮助</h3>
+
+<p>帮助信息</p>
+<hr class="hr" />
+<table class="row gy-3 pe-1">
+    <tr>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr class="form-group">
+        <td>
+            <label class="col-form-label">中文转拼音:</label>
+        </td>
+        <td>
+            <div class="col-form-label">
+                <a href="https://configstoragefelix.z13.web.core.windows.net/" class="link-primary">打开</a>
+            </div>
+        </td>
+    </tr>
+</table>
