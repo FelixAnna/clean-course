@@ -3,7 +3,7 @@ using Services.WordAndHistory.Repositories;
 
 namespace Services.BookCategoryWords
 {
-    public class WordService(IWordRepository repository) : IWordService
+    public class WordImportService(IWordRepository repository) : IWordImportService
     {
         private readonly IWordRepository repository = repository;
         public async Task<SearchWordsResult> GetWordsForBookCategoryAsync(SearchWordsCriteria criteria)

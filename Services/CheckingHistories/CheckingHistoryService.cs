@@ -28,22 +28,4 @@ public class CheckingHistoryService(ICheckingHistoryRepository repository, IWord
     {
         return await repository.RemoveAsync(historyId);
     }
-
-    public async Task<IEnumerable<CheckingHistory>> AddAsync(params AddCheckingHistoryModel[] models)
-    {
-        var results = await repository.AddAsync([.. models]);
-        return results.Select(x => new CheckingHistory()
-        {
-            Id = x.Id,
-            IsCorrect = x.IsCorrect,
-            CreatedTime = x.CreatedTime,
-            Remark = x.Remark,
-        });
-
-    }
-
-    public async Task RemoveAllByWordIdAsync(int kidId, params int[] wordIds)
-    {
-        await repository.RemoveByWordIdsAsync(kidId, wordIds);
-    }
 }

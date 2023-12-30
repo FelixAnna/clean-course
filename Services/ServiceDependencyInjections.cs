@@ -2,9 +2,7 @@
 using Services.BookCategories;
 using Services.BookCategoryWords;
 using Services.CheckingHistories;
-using Services.CheckingHistories.Services;
 using Services.Kids;
-using Services.WordAndHistory;
 using Services.WordAndHistory.Services;
 
 namespace Services;
@@ -20,6 +18,7 @@ public static class ServiceDependencyInjections
         services.AddSingleton<CheckingHistories.Services.IWordHistoryBatchService, CheckingHistories.Services.WordHistoryBatchService>();
         services.AddSingleton<IWordBatchService, WordBatchService>();
         services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
+        services.AddSingleton<IWordImportService, WordImportService>();
 
         return services;
     }

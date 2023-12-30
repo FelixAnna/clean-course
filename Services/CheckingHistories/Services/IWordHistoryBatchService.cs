@@ -7,7 +7,7 @@ namespace Services.CheckingHistories.Services
     {
         Task<string> ExportCheckingStatusAsync(ExportCheckingHistoryCriteria model);
         Task SaveCheckingStatusAsync(int wordId, int kidId, CheckingRemark status);
-        Task<IList<CheckingHistory>> ImportHistoryAsync(ImportCheckingHistoryModel model);
+        Task<int> ImportHistoryAsync(ImportCheckingHistoryModel model);
         Task<IList<WordHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model);
     }
 }

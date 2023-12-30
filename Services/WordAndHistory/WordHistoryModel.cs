@@ -19,7 +19,7 @@ public class WordHistoryModel : BaseWordModel
         SetHistorySummary(entity.CheckingHistories);
     }
 
-    
+
     public string? CheckingHistorySummary { get; set; }
 
     public void SetHistorySummary(IEnumerable<CheckingHistoryEntity> histories)

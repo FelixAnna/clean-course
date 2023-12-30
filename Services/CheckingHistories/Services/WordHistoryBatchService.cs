@@ -1,15 +1,16 @@
 ﻿using Entities.Entities;
 using Services.CheckingHistories.Models;
+using Services.CheckingHistories.Repositories;
 using Services.WordAndHistory;
 using Services.WordAndHistory.Models;
 using Services.WordAndHistory.Repositories;
 
 namespace Services.CheckingHistories.Services
 {
-    public class WordHistoryBatchService(IWordRepository repository, ICheckingHistoryService checkingService) : IWordHistoryBatchService
+    public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWordRepository wordRepository) : IWordHistoryBatchService
     {
-        private readonly IWordRepository repository = repository;
-        private readonly ICheckingHistoryService checkingService = checkingService;
+        private readonly ICheckingHistoryRepository repository = repository;
+        private readonly IWordRepository wordRepository = wordRepository;
 
         public async Task<string> ExportCheckingStatusAsync(ExportCheckingHistoryCriteria model)
         {
@@ -19,7 +20,7 @@ namespace Services.CheckingHistories.Services
                 SharedCode = model.SharedCode
             };
 
-            var words = await repository.FindAsync(request);
+            var words = await wordRepository.FindAsync(request);
 
             var index = 1;
             var results = words.Select(x =>
@@ -52,21 +53,21 @@ namespace Services.CheckingHistories.Services
                 KidId = kidId,
                 Remark = status.ToString(),
             };
-            await checkingService.AddAsync(model);
+            await repository.AddAsync(model);
         }
 
-        public async Task<IList<CheckingHistory>> ImportHistoryAsync(ImportCheckingHistoryModel model)
+        public async Task<int> ImportHistoryAsync(ImportCheckingHistoryModel model)
         {
             var toBeInserted = await GetWordWithHistoryAsync(model);
 
             if (toBeInserted.Count <= 0)
             {
-                return new List<CheckingHistory>();
+                return 0;
             }
 
             if (model.IsOverwrite)
             {
-                await checkingService.RemoveAllByWordIdAsync(model.KidId, toBeInserted.Select(x => x.Id).ToArray());
+                await repository.RemoveByWordIdsAsync(model.KidId, toBeInserted.Select(x => x.Id).ToArray());
             }
 
             var historyList = toBeInserted.SelectMany(x =>
@@ -86,9 +87,9 @@ namespace Services.CheckingHistories.Services
                 }
                 return checkingList;
             }).ToList();
-            var results = await checkingService.AddAsync([.. historyList]);
+            var results = await repository.AddAsync([.. historyList]);
 
-            return results.ToList();
+            return results.Count();
         }
 
         public async Task<IList<WordHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
@@ -110,6 +111,17 @@ namespace Services.CheckingHistories.Services
                 WordId = x.Id,
                 CheckingHistorySummary = $"{x.CheckingHistories.Count(x => x.Remark == CheckingRemark.Correct)}/ {x.CheckingHistories.Count}",
             }).ToList();
+        }
+        private async Task<IEnumerable<CheckingHistory>> AddAsync(params AddCheckingHistoryModel[] models)
+        {
+            var results = await repository.AddAsync([.. models]);
+            return results.Select(x => new CheckingHistory()
+            {
+                Id = x.Id,
+                IsCorrect = x.IsCorrect,
+                CreatedTime = x.CreatedTime,
+                Remark = x.Remark,
+            });
         }
 
         private static List<Models.WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)
@@ -137,7 +149,7 @@ namespace Services.CheckingHistories.Services
             var providedWords = ParseWords(model);
             var affectedExistingWords = new List<WordEntity>();
 
-            var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
+            var existingWords = await wordRepository.FindAsync(new SearchWordAndHistoryCriteria()
             {
                 SharedCode = model.SharedCode,
                 Course = model.Course,

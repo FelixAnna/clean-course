@@ -2,7 +2,7 @@
 
 namespace Services.BookCategoryWords
 {
-    public interface IWordService
+    public interface IWordImportService
     {
         Task<SearchWordsResult> GetWordsForBookCategoryAsync(SearchWordsCriteria criteria);
         Task<bool> DeleteWordAsync(int wordId);

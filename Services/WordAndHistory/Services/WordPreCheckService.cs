@@ -13,7 +13,7 @@ namespace Services.WordAndHistory.Services
                 _preCheckWordsForKids[kidId] = new List<WordHistoryModel>();
             }
 
-            var words = _preCheckWordsForKids[kidId].Where(x=>x.SharedCode == sharedCode).ToList();
+            var words = _preCheckWordsForKids[kidId].Where(x => x.SharedCode == sharedCode).ToList();
 
             return new SearchWordAndHistoryResult()
             {
@@ -36,7 +36,7 @@ namespace Services.WordAndHistory.Services
         {
             if (_preCheckWordsForKids.ContainsKey(kidId))
             {
-                _preCheckWordsForKids[kidId].RemoveAll(x=>x.WordId == id);
+                _preCheckWordsForKids[kidId].RemoveAll(x => x.WordId == id);
             }
         }
     }
