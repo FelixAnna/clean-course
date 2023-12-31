@@ -41,7 +41,7 @@ dotnet publish -f net8.0-android -c Release -p:AndroidKeyStore=true -p:AndroidSi
 
 #### Windows
 
-After published, install by running: CleanCourse_[version]_[arch].msix
+Windows Store: https://apps.microsoft.com/detail/9NR9KR5N3BX2?hl=zh-cn&gl=CN
 
 ### Android
 
