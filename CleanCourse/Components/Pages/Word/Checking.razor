@@ -5,6 +5,7 @@
 @using Services.Metadata
 @using Services.CheckingHistories.Services
 @using Services.WordAndHistory.Services
+@using System.Text
 @inject             Services.WordAndHistory.IWordHistoryService service
 @inject             Services.CheckingHistories.Services.IWordHistoryBatchService historyService
 @inject IWordPreCheckService preCheckService
@@ -39,6 +40,22 @@
                         教材：
                     </label>
                     <span class="text-primary">@appState.BookCategoryFullName</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td class="col-md-4">
+                <div>
+                    <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
+                        复制词语
+                    </button>
+                </div>
+            </td>
+            <td class="col-md-4">
+                <div>
+                    <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
+                        复制全部
+                    </button>
                 </div>
             </td>
         </tr>
@@ -139,6 +156,8 @@ else
 }
 
 @code {
+    const string Splitter = ",";
+    const string WordSplitter = ";";
     private SearchWordAndHistoryResult result;
 
     private List<int> checkedWords;
@@ -200,5 +219,34 @@ else
 
         pageIndex = i;
         currentItems = result.Words.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+
+    private async Task CopyWords()
+    {
+        var contentBuilder = new StringBuilder();
+        foreach (var word in result.Words)
+        {
+            contentBuilder.Append(word.Content);
+            contentBuilder.Append(WordSplitter);
+        }
+
+        await Clipboard.SetTextAsync(contentBuilder.ToString());
+        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+    }
+
+    private async Task CopyAll()
+    {
+        var contentBuilder = new StringBuilder();
+
+        foreach (var word in result.Words)
+        {
+            contentBuilder.Append(word.Content);
+            contentBuilder.Append(Splitter);
+            contentBuilder.Append(word.Explanation);
+            contentBuilder.Append(WordSplitter);
+        }
+
+        await Clipboard.SetTextAsync(contentBuilder.ToString());
+        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
     }
 }
