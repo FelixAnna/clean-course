@@ -52,11 +52,20 @@
                 </div>
             </td>
             <td class="col-md-4">
-                <div>
-                    <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
-                        复制全部
-                    </button>
-                </div>
+                @if (errorWords!=null && errorWords.Any())
+                {
+                    <div>
+                        <button @onclick="@(e => CopyErrorWords())" class="btn btn-secondary m-2 btn-sm">
+                            复制错误词语
+                        </button>
+                    </div>
+                }else{
+                    <div>
+                        <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
+                            复制全部
+                        </button>
+                    </div>
+                }
             </td>
         </tr>
     </tbody>
@@ -161,6 +170,7 @@ else
     private SearchWordAndHistoryResult result;
 
     private List<int> checkedWords;
+    private List<int> errorWords;
 
     private int pageIndex;
     private int totalPage;
@@ -171,6 +181,7 @@ else
     public Checking()
     {
         checkedWords = new List<int>();
+        errorWords = new List<int>();
     }
 
     protected override async Task OnInitializedAsync()
@@ -195,7 +206,13 @@ else
     private async Task SaveCheckingStatus(int id, CheckingRemark status)
     {
         await historyService.SaveCheckingStatusAsync(id, appState.KidId, status);
+
         checkedWords.Add(id);
+        if(status != CheckingRemark.Correct)
+        {
+            errorWords.Add(id);
+        }
+
         preCheckService.Remove(appState.KidId, id);
     }
 
@@ -249,4 +266,24 @@ else
         await Clipboard.SetTextAsync(contentBuilder.ToString());
         await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
     }
+
+    private async Task CopyErrorWords()
+    {
+        var contentBuilder = new StringBuilder();
+
+        foreach (var word in result.Words)
+        {
+            if (errorWords.Contains(word.WordId))
+            {
+                contentBuilder.Append(word.Content);
+                contentBuilder.Append(Splitter);
+                contentBuilder.Append(word.Explanation);
+                contentBuilder.Append(WordSplitter);
+            }
+        }
+
+        await Clipboard.SetTextAsync(contentBuilder.ToString());
+        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+    }
+    
 }
