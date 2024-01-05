@@ -5,7 +5,7 @@
 @using Services.Metadata
 @using Services.CheckingHistories.Services
 @using Services.WordAndHistory.Services
-@inject             Services.WordAndHistory.IWordHistoryService service
+@inject Services.WordAndHistory.IWordHistoryService service
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -95,6 +95,18 @@
                         <div class="form-floating">
                             <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
                             <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+                            @if (IsReadyToCheckAll)
+                            {
+                                <button @onclick="@(e => ToCheckAll())" class="btn btn-success m-2 btn-sm">
+                                    准备听写本页
+                                </button>
+                            }
+                            else
+                            {
+                                <button @onclick="@(e => ToUnCheckAll())" class="btn btn-secondary m-2 btn-sm">
+                                    取消听写本页
+                                </button>
+                            }
                         </div>
                     </div>
                 </td>
@@ -194,6 +206,8 @@ else
     private int pageSize;
     private IList<WordHistoryModel> currentItems;
 
+    private bool IsReadyToCheckAll = true;
+
 
     public Words()
     {
@@ -222,6 +236,12 @@ else
         Model.SharedCode = appState.SharedCode;
         Model.KidId = appState.KidId;
 
+        var lastSearchCriteria = appState.WordSearchCriteria;
+        if (lastSearchCriteria?.KidId == Model.KidId && lastSearchCriteria?.SharedCode == Model.SharedCode)
+        {
+            Model = lastSearchCriteria;
+        }
+
         var precheck = preCheckService.GetAll(Model.KidId, Model.SharedCode);
         toCheckedWords = precheck.Words.Select(x => x.WordId).ToList();
         result = await service.GetWordsAsync(Model);
@@ -233,6 +253,7 @@ else
         var precheck = preCheckService.GetAll(Model.KidId, Model.SharedCode);
         toCheckedWords = precheck.Words.Select(x => x.WordId).ToList();
         result = await service.GetWordsAsync(Model);
+        appState.WordSearchCriteria = Model;
         Refresh(1);
     }
 
@@ -240,6 +261,38 @@ else
     {
         preCheckService.Add(Model.KidId, result.Words.First(x => x.WordId == id));
         toCheckedWords.Add(id);
+    }
+
+    private async Task ToCheckAll()
+    {
+        foreach (var item in currentItems)
+        {
+            if (toCheckedWords.Contains(item.WordId))
+            {
+                continue;
+            }
+
+            preCheckService.Add(Model.KidId, result.Words.First(x => x.WordId == item.WordId));
+            toCheckedWords.Add(item.WordId);
+        }
+
+        IsReadyToCheckAll = false;
+    }
+
+    private async Task ToUnCheckAll()
+    {
+        foreach (var item in currentItems)
+        {
+            if (!toCheckedWords.Contains(item.WordId))
+            {
+                continue;
+            }
+
+            preCheckService.Remove(Model.KidId, item.WordId);
+            toCheckedWords.Remove(item.WordId);
+        }
+
+        IsReadyToCheckAll = true;
     }
 
     private async Task CancelCheck(int id)

@@ -1,4 +1,6 @@
-﻿namespace CleanCourse;
+﻿using Services.WordAndHistory.Models;
+
+namespace CleanCourse;
 
 public class AppState
 {
@@ -6,6 +8,7 @@ public class AppState
     public string KidName { get; set; }
     public string SharedCode { get; set; }
     public string BookCategoryFullName { get; set; }
+    public SearchWordAndHistoryCriteria WordSearchCriteria { get; set; }
 
     public int DefaultPageSize
     {
@@ -19,4 +22,5 @@ public class AppState
     {
         get => Preferences.Get(nameof(DefaultRecentThreshold), 3); set => Preferences.Set(nameof(DefaultRecentThreshold), value);
     }
+
 }

@@ -43,31 +43,34 @@
                 </div>
             </td>
         </tr>
-        <tr class="form-group">
-            <td class="col-md-4">
-                <div>
-                    <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
-                        复制词语
-                    </button>
-                </div>
-            </td>
-            <td class="col-md-4">
-                @if (errorWords!=null && errorWords.Any())
-                {
+        @if (currentItems != null && currentItems.Count>0)
+        {
+            <tr class="form-group">
+                <td class="col-md-4">
                     <div>
-                        <button @onclick="@(e => CopyErrorWords())" class="btn btn-secondary m-2 btn-sm">
-                            复制错误词语
+                        <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
+                            复制词语
                         </button>
                     </div>
-                }else{
-                    <div>
-                        <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
+                </td>
+                <td class="col-md-4">
+                    @if (errorWords != null && errorWords.Any())
+                    {
+                        <div>
+                            <button @onclick="@(e => CopyErrorWords())" class="btn btn-secondary m-2 btn-sm">
+                                复制错误词语
+                            </button>
+                        </div>
+                    } else {
+                        <div>
+                            <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
                             复制全部
                         </button>
                     </div>
-                }
-            </td>
-        </tr>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
 <hr class="hr" />
