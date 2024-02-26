@@ -25,7 +25,7 @@ namespace Services.CheckingHistories.Services
             var index = 1;
             var results = words.Select(x =>
             {
-                var wordInfo = $"{index++}\t{x.Content}\t{x.Explanation}\t{x.Unit}\t{x.Course}";
+                var wordInfo = $"{index++}\t{x.Content}\t{x.Explanation}\t{x.Details}\t{x.Unit}\t{x.Course}";
                 var checkingInfo = x.CheckingHistories
                                     .OrderBy(y => y.CreatedTime)
                                     .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
@@ -106,6 +106,7 @@ namespace Services.CheckingHistories.Services
                 Course = x.Course,
                 Content = x.Content,
                 Explanation = x.Explanation,
+                Details = x.Details,
                 Unit = x.Unit,
                 SharedCode = model.SharedCode,
                 WordId = x.Id,
@@ -124,9 +125,9 @@ namespace Services.CheckingHistories.Services
             });
         }
 
-        private static List<Models.WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)
+        private static List<WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)
         {
-            var providedWords = new List<Models.WordCheckingHistoriesModel>();
+            var providedWords = new List<WordCheckingHistoriesModel>();
             if (!string.IsNullOrEmpty(model.Content))
             {
                 var wordsText = model.Content.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -144,7 +145,7 @@ namespace Services.CheckingHistories.Services
 
             return providedWords;
         }
-        private async Task<IList<Models.WordCheckingHistoriesModel>> GetWordWithHistoryAsync(ImportCheckingHistoryModel model)
+        private async Task<IList<WordCheckingHistoriesModel>> GetWordWithHistoryAsync(ImportCheckingHistoryModel model)
         {
             var providedWords = ParseWords(model);
             var affectedExistingWords = new List<WordEntity>();
@@ -158,8 +159,8 @@ namespace Services.CheckingHistories.Services
 
             providedWords = (from word in existingWords
                              from history in providedWords
-                             where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && word.Unit == history.Unit
-                             select new Models.WordCheckingHistoriesModel()
+                             where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <=0 )
+                             select new WordCheckingHistoriesModel()
                              {
                                  Id = word.WordId,
                                  SharedCode = word.SharedCode,
@@ -167,6 +168,7 @@ namespace Services.CheckingHistories.Services
                                  Content = word.Content,
                                  Unit = word.Unit,
                                  Explanation = word.Explanation,
+                                 Details = word.Details,
                                  Overwrite = history.Overwrite,
                                  CheckingRecords = history.CheckingRecords,
                              }).ToList();

@@ -97,6 +97,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
                 Course = model.Course,
                 Content = model.Content,
                 Explanation = model.Explanation,
+                Details = model.Details,
                 Unit = model.Unit,
                 SharedCode = model.SharedCode,
             });
@@ -113,6 +114,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         var word = await courseContext.Words.FirstAsync(x => x.WordId == id);
         word.Content = model.Content;
         word.Explanation = model.Explanation;
+        word.Details = model.Details;
         word.Unit = model.Unit;
         word.Course = model.Course;
         await courseContext.SaveChangesAsync();

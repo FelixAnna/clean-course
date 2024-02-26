@@ -13,6 +13,7 @@
         public string Content { get; set; }
 
         public string Explanation { get; set; }
+        public string Details { get; set; }
 
         public bool IsEnglish()
         {

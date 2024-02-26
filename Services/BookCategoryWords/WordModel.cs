@@ -13,6 +13,7 @@ namespace Services.BookCategoryWords
             Course = entity.Course;
             Content = entity.Content;
             Explanation = entity.Explanation;
+            Details = entity.Details;
             Unit = entity.Unit;
         }
     }

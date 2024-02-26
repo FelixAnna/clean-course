@@ -10,14 +10,7 @@ namespace Services.BookCategoryWords
         private readonly IWordRepository repository = repository;
         public async Task<WordModel> AddWordAsync(AddWordModel model)
         {
-            var importModel = new ImportWordsModel
-            {
-                SharedCode = model.SharedCode,
-                Course = model.Course,
-                Overwrite = model.Overwrite,
-                Content = $"1;{model.Content};{model.Explanation};{model.Unit};{model.Course}"
-            };
-            var (tobeInserted, tobeUpdated) = await GetWords(importModel);
+            var (tobeInserted, tobeUpdated) = await GetWords(model);
 
             await repository.UpdateAllAsync([.. tobeUpdated]);
             var result = await repository.AddAsync([.. tobeInserted]);
@@ -27,7 +20,7 @@ namespace Services.BookCategoryWords
 
         public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model);
+            var (tobeInserted, tobeUpdated) = await GetWords([.. ParseWords(model)]);
 
             await repository.UpdateAllAsync([.. tobeUpdated]);
             var results = await repository.AddAsync([.. tobeInserted]);
@@ -37,7 +30,7 @@ namespace Services.BookCategoryWords
 
         public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model);
+            var (tobeInserted, tobeUpdated) = await GetWords([.. ParseWords(model)]);
 
             return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
             {
@@ -46,11 +39,13 @@ namespace Services.BookCategoryWords
                 Course = x.Course,
                 Unit = x.Unit,
                 Explanation = x.Explanation,
+                Details = x.Details,
             })).Select(x => new WordModel()
             {
                 Course = x.Course,
                 Content = x.Content,
                 Explanation = x.Explanation,
+                Details= x.Details,
                 Unit = x.Unit,
                 SharedCode = model.SharedCode,
                 WordId = -1
@@ -74,34 +69,47 @@ namespace Services.BookCategoryWords
 
             return tobeInsertedNewWords;
         }
-        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(ImportWordsModel model)
+        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(params AddWordModel[] model)
         {
-            var tobeInsertedNewWords = ParseWords(model);
+            var tobeInsertedNewWords = model;
             var tobeUpdated = new List<WordEntity>();
 
-            var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
+            if (model != null && model.Length > 0)
             {
-                SharedCode = model.SharedCode,
-                Course = model.Course,
-            });
+                var sharedCode = model.FirstOrDefault().SharedCode;
+                var course = model.FirstOrDefault().Course;
+                var isOverwrite = model.FirstOrDefault().IsOverwrite;
 
-            if (model.IsOverwrite)
-            {
-                foreach (var w in existingWords)
+                var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
                 {
-                    var nw = tobeInsertedNewWords.Where(nw => w.SharedCode == nw.SharedCode && w.Course == nw.Course && w.Content == nw.Content && w.Unit == nw.Unit).FirstOrDefault();
-                    if (nw != null)
-                    {
-                        w.Explanation = nw.Explanation;
-                        tobeUpdated.Add(w);
-                    }
-                }
+                    SharedCode = sharedCode,
+                    Course = course,
+                });
 
-                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content && y.Unit == x.Unit)).ToList();
-            }
-            else
-            {
-                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content && y.Unit == x.Unit)).ToList();
+                if (isOverwrite)
+                {
+                    foreach (var w in existingWords)
+                    {
+                        var nw = tobeInsertedNewWords.Where(nw => w.SharedCode == nw.SharedCode && w.Course == nw.Course && w.Content == nw.Content).FirstOrDefault();
+                        if (nw != null)
+                        {
+                            w.Explanation = nw.Explanation;
+                            w.Details = nw.Details;
+                            if (w.Unit <= 0)
+                            {
+                                w.Unit = nw.Unit;
+                            }
+
+                            tobeUpdated.Add(w);
+                        }
+                    }
+
+                    tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content)).ToArray();
+                }
+                else
+                {
+                    tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.SharedCode == x.SharedCode && y.Course == y.Course && y.Content == x.Content)).ToArray();
+                }
             }
 
             return (tobeInsertedNewWords, tobeUpdated);

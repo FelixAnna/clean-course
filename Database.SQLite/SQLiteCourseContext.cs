@@ -14,7 +14,7 @@ public class SQLiteCourseContext : AbstractCourseContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        //optionsBuilder.UseSqlite($@"Data Source=C:\Users\yuecn\Desktop\home\{nameof(CleanCourse)}.db"); 
+        optionsBuilder.UseSqlite($@"Data Source=C:\Users\yuecn\Desktop\home\{nameof(CleanCourse)}.db"); 
         base.OnConfiguring(optionsBuilder);
     }
 }

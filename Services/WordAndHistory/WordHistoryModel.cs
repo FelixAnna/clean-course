@@ -14,6 +14,7 @@ public class WordHistoryModel : BaseWordModel
         Course = entity.Course;
         Content = entity.Content;
         Explanation = entity.Explanation;
+        Details = entity.Details;
         Unit = entity.Unit;
 
         SetHistorySummary(entity.CheckingHistories);

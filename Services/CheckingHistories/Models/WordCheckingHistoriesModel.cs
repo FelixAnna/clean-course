@@ -56,9 +56,10 @@ namespace Services.CheckingHistories.Models
     {
         const int contentIndex = 1;
         const int explanationIndex = contentIndex + 1;
-        const int UnitIndex = contentIndex + 2;
-        const int CourseIndex = contentIndex + 3;
-        const int HistoryIndex = contentIndex + 4;
+        const int detailsIndex = contentIndex + 2;
+        const int UnitIndex = contentIndex + 3;
+        const int CourseIndex = contentIndex + 4;
+        const int HistoryIndex = contentIndex + 5;
 
         public static bool IsValid(string[] values)
         {
@@ -78,6 +79,7 @@ namespace Services.CheckingHistories.Models
                 Course = course,
                 Content = values[contentIndex],
                 Explanation = values[explanationIndex],
+                Details = values[detailsIndex],
                 Unit = int.Parse(values[UnitIndex]),
             };
 

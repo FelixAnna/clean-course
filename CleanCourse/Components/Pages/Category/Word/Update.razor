@@ -38,6 +38,10 @@
             <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
         </div>
         <div class="col-md-2">
+            <label class="form-label">详细描述：</label>
+            <textarea @bind="Model!.Details" class="form-control rounded" rows="8" placeholder="选填内容" />
+        </div>
+        <div class="col-md-2">
             <label class="form-label">
                 单元：
             </label>
@@ -84,6 +88,7 @@
                 Unit = word.Unit,
                 Content = word.Content,
                 Explanation = word.Explanation,
+                Details=word.Details,
                 Overwrite = "1",
             };
     }

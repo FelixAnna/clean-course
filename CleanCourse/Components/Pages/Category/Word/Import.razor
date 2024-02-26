@@ -83,6 +83,7 @@
                 <th>#</th>
                 <th>单词/词语</th>
                 <th>翻译/拼音</th>
+                <th>详细(字数）</th>
                 <th>单元</th>
                 <th>课程</th>
             </tr>
@@ -97,6 +98,7 @@
                     <td>@(x++)</td>
                     <td>@word.Content</td>
                     <td>@word.Explanation</td>
+                    <td>@(string.IsNullOrEmpty(word.Details)?"--":word.Details.Length)</td>
                     <td>@word.Unit</td>
                     <td>@word.Course</td>
                 </tr>

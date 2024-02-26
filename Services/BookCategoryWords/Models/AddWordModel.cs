@@ -11,12 +11,15 @@ public class AddWordModel
     public string Course { get; set; }
 
     [Required]
-    [StringLength(10, ErrorMessage = "Content is too long.")]
+    [StringLength(20, ErrorMessage = "Content is too long (>20).")]
     public string Content { get; set; }
 
     [Required]
-    [StringLength(10, ErrorMessage = "Explanation is too long.")]
+    [StringLength(20, ErrorMessage = "Explanation is too long (>20).")]
     public string Explanation { get; set; }
+
+    [StringLength(1000, ErrorMessage = "Details is too long (>1000).")]
+    public string Details { get; set; }
 
     [Required]
     public int Unit { get; set; }
@@ -28,8 +31,9 @@ public static class AddWordModelConvertor
 {
     const int contentIndex = 1;
     const int explanationIndex = contentIndex + 1;
-    const int UnitIndex = contentIndex + 2;
-    const int CourseIndex = contentIndex + 3;
+    const int detailsIndex = contentIndex + 2;
+    const int UnitIndex = contentIndex + 3;
+    const int CourseIndex = contentIndex + 4;
 
     public static bool IsValid(string[] values)
     {
@@ -49,6 +53,7 @@ public static class AddWordModelConvertor
             Course = course,
             Content = values[contentIndex],
             Explanation = values[explanationIndex],
+            Details = values[detailsIndex],
             Unit = int.Parse(values[UnitIndex]),
         };
 
