@@ -14,7 +14,7 @@
 <h3>单词/词语</h3>
 
 <p>
-    查询所有单词/词语的听写信息。
+    查询所有单词/词语的信息。
     <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
     <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
 </p>
@@ -94,20 +94,34 @@
                         <label class="form-label"></label>
                         <div class="form-floating">
                             <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
-                            <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
-                            @if (IsReadyToCheckAll)
-                            {
-                                <button type="button" @onclick="@(e => ToCheckAll())" class="btn btn-success m-2 btn-sm">
-                                    准备听写本页
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" @onclick="@(e => ToUnCheckAll())" class="btn btn-secondary m-2 btn-sm">
-                                    取消听写本页
-                                </button>
-                            }
                         </div>
+                    </div>
+                </td>
+            </tr>
+
+            <tr class="form-group">
+                <td class="m-2">
+                    <div>
+                        <label class="form-label"></label> 
+                        @if (IsReadyToCheckAll)
+                        {
+                            <button type="button" @onclick="@(e => ToCheckAll())" class="btn btn-outline-primary m-2">
+                                准备听写本页
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" @onclick="@(e => ToUnCheckAll())" class="btn btn-secondary m-2">
+                                取消听写本页
+                            </button>
+                        }
+                    </div>
+                </td>
+                <td class="m-2">
+                    <div>
+                        <label class="form-label"></label>
+                        <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+
                     </div>
                 </td>
             </tr>
@@ -130,6 +144,7 @@ else
                 <th class="w-25">翻译/拼音</th>
                 <th class="w-25">课程/单元</th>
                 <th class="w-25">检查情况</th>
+                <th class="w-20"></th>
             </tr>
         </thead>
         <tbody>
@@ -146,27 +161,17 @@ else
                     <td>
                         @word.CheckingHistorySummary
                    </td>
-                </tr>
-                <tr>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                    </td>
                     <td>
                         @if (!toCheckedWords.Contains(word.WordId))
                         {
                             <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success m-2 btn-sm">
-                                准备听写
+                                准备
                             </button>
                         }
                         else
                         {
                             <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-secondary m-2 btn-sm">
-                                取消听写
+                                取消
                             </button>
                         }
                     </td>
