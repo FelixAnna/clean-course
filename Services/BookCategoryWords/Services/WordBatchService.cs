@@ -10,7 +10,7 @@ namespace Services.BookCategoryWords
         private readonly IWordRepository repository = repository;
         public async Task<WordModel> AddWordAsync(AddWordModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model);
+            var (tobeInserted, tobeUpdated) = await GetWords(model, model);
 
             await repository.UpdateAllAsync([.. tobeUpdated]);
             var result = await repository.AddAsync([.. tobeInserted]);
@@ -20,7 +20,7 @@ namespace Services.BookCategoryWords
 
         public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords([.. ParseWords(model)]);
+            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. ParseWords(model)]);
 
             await repository.UpdateAllAsync([.. tobeUpdated]);
             var results = await repository.AddAsync([.. tobeInserted]);
@@ -30,7 +30,7 @@ namespace Services.BookCategoryWords
 
         public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords([.. ParseWords(model)]);
+            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. ParseWords(model)]);
 
             return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
             {
@@ -58,7 +58,7 @@ namespace Services.BookCategoryWords
             var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             for (int i = 0; i < wordsText?.Length; i++)
             {
-                var wordParts = wordsText[i].Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
+                var wordParts = wordsText[i].Split('$', '\t').Select(x => x.Trim()).ToArray();
 
                 if (AddWordModelConvertor.IsValid(wordParts))
                 {
@@ -69,16 +69,16 @@ namespace Services.BookCategoryWords
 
             return tobeInsertedNewWords;
         }
-        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(params AddWordModel[] model)
-        {
-            var tobeInsertedNewWords = model;
-            var tobeUpdated = new List<WordEntity>();
 
-            if (model != null && model.Length > 0)
+        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel,params AddWordModel[] words)
+        {
+            var tobeInsertedNewWords = words.Where(x => string.Equals(x.Course, addModel.Course)).ToArray();
+            var tobeUpdated = new List<WordEntity>();
+            if (words != null && words.Length > 0)
             {
-                var sharedCode = model.FirstOrDefault().SharedCode;
-                var course = model.FirstOrDefault().Course;
-                var isOverwrite = model.FirstOrDefault().IsOverwrite;
+                var sharedCode = addModel.SharedCode;
+                var course = addModel.Course;
+                var isOverwrite = addModel.IsOverwrite;
 
                 var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
                 {

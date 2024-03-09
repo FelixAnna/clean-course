@@ -134,7 +134,7 @@ namespace Services.CheckingHistories.Services
                 foreach (var line in wordsText)
                 {
                     //example: 230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
-                    var wordParts = line.Split(';', '；', '$', '\t').Select(x => x.Trim()).ToArray();
+                    var wordParts = line.Split('$', '\t').Select(x => x.Trim()).ToArray();
                     if (AddWordHistoryModelConvertor.IsValid(wordParts))
                     {
                         var addModel = AddWordHistoryModelConvertor.FromLine(model.SharedCode, model.Course, wordParts);

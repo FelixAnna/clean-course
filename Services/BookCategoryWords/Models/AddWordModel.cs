@@ -2,14 +2,8 @@
 
 namespace Services.BookCategoryWords.Models;
 
-public class AddWordModel
+public class AddWordModel : AddWordBaseModel
 {
-    [Required]
-    public required string SharedCode { get; set; }
-
-    [Required]
-    public string Course { get; set; }
-
     [Required]
     [StringLength(20, ErrorMessage = "Content is too long (>20).")]
     public string Content { get; set; }
@@ -23,9 +17,6 @@ public class AddWordModel
 
     [Required]
     public int Unit { get; set; }
-    [Required]
-    public string Overwrite { get; set; }
-    public bool IsOverwrite => Overwrite == "1";
 }
 public static class AddWordModelConvertor
 {
