@@ -7,6 +7,7 @@ namespace Services.BookCategoryWords
 {
     public class WordBatchService(IWordRepository repository) : IWordBatchService
     {
+        private const string splitter = "\t";
         private readonly IWordRepository repository = repository;
         public async Task<WordModel> AddWordAsync(AddWordModel model)
         {
@@ -58,7 +59,7 @@ namespace Services.BookCategoryWords
             var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             for (int i = 0; i < wordsText?.Length; i++)
             {
-                var wordParts = wordsText[i].Split('$', '\t').Select(x => x.Trim()).ToArray();
+                var wordParts = wordsText[i].Split(splitter).Select(x => x.Trim()).ToArray();
 
                 if (AddWordModelConvertor.IsValid(wordParts))
                 {

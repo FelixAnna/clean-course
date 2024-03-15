@@ -46,14 +46,15 @@ else
                     <td>@category.Grade</td>
                     <td>@category.Semester</td>
                     <td>
-                        <a href="/bookCategories/@(category.SharedCode)/words" class="btn btn-outline-primary m-1" data-mdb-ripple-init>字库</a>
-                        <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary m-1">更新</a>
+                        <a href="/bookCategories/@(category.SharedCode)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+                        <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
                         @if (!category.Selected)
                         {
+                            <span class="px-1"></span>
                             <button @onclick="@(e => Select(category.Id, category.SharedCode, category.CategoryName))" class="btn btn-outline-info">
                                 设为默认
                             </button>
-                            <button @onclick="@(e => Delete(category.Id, category.CategoryName))" class="btn btn-outline-danger m-2">
+                            <button @onclick="@(e => Delete(category.Id, category.CategoryName))" class="btn btn-outline-danger">
                                 删除
                             </button>
                         }

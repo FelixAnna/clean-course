@@ -14,7 +14,7 @@ public class BookCategoryService(IBookCategoryRepository repository) : IBookCate
         var results = categories.Select(x =>
         {
             return new BookCategoryModel(x);
-        }).ToList();
+        }).OrderByDescending(x=>x.Selected).ToList();
 
         return new SearchBookCategoryResult()
         {

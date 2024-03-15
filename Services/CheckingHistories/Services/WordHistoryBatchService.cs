@@ -9,6 +9,7 @@ namespace Services.CheckingHistories.Services
 {
     public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWordRepository wordRepository) : IWordHistoryBatchService
     {
+        private const string splitter = "\t";
         private readonly ICheckingHistoryRepository repository = repository;
         private readonly IWordRepository wordRepository = wordRepository;
 
@@ -25,17 +26,17 @@ namespace Services.CheckingHistories.Services
             var index = 1;
             var results = words.Select(x =>
             {
-                var wordInfo = $"{index++}\t{x.Content}\t{x.Explanation}\t{x.Details}\t{x.Unit}\t{x.Course}";
+                var wordInfo = $"{index++}{splitter}{x.Content}{splitter}{x.Explanation}{splitter}{x.Details}{splitter}{x.Unit}{splitter}{x.Course}";
                 var checkingInfo = x.CheckingHistories
                                     .OrderBy(y => y.CreatedTime)
                                     .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
-                                    .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}\t{value}");
+                                    .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{splitter}{value}");
                 var data = new
                 {
                     x.SharedCode,
                     x.Course,
                     x.Unit,
-                    Value = $"{wordInfo}\t{checkingInfo}"
+                    Value = $"{wordInfo}{splitter}{checkingInfo}"
                 };
 
                 return data;
@@ -134,7 +135,7 @@ namespace Services.CheckingHistories.Services
                 foreach (var line in wordsText)
                 {
                     //example: 230;肥料;féiliào;18;语文;Correct|2023-12-10 21:39:10;0|2023-12-10 21:39:11
-                    var wordParts = line.Split('$', '\t').Select(x => x.Trim()).ToArray();
+                    var wordParts = line.Split(splitter).Select(x => x.Trim()).ToArray();
                     if (AddWordHistoryModelConvertor.IsValid(wordParts))
                     {
                         var addModel = AddWordHistoryModelConvertor.FromLine(model.SharedCode, model.Course, wordParts);

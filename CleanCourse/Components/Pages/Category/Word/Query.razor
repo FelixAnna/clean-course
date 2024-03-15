@@ -23,12 +23,14 @@
         <thead>
             <tr class="form-group">
                 <th ></th>
-                <th ></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <tr class="form-group">
-                <td class="m-2">
+                <td>
                     <label class="form-label">课程：</label>
                     <select @bind="Model.Course" class="form-select">
                         @foreach (var course in Courses)
@@ -48,9 +50,7 @@
                         }
                     </select>
                 </td>
-            </tr>
-            <tr class="form-group">
-                <td class="m-2">
+                <td>
                     <label class="form-label">单词/词语：</label>
                     <InputText @bind-Value="Model!.Content" class="form-control rounded" />
                 </td>
@@ -58,11 +58,9 @@
                     <label class="form-label">翻译/拼音：</label>
                     <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
                 </td>
-             </tr>
-            <tr class="form-group">
-                <td class="m-2">
+                <td>
                     <label class="form-label"></label>
-                    <button type="submit" class="btn btn-primary m-2" data-mdb-ripple-init>查询</button>
+                    <button type="submit" class="btn btn-primary form-control mx-3" data-mdb-ripple-init>查询</button>
                 </td>
                 <td>
                     

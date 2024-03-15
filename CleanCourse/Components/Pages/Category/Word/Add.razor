@@ -108,9 +108,9 @@
             };
     }
 
-    private void Submit()
+    private async Task Submit()
     {
-        importService.AddWordAsync(Model);
+        await importService.AddWordAsync(Model);
         navigationManager.NavigateTo($"/bookCategories/{sharedCode}/words");
     }
 }

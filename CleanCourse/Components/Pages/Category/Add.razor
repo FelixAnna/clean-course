@@ -73,9 +73,9 @@
     {
     }
 
-    private void Submit()
+    private async Task Submit()
     {
-        service.AddAsync(Model);
+        await service.AddAsync(Model);
         navigationManager.NavigateTo("/bookCategories");
     }
 }

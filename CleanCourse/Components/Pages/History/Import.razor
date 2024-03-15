@@ -44,7 +44,7 @@
     </table>
     <div class="form-group">
         <label class="form-label">单词/词语的历史记录：</label>
-        <textarea @bind="Model!.Content" class="form-control rounded" rows="8" cols="100" placeholder="请从Excel/Csv复制多行粘贴到这里，每一行分别为：序号(可空);词语；注音(可空)；单元；课程（可空)；1 / 其他数字 （1表示正确的听写记录，其他表示错误）； 1 / 其他数字； 。。" />
+        <textarea @bind="Model!.Content" class="form-control rounded" rows="8" cols="100" placeholder="请从Excel/Csv复制多行粘贴到这里，每一行分别为：序号(可空)\t词语\t注音(翻译)\t详细(可空)\t单元\t课程（可空)\t1 / 其他数字 （1表示正确的听写记录，其他表示错误）\t1 / 其他数字\t。。。" />
     </div>
     <table class="table">
         <tr class="form-group">
