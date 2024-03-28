@@ -105,8 +105,10 @@
                                     取消听写本页
                                 </button>
                             }
-                            <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
-
+                            @if (toCheckedWords.Any())
+                            {
+                                <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+                            }
                         </div>
                     </div>
                 </td>
