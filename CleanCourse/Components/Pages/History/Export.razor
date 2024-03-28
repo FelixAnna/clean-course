@@ -1,10 +1,12 @@
 ﻿@page "/history/export"
 @using Services.CheckingHistories;
+@using Services.BookCategories
 @using Services.Metadata;
 @using Services.CheckingHistories.Services;
 @using Services.CheckingHistories.Models;
 @inject AppState appState
 @inject IWordHistoryBatchService service
+@inject IBookCategoryService categoryService
 @inject NavigationManager navigationManager
 
 
@@ -54,13 +56,19 @@
         Categories = new Dictionary<string, string>();
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Categories = new Dictionary<string, string>()
         {
             {"", "全部" },
-            {appState.SharedCode, appState.BookCategoryFullName },
         };
+
+        var categories = (await categoryService.GetAllAsync()).Categories.ToList();
+        foreach (var cat in categories)
+        {
+            Categories.Add(cat.SharedCode, cat.BookCategoryFullName);
+        }
+
         Model = new ExportCheckingHistoryCriteria()
             {
                 SharedCode = appState.SharedCode,
