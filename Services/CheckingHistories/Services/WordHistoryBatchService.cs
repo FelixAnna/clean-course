@@ -26,7 +26,7 @@ namespace Services.CheckingHistories.Services
             var index = 1;
             var results = words.Select(x =>
             {
-                var wordInfo = $"{index++}{splitter}{x.Content}{splitter}{x.Explanation}{splitter}{x.Details}{splitter}{x.Unit}{splitter}{x.Course}";
+                var wordInfo = $"{index++}{splitter}{Encode(x.Content)}{splitter}{Encode(x.Explanation)}{splitter}{Encode(x.Details)}{splitter}{x.Unit}{splitter}{x.Course}";
                 var checkingInfo = x.CheckingHistories
                                     .OrderBy(y => y.CreatedTime)
                                     .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
@@ -45,6 +45,15 @@ namespace Services.CheckingHistories.Services
 
             return results;
         }
+
+        private static string Encode(string value)
+        {
+            if(string.IsNullOrEmpty(value)) return string.Empty;
+
+            var encodedValue = value.Replace("\n","\\n").Trim();
+            return encodedValue;
+        }
+
         public async Task SaveCheckingStatusAsync(int wordId, int kidId, CheckingRemark status)
         {
             var model = new AddCheckingHistoryModel()
@@ -160,7 +169,7 @@ namespace Services.CheckingHistories.Services
 
             providedWords = (from word in existingWords
                              from history in providedWords
-                             where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <=0 )
+                             where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
                              select new WordCheckingHistoriesModel()
                              {
                                  Id = word.WordId,

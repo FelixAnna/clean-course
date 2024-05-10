@@ -46,7 +46,7 @@ namespace Services.BookCategoryWords
                 Course = x.Course,
                 Content = x.Content,
                 Explanation = x.Explanation,
-                Details= x.Details,
+                Details = x.Details,
                 Unit = x.Unit,
                 SharedCode = model.SharedCode,
                 WordId = -1
@@ -71,7 +71,7 @@ namespace Services.BookCategoryWords
             return tobeInsertedNewWords;
         }
 
-        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel,params AddWordModel[] words)
+        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel, params AddWordModel[] words)
         {
             var tobeInsertedNewWords = words.Where(x => string.Equals(x.Course, addModel.Course)).ToArray();
             var tobeUpdated = new List<WordEntity>();

@@ -152,13 +152,13 @@ else
                     <td>
                         @if (!toCheckedWords.Contains(word.WordId))
                         {
-                            <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success m-2 btn-sm">
+                            <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success btn-sm">
                                 准备
                             </button>
                         }
                         else
                         {
-                            <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-secondary m-2 btn-sm">
+                            <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-secondary btn-sm">
                                 取消
                             </button>
                         }

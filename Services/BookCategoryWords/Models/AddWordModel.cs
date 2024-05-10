@@ -42,9 +42,9 @@ public static class AddWordModelConvertor
         {
             SharedCode = shareCode,
             Course = course,
-            Content = values[contentIndex],
-            Explanation = values[explanationIndex],
-            Details = values[detailsIndex],
+            Content = Decode(values[contentIndex]),
+            Explanation = Decode(values[explanationIndex]),
+            Details = Decode(values[detailsIndex]),
             Unit = int.Parse(values[UnitIndex]),
         };
 
@@ -54,6 +54,14 @@ public static class AddWordModelConvertor
         }
 
         return model;
+    }
+
+    private static string Decode(string value)
+    {
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+
+        var decodedValue = value.Replace("\\n", "\n").Trim();
+        return decodedValue;
     }
 
 }

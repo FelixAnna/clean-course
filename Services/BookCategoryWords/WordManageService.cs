@@ -13,7 +13,7 @@ namespace Services.BookCategoryWords
             var results = words.Select(x =>
             {
                 return new WordModel(x);
-            }).ToList();
+            }).OrderBy(x=>x.Course).ThenBy(x=>x.Unit).ThenBy(x=>x.Content).ToList();
 
             return new SearchWordsResult()
             {
@@ -21,6 +21,7 @@ namespace Services.BookCategoryWords
                 Count = results.Count
             };
         }
+
         public async Task<WordModel> UpdateWordAsync(int id, AddWordModel model)
         {
             var result = await repository.UpdateAsync(id, model);

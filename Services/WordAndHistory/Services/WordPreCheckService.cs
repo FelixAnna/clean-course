@@ -13,7 +13,7 @@ namespace Services.WordAndHistory.Services
                 _preCheckWordsForKids[kidId] = new List<WordHistoryModel>();
             }
 
-            var words = _preCheckWordsForKids[kidId].Where(x => x.SharedCode == sharedCode).ToList();
+            var words = _preCheckWordsForKids[kidId].Where(x => x.SharedCode == sharedCode).OrderByDescending(x=>x.Course).ThenBy(x=>x.Unit).ThenBy(x=>x.WordId).ToList();
 
             return new SearchWordAndHistoryResult()
             {

@@ -246,7 +246,14 @@ else
         var contentBuilder = new StringBuilder();
         foreach (var word in result.Words)
         {
-            contentBuilder.Append(word.Content);
+            if (word.Course == "英语" || word.Course == "English")
+            {
+                contentBuilder.Append(word.Explanation);
+            }
+            else
+            {
+                contentBuilder.Append(word.Content);
+            }
             contentBuilder.Append(WordSplitter);
         }
 

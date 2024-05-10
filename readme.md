@@ -19,7 +19,6 @@ dotnet 8.0 (C# 12) + MAUI Blazor cross platform framework， database is SQLite 
 
 ```bash
 dotnet publish -f net8.0-windows10.0.19041.0 -c Release -p:RuntimeIdentifierOverride=win10-x64 --self-contained
-
 ```
 
 ### Publish to Android
