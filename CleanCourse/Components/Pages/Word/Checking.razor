@@ -84,11 +84,12 @@ else
     <table class="table">
         <thead class="thead-light">
             <tr>
-                <th class="w-5">#</th>
-                <th class="w-25">单词/词语</th>
-                <th class="w-25">翻译/拼音</th>
-                <th class="w-25">课程/单元</th>
-                <th class="w-25">检查情况</th>
+                <th class="w-auto">#</th>
+                <th class="w-auto">单词/词语</th>
+                <th class="w-auto">翻译/拼音</th>
+                <th class="w-auto">课程/单元</th>
+                <th class="w-auto">检查情况</th>
+                <th class="w-auto"></th>
             </tr>
         </thead>
         <tbody>
@@ -98,59 +99,45 @@ else
             @foreach (var word in currentItems)
             {
                 <tr>
-                    <td>@(x++)</td>
-                    <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
-                    <td>@word.Explanation</td>
-                    <td>@word.Course/@word.Unit</td>
-                    <td>
+                    <td class="w-auto">@(x++)</td>
+                    <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                    <td class="w-auto">@word.Explanation</td>
+                    <td class="w-auto">@word.Course/@word.Unit</td>
+                    <td class="w-auto">
                         @word.CheckingHistorySummary
                    </td>
-                </tr>
-                @if (!checkedWords.Contains(word.WordId))
-                {
-                    <tr>
-                        <td>
-                        </td>
-                        <td>
-                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Correct))" class="btn btn-success m-2 btn-sm">
+                    <td class="w-auto">
+                    @if (!checkedWords.Contains(word.WordId))
+                        {
+                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Correct))" class="btn btn-success mx-2 btn-sm">
                                 正确
                             </button>
-                        </td>
-                        <td>
-                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning m-2 btn-sm">
+                            <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning mx-2 btn-sm">
                                 错误
                             </button>
-                        </td>
-                        
-                        @if (word.IsEnglish())
-                        {
-                            <td>
-                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger m-1 btn-sm">
+                            @if (word.IsEnglish())
+                            {
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger mx-3 btn-sm">
                                     拼写 错误
                                 </button>
-                            </td>
-                            <td>
-                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Translation))" class="btn btn-danger m-1 btn-sm">
+
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Translation))" class="btn btn-danger mx-1 btn-sm">
                                     翻译 错误
                                 </button>
-                            </td>
-                        }
-                        else if (word.IsChinese())
-                        {
-                            <td>
-                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Word))" class="btn btn-danger m-1 btn-sm">
+                            }
+                            else if (word.IsChinese())
+                            {
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Word))" class="btn btn-danger mx-3 btn-sm">
                                     文字 错误
                                 </button>
-                            </td>
-                            <td>
-                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Pinyin))" class="btn btn-danger m-1 btn-sm">
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Pinyin))" class="btn btn-danger mx-1 btn-sm">
                                     拼音 错误
                                 </button>
-                            </td>
+                            }
                         }
-                    </tr>
+                    </td>
+                </tr>
                 }
-            }
         </tbody>
     </table>
     <nav aria-label="Page navigation example">

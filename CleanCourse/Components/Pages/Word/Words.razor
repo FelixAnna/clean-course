@@ -25,17 +25,10 @@
     <InputText @bind-Value="Model!.SharedCode" hidden="hidden"/>
     <InputNumber @bind-Value="Model.KidId" hidden="hidden" />
     <table class="row gy-3 pe-1">
-        <thead>
-            <tr class="form-group">
-                <th ></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
         <tbody>
             <tr class="form-group">
                 <td class="m-2">
-                    <div >
+                    <div class="flex-row">
                         <label class="form-label">课程：</label>
                         <select @bind="Model.Course" class="form-select small">
                             @foreach (var course in Courses)
@@ -46,7 +39,7 @@
                     </div>
                 </td>
                 <td>
-                    <div>
+                    <div class="flex-row">
                         <label class="form-label">
                             单元：
                         </label>
@@ -59,7 +52,7 @@
                     </div>
                 </td>
                 <td class="m-2">
-                    <div>
+                    <div class="flex-row">
                         <label class="form-label">检查情况：</label>
 
                         <select @bind="Model.CheckingResult" class="form-select" aria-describedby="search-addon">
@@ -116,14 +109,23 @@
         </tbody>
     </table>
 </EditForm>
-<hr class="hr" />
 @if (result == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-
+    <ul class="pagination">
+        @if (pageIndex > 1)
+        {
+            <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+        }
+        <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+        @if (pageIndex < totalPage)
+        {
+            <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+        }
+    </ul>
     <table class="table">
         <thead class="thead-light">
             <tr>
