@@ -24,6 +24,11 @@
             return Course == "语文" || Course == "Chinese";
         }
 
+        public bool IsLongText()
+        {
+            return !string.IsNullOrEmpty(Details) && Details.Length>8;
+        }
+
         public int CompareTo(BaseWordModel? other)
         {
             return other?.WordId ?? 0 - this.WordId;

@@ -15,9 +15,7 @@
 
 <h3>听写</h3>
 
-<p>新增听写信息。
-    <a href="/words" class="btn btn-outline-primary" data-mdb-ripple-init>返回</a>
-</p>
+<p>新增听写信息。</p>
 <hr class="hr" />
 <table class="row gy-3 pe-1">
     <thead>
@@ -115,7 +113,10 @@ else
                             <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning mx-2 btn-sm">
                                 错误
                             </button>
-                            @if (word.IsEnglish())
+                            @if (word.IsLongText())
+                            {
+                                <a class="btn btn-danger mx-3 btn-sm" href="/bookCategories/@(word.SharedCode)/words/@(word.WordId)/addhoc">记录为新的错字</a>
+                            }else if (word.IsEnglish())
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger mx-3 btn-sm">
                                     拼写 错误
