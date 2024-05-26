@@ -83,8 +83,8 @@ else
         <thead class="thead-light">
             <tr>
                 <th class="w-auto">#</th>
-                <th class="w-auto">单词/词语</th>
-                <th class="w-auto">翻译/拼音</th>
+                <th class="w-auto">主题</th>
+                <th class="w-auto">备注</th>
                 <th class="w-auto">课程/单元</th>
                 <th class="w-auto">检查情况</th>
                 <th class="w-auto"></th>
@@ -98,8 +98,16 @@ else
             {
                 <tr>
                     <td class="w-auto">@(x++)</td>
-                    <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
-                    <td class="w-auto">@word.Explanation</td>
+                    @if (word.IsMath())
+                    {
+                        <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                        <td class="w-auto">@word.Details</td>
+                    }
+                    else
+                    {
+                        <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                        <td class="w-auto">@word.Explanation</td>
+                    }
                     <td class="w-auto">@word.Course/@word.Unit</td>
                     <td class="w-auto">
                         @word.CheckingHistorySummary
@@ -113,7 +121,7 @@ else
                             <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning mx-2 btn-sm">
                                 错误
                             </button>
-                            @if (word.IsLongText())
+                            @if(word.IsLongText() && !word.IsMath())
                             {
                                 <a class="btn btn-danger mx-3 btn-sm" href="/bookCategories/@(word.SharedCode)/words/@(word.WordId)/addhoc">记录为新的错字</a>
                             }else if (word.IsEnglish())
@@ -234,9 +242,12 @@ else
         var contentBuilder = new StringBuilder();
         foreach (var word in result.Words)
         {
-            if (word.Course == "英语" || word.Course == "English")
+            if (word.IsEnglish())
             {
                 contentBuilder.Append(word.Explanation);
+            }else if (word.IsMath())
+            {
+                contentBuilder.Append(word.Details);
             }
             else
             {
@@ -258,6 +269,8 @@ else
             contentBuilder.Append(word.Content);
             contentBuilder.Append(Splitter);
             contentBuilder.Append(word.Explanation);
+            contentBuilder.Append(Splitter);
+            contentBuilder.Append(word.Details);
             contentBuilder.Append(WordSplitter);
         }
 

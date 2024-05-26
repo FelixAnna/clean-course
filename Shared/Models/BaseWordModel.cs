@@ -23,6 +23,10 @@
         {
             return Course == "语文" || Course == "Chinese";
         }
+        public bool IsMath()
+        {
+            return Course == "数学" || Course == "Math";
+        }
 
         public bool IsLongText()
         {
