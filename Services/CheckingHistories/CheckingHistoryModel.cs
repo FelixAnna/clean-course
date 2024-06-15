@@ -13,6 +13,7 @@ public class CheckingHistoryModel
             Content = wordEntity.Content,
             Course = wordEntity.Course,
             Details = wordEntity.Details,
+            Unit = wordEntity.Unit,
             Explanation = wordEntity.Explanation,
         };
 
