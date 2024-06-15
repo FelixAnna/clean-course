@@ -7,7 +7,7 @@
 
 <h3>检查记录</h3>
 
-<p>这里显示当前字的检查记录。</p>
+<p>这里显示当前词条的检查记录。</p>
 <hr class="hr" />
 @if (historyRecords == null)
 {
@@ -16,48 +16,37 @@
 else
 {
     <table class="row gy-3 pe-1">
-    <thead>
-        <tr class="form-group">
-            <th ></th>
-            <th ></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="form-group">
-            <td class="col-md-4">
-                <label class="form-label">宝宝：</label>
-                <span class="text-primary">@appState.KidName</span>
-            </td>
-            <td class="col-md-4">
-                <label class="form-label">课程：</label>
-                <span class="text-primary">@historyRecords.Word.Course</span>
-            </td>
-        </tr>
-        <tr class="form-group">
-            <td class="col-md-4">
-                @if (historyRecords.Word.IsEnglish())
-                {
-                    <label class="form-label">单词：</label>
-                }
-                else
-                {
-                    <label class="form-label">词语：</label>
-                }
-                <span class="text-primary">@historyRecords.Word.Content</span>
-            </td>
-            <td class="col-md-4">
-                @if (historyRecords.Word.IsEnglish())
-                {
-                    <label class="form-label">翻译：</label>
-                }
-                else
-                {
-                    <label class="form-label">拼音：</label>
-                }
-                <span class="text-primary">@historyRecords.Word.Explanation</span>
-            </td>
-        </tr>
-            @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
+            <tr class="form-group">
+                <td class="col-md-4">
+                    <label class="form-label">宝宝：</label>
+                    <span class="text-primary">@appState.KidName</span>
+                </td>
+                <td class="col-md-4">
+                    <label class="form-label">教材：</label>
+                    <span class="text-primary">@appState.BookCategoryFullName</span>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td class="col-md-4">
+                    <label class="form-label">课程：</label>
+                    <span class="text-primary">@historyRecords.Word.Course</span>
+                </td>
+                <td class="col-md-4">
+                    <label class="form-label">单元：</label>
+                    <span class="text-primary">@historyRecords.Word.Unit</span>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td class="col-md-4">
+                    <label class="form-label">词条：</label>
+                    <span class="text-primary">@historyRecords.Word.Content</span>
+                </td>
+                <td class="col-md-4">
+                   <label class="form-label">备注：</label>
+                    <span class="text-primary">@historyRecords.Word.Explanation</span>
+                </td>
+            </tr>
+        @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
         <tr class="form-group">
             <td class="m-2">
                 <label class="form-label">详细描述：</label>
@@ -65,7 +54,6 @@ else
             </td>
         </tr>
         }
-        </tbody>
     </table>
     <hr class="hr" />
     <table class="table">

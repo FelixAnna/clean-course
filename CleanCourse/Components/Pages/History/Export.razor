@@ -10,9 +10,9 @@
 @inject NavigationManager navigationManager
 
 
-<h3>单词/词语</h3>
+<h3>词条</h3>
 
-<p>批量导出单词/词语的检查记录。</p>
+<p>批量导出词条的检查记录。</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="ImportHistory">
     <DataAnnotationsValidator />
@@ -39,7 +39,7 @@
         </tr>
     </table>
     <div class="form-group">
-        <label class="form-label">单词/词语的历史记录：</label>
+        <label class="form-label">词条的历史记录：</label>
         <textarea @bind="Content" class="form-control rounded" rows="8" cols="100" placeholder="导出的结果会在这里，可以直接粘贴到Excel 或 CSV文件里" />
     </div>
 </EditForm>

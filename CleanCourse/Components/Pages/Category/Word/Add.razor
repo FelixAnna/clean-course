@@ -7,9 +7,10 @@
 @inject NavigationManager navigationManager
 
 
-<h3>单词/词语</h3>
+<h3>词条</h3>
 
-<p>为当前教材添加单词/词语。
+<p>
+    为当前教材(<span class="text-primary">@appState.BookCategoryFullName</span>)添加词条。
     <a href="/bookCategories/@(sharedCode)/words/import" class="btn btn-outline-primary" data-mdb-ripple-init>导入</a>
 </p>
 <hr class="hr" />
@@ -44,11 +45,11 @@
         </tr>
         <tr class="form-group">
             <td class="m-2">
-                <label class="form-label">单词/词语：</label>
+                <label class="form-label">词条：</label>
                 <InputText @bind-Value="Model!.Content" class="form-control rounded" />
             </td>
             <td>
-                <label class="form-label">翻译/拼音：</label>
+                <label class="form-label">备注：</label>
                 <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
             </td>
         </tr>

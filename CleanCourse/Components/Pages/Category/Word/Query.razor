@@ -10,7 +10,7 @@
 <h3>字库</h3>
 
 <p>
-    查询字库单词/词语信息。
+    查询当前教材(<span class="text-primary">@appState.BookCategoryFullName</span>)词条信息。
     <a href="/bookCategories/@(sharedCode)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增/导入</a>
 </p>
 <hr class="hr" />
@@ -18,6 +18,7 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
     <InputText @bind-Value="Model.SharedCode" hidden="hidden" />
+
     <table class="row gy-3 pe-1">
         <tbody>
             <tr class="form-group">
@@ -42,11 +43,11 @@
                     </select>
                 </td>
                 <td>
-                    <label class="form-label">单词/词语：</label>
+                    <label class="form-label">词条：</label>
                     <InputText @bind-Value="Model!.Content" class="form-control rounded" />
                 </td>
                 <td>
-                    <label class="form-label">翻译/拼音：</label>
+                    <label class="form-label">备注：</label>
                     <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
                 </td>
                 <td>
@@ -72,8 +73,8 @@ else
         <thead class="thead-light">
             <tr>
                 <th>#</th>
-                <th>单词/词语</th>
-                <th>翻译/拼音</th>
+                <th>词条</th>
+                <th>备注</th>
                 <th>课程/单元</th>
                 <th></th>
             </tr>

@@ -47,7 +47,7 @@
                 <td class="col-md-4">
                     <div>
                         <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
-                            复制词语
+                            复制词条
                         </button>
                     </div>
                 </td>
@@ -56,13 +56,13 @@
                     {
                         <div>
                             <button @onclick="@(e => CopyErrorWords())" class="btn btn-secondary m-2 btn-sm">
-                                复制错误词语
+                                复制错误内容
                             </button>
                         </div>
                     } else {
                         <div>
                             <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
-                            复制全部
+                            复制全部内容
                         </button>
                     </div>
                     }
