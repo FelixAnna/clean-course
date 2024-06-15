@@ -1,5 +1,6 @@
 ﻿using Entities.Entities;
 using Services.CheckingHistories.Models;
+using Services.Kids;
 
 namespace Services.CheckingHistories;
 
@@ -23,6 +24,7 @@ public class CheckingHistoryModel
             {
                 CreatedTime = x.CreatedTime,
                 Id = x.Id,
+                Kid = new KidModel(x.Kid),
                 IsCorrect = x.IsCorrect,
                 Remark = x.Remark,
             };

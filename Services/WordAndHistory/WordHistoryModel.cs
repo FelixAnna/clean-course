@@ -32,7 +32,7 @@ public class WordHistoryModel : BaseWordModel
             var success = histories.Count(x => x.IsCorrect);
             var failed = histories.Count(x => !x.IsCorrect);
 
-            var percent = (success * 1.0 / (success + failed)).ToString("P", CultureInfo.InvariantCulture);
+            var percent = (success * 1.0 / (success + failed)).ToString("0%", CultureInfo.InvariantCulture);
             result = $"{percent}({success}/{success + failed})";
         }
         else

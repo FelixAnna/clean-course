@@ -1,4 +1,6 @@
-﻿namespace Services.CheckingHistories.Models;
+﻿using Services.Kids;
+
+namespace Services.CheckingHistories.Models;
 
 public class CheckingHistory
 {
@@ -9,6 +11,8 @@ public class CheckingHistory
     public string? Remark { get; set; }
 
     public DateTime CreatedTime { get; set; }
+
+    public KidModel Kid { get; set; }
 
 
     public string GetFormattedRemark()

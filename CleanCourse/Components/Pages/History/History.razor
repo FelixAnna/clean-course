@@ -5,27 +5,21 @@
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 
-<h3>检查记录</h3>
-
-<p>这里显示当前词条的检查记录。</p>
-<hr class="hr" />
 @if (historyRecords == null)
 {
+    <h3>检查记录</h3>
+
+    <p>这里显示当前词条的检查记录。</p>
+    <hr class="hr" />
     <p><em>Loading...</em></p>
 }
 else
 {
+    <h3>@historyRecords.Word.Content</h3>
+
+    <p>@historyRecords.Word.Explanation</p>
+    <hr class="hr" />
     <table class="row gy-3 pe-1">
-            <tr class="form-group">
-                <td class="col-md-4">
-                    <label class="form-label">宝宝：</label>
-                    <span class="text-primary">@appState.KidName</span>
-                </td>
-                <td class="col-md-4">
-                    <label class="form-label">教材：</label>
-                    <span class="text-primary">@appState.BookCategoryFullName</span>
-                </td>
-            </tr>
             <tr class="form-group">
                 <td class="col-md-4">
                     <label class="form-label">课程：</label>
@@ -35,15 +29,9 @@ else
                     <label class="form-label">单元：</label>
                     <span class="text-primary">@historyRecords.Word.Unit</span>
                 </td>
-            </tr>
-            <tr class="form-group">
                 <td class="col-md-4">
-                    <label class="form-label">词条：</label>
-                    <span class="text-primary">@historyRecords.Word.Content</span>
-                </td>
-                <td class="col-md-4">
-                   <label class="form-label">备注：</label>
-                    <span class="text-primary">@historyRecords.Word.Explanation</span>
+                    <label class="form-label">教材：</label>
+                    <span class="text-primary">@appState.BookCategoryFullName</span>
                 </td>
             </tr>
         @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
@@ -60,6 +48,7 @@ else
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">宝宝</th>
                 <th scope="col">结果</th>
                 <th scope="col">备注</th>
                 <th scope="col">记录时间</th>
@@ -74,6 +63,7 @@ else
             {
                 <tr>
                     <td>@(x++)</td>
+                    <td>@history.Kid.Name</td>
                     <td>@(history.IsCorrect?"正确":"错误")</td>
                     <td>@history.GetFormattedRemark()</td>
                     <td>@history.CreatedTime</td>
