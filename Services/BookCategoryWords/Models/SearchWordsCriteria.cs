@@ -19,4 +19,6 @@ public class SearchWordsCriteria
 
     [Required]
     public int KidId { get; set; }
+
+    public int PageIndex { get; set; }
 }

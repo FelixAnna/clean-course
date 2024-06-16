@@ -1,4 +1,5 @@
-﻿using Services.WordAndHistory.Models;
+﻿using Services.BookCategoryWords.Models;
+using Services.WordAndHistory.Models;
 
 namespace CleanCourse;
 
@@ -8,7 +9,8 @@ public class AppState
     public string KidName { get; set; }
     public string SharedCode { get; set; }
     public string BookCategoryFullName { get; set; }
-    public SearchWordAndHistoryCriteria WordSearchCriteria { get; set; }
+    public SearchWordsCriteria SearchWordsCriteria { get; set; }
+    public SearchWordAndHistoryCriteria SearchWordAndHistoryCriteria { get; set; }
 
     public int DefaultPageSize
     {

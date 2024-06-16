@@ -102,14 +102,14 @@ else
     </table>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
-            @if (pageIndex > 1)
+            @if (Model.PageIndex > 1)
             {
-                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex-1))">&lt;&lt;</text></li>
             }
-            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
-            @if (pageIndex < totalPage)
+            <li class="page-item"><text id="pg-@(Model.PageIndex)" class="page-link">第 @(Model.PageIndex)/@(totalPage) 页</text></li>
+            @if (Model.PageIndex < totalPage)
             {
-                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex+1))">>></text></li>
             }
         </ul>
     </nav>
@@ -127,7 +127,6 @@ else
     private Dictionary<string, string> Courses;
     private Dictionary<int, string> Units;
 
-    private int pageIndex;
     private int totalPage;
     private int pageSize;
     private IList<WordModel> currentItems;
@@ -149,14 +148,21 @@ else
         }
 
         Model.SharedCode = sharedCode;
+        var lastSearchCriteria = appState.SearchWordsCriteria;
+        if (lastSearchCriteria?.SharedCode == Model.SharedCode)
+        {
+            Model = lastSearchCriteria;
+        }
+
         result = await service.GetWordsForBookCategoryAsync(Model);
-        Refresh(1);
+        Refresh();
     }
 
     private async Task Submit()
     {
+        Model.PageIndex = 1;
         result = await service.GetWordsForBookCategoryAsync(Model);
-        Refresh(1);
+        Refresh();
     }
 
     private async Task Delete(int id, string content)
@@ -171,29 +177,32 @@ else
                     Words = result.Words.Where(x => x.WordId != id).ToArray(),
                     Count = result.Count - 1,
                 };
-            Refresh(pageIndex);
+            Refresh();
         }
     }
 
-    private void Refresh(int page)
+    private void Refresh()
     {
+        var pageIndex = Model.PageIndex;
         totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
-        ChangePage(page);
+        ChangePage(pageIndex);
+
+        appState.SearchWordsCriteria = Model;
     }
 
-    private void ChangePage(int i)
+    private void ChangePage(int pageIndex)
     {
-        if (i < 1)
+        if (pageIndex < 1)
         {
-            i = 1;
+            pageIndex = 1;
         }
 
-        if (i > totalPage)
+        if (pageIndex > totalPage)
         {
-            i = totalPage;
+            pageIndex = totalPage;
         }
 
-        pageIndex = i;
+        Model.PageIndex = pageIndex;
         currentItems = result.Words.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
     }
 }
