@@ -48,9 +48,9 @@ namespace Services.CheckingHistories.Services
 
         private static string Encode(string value)
         {
-            if(string.IsNullOrEmpty(value)) return string.Empty;
+            if (string.IsNullOrEmpty(value)) return string.Empty;
 
-            var encodedValue = value.Replace("\n","\\n").Trim();
+            var encodedValue = value.Replace("\n", "\\n").Trim();
             return encodedValue;
         }
 

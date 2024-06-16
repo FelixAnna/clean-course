@@ -30,7 +30,7 @@
 
         public bool IsLongText()
         {
-            return !string.IsNullOrEmpty(Details) && Details.Length>8;
+            return !string.IsNullOrEmpty(Details) && Details.Length > 8;
         }
 
         public int CompareTo(BaseWordModel? other)

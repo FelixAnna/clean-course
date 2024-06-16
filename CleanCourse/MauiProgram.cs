@@ -19,9 +19,9 @@ namespace CleanCourse
                 });
 
             builder.Services.AddMauiBlazorWebView();
-            var stream = Task.Run(() => FileSystem.Current.OpenAppPackageFileAsync("appsettings.json")).Result;
-            builder.Configuration.AddJsonStream(stream);
 
+            
+            builder.Configuration.AddJsonFile(GetJsonConfigFile());
             builder.Services.RegisterAllServices(builder.Configuration);
 
             MigrateDatabase(builder);
@@ -38,6 +38,18 @@ namespace CleanCourse
         {
             var dbContext = builder.Services.BuildServiceProvider().GetService<AbstractCourseContext>()!;
             dbContext.Database.Migrate();
+        }
+
+        private static string GetJsonConfigFile()
+        {
+            var configFileName = Path.Combine(FileSystem.Current.AppDataDirectory, "appsettings.json");
+            if (!File.Exists(configFileName))
+            {
+                var stream = Task.Run(() => FileSystem.Current.OpenAppPackageFileAsync("appsettings.json")).Result;
+                using FileStream outputStream = File.Create(configFileName);
+                stream.CopyTo(outputStream);
+            }
+            return configFileName;
         }
     }
 }

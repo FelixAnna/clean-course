@@ -76,9 +76,9 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
         if (!string.IsNullOrEmpty(request.Content))
         {
-            results = results.Where(x => 
-            x.Content.Contains(request.Content, StringComparison.OrdinalIgnoreCase) 
-            || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Content,StringComparison.OrdinalIgnoreCase))
+            results = results.Where(x =>
+            x.Content.Contains(request.Content, StringComparison.OrdinalIgnoreCase)
+            || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Content, StringComparison.OrdinalIgnoreCase))
             ).ToList();
         }
 
