@@ -143,6 +143,9 @@ else
                                     拼音 错误
                                 </button>
                             }
+                            <button @onclick="@(e => CancelChecking(word.WordId))" class="btn btn-secondary mx-3 btn-sm">
+                                取消
+                            </button>
                         }
                     </td>
                 </tr>
@@ -207,12 +210,20 @@ else
         await historyService.SaveCheckingStatusAsync(id, appState.KidId, status);
 
         checkedWords.Add(id);
-        if(status != CheckingRemark.Correct)
+        if (status != CheckingRemark.Correct)
         {
             errorWords.Add(id);
         }
 
+        CancelChecking(id);
+    }
+
+    private void CancelChecking(int id)
+    {
         preCheckService.Remove(appState.KidId, id);
+        result.Words = result.Words.Where(x => x.WordId != id).ToArray();
+        result.Count = result.Words.Count();
+        Refresh(pageIndex);
     }
 
     private void Refresh(int page)
