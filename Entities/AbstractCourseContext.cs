@@ -8,6 +8,8 @@ namespace Entities
     {
         public DbSet<BookCategoryEntity> BookCategories { get; set; }
 
+        public DbSet<BookEntity> Books { get; set; }
+        public DbSet<BookCategoryMappingsEntity> BookCategoryMappings { get; set; }
         public DbSet<WordEntity> Words { get; set; }
 
         public DbSet<CheckingHistoryEntity> CheckingHistories { get; set; }

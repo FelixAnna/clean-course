@@ -36,12 +36,11 @@ public static class AddWordModelConvertor
         return true;
     }
 
-    public static AddWordModel FromLine(string shareCode, string course, string[] values)
+    public static AddWordModel FromLine(int bookId, string[] values)
     {
         var model = new AddWordModel()
         {
-            SharedCode = shareCode,
-            Course = course,
+            BookId = bookId,
             Content = Decode(values[contentIndex]),
             Explanation = Decode(values[explanationIndex]),
             Details = Decode(values[detailsIndex]),

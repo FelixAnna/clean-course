@@ -24,16 +24,16 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
         if (!string.IsNullOrEmpty(request.SharedCode))
         {
-            words = words.Where(x => x.SharedCode == request.SharedCode);
+            var bookIds = courseContext.BookCategoryMappings
+                .Where(x=>x.BookCategory.SharedCode == request.SharedCode)
+                .Where(x=> string.IsNullOrEmpty(request.Course) || string.Equals(x.Book.BookName, request.Course, StringComparison.OrdinalIgnoreCase))
+                .Select(x=>x.BookId).ToList();
+            words = words.Where(x => bookIds.Contains(x.BookId));
         }
+
         if (request.Unit > 0)
         {
             words = words.Where(x => x.Unit == request.Unit);
-        }
-
-        if (!string.IsNullOrEmpty(request.Course))
-        {
-            words = words.Where(x => x.Course == request.Course);
         }
 
         IList<WordEntity> results = await words.ToListAsync();
@@ -97,12 +97,11 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         {
             var result = courseContext.Words.Add(new WordEntity
             {
-                Course = model.Course,
+                BookId = model.BookId,
                 Content = model.Content,
                 Explanation = model.Explanation,
                 Details = model.Details,
                 Unit = model.Unit,
-                SharedCode = model.SharedCode,
             });
 
             results.Add(result.Entity);
@@ -119,7 +118,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         word.Explanation = model.Explanation;
         word.Details = model.Details;
         word.Unit = model.Unit;
-        word.Course = model.Course;
+        word.BookId = model.BookId;
         await courseContext.SaveChangesAsync();
         return word;
     }

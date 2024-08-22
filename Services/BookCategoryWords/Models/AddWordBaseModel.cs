@@ -5,10 +5,7 @@ namespace Services.BookCategoryWords.Models
     public abstract class AddWordBaseModel
     {
         [Required]
-        public required string SharedCode { get; set; }
-
-        [Required]
-        public string Course { get; set; }
+        public int BookId { get; set; }
 
         [Required]
         public string Overwrite { get; set; }

@@ -7,9 +7,7 @@ public class WordEntity
     [Key]
     public int WordId { get; set; }
 
-    public required string SharedCode { get; set; }
-
-    public required string Course { get; set; }
+    public required int BookId { get; set; }
 
     public required string Content { get; set; }
 

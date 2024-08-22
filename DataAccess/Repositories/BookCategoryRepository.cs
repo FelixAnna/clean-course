@@ -15,10 +15,7 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
         var result = courseContext.BookCategories.Add(new BookCategoryEntity
         {
             SharedCode = code,
-            CategoryName = model.CategoryName,
-            Grade = model.Grade,
-            Semester = model.Semester,
-            Year = model.Year
+            CategoryName = model.CategoryName
         });
         await courseContext.SaveChangesAsync();
         return result.Entity;
@@ -26,7 +23,7 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
 
     private static string GenerateCode(AddBookCategoryModel model)
     {
-        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes($"{model.CategoryName}-{model.Year}-{model.Grade}-{model.Semester}");
+        var plainTextBytes = System.Text.Encoding.UTF8.GetBytes($"{model.CategoryName}");
         var code = Convert.ToBase64String(plainTextBytes);
         return code;
     }
@@ -35,9 +32,6 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
     {
         var category = await courseContext.BookCategories.FirstAsync(x => x.Id == id);
         category.CategoryName = model.CategoryName;
-        category.Grade = model.Grade;
-        category.Semester = model.Semester;
-        category.Year = model.Year;
         await courseContext.SaveChangesAsync();
         return category;
     }
@@ -58,10 +52,10 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
         var category = await courseContext.BookCategories.FindAsync(categoryId);
         if (category != null)
         {
-            var relatedWords = courseContext.Words.Include(x => x.CheckingHistories)
-                .Where(w => w.SharedCode == category.SharedCode)
+            var relatedMappings = courseContext.BookCategoryMappings
+                .Where(w => w.BookCategoryId == category.Id)
                 .ToList();
-            courseContext.Words.RemoveRange(relatedWords);
+            courseContext.BookCategoryMappings.RemoveRange(relatedMappings);
             await courseContext.SaveChangesAsync();
 
             courseContext.BookCategories.Remove(category);
