@@ -13,9 +13,8 @@ public class SearchWordsCriteria
     public string Explanation { get; set; }
 
     public int Unit { get; set; }
-
-    [Required]
     public string SharedCode { get; set; }
+    public int BookId { get; set; }
 
     [Required]
     public int KidId { get; set; }

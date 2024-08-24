@@ -3,8 +3,6 @@ using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
 using Services.Books.Models;
 using Services.Books.Repositories;
-using Services.Kids.Models;
-using Services.Kids.Repositories;
 
 namespace DataAccess.Repositories;
 
@@ -22,6 +20,7 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
         var book = await courseContext.Books.FindAsync(bookId);
         return book;
     }
+
     public async Task<BookEntity> AddAsync(AddBookModel model)
     {
         var result = await courseContext.Books.AddAsync(new BookEntity
@@ -36,9 +35,9 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
         return result.Entity;
     }
 
-    public async Task<BookEntity> UpdateAsync(int id, AddBookModel model)
+    public async Task<BookEntity> UpdateAsync(int bookId, AddBookModel model)
     {
-        var book = await courseContext.Books.FirstAsync(x => x.BookId == id);
+        var book = await courseContext.Books.FirstAsync(x => x.BookId == bookId);
         book.BookName = model.BookName;
         book.AuditYear = model.AuditYear;
         book.Grade = model.Grade;

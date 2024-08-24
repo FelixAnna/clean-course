@@ -24,7 +24,7 @@ public static class AddWordModelConvertor
     const int explanationIndex = contentIndex + 1;
     const int detailsIndex = contentIndex + 2;
     const int UnitIndex = contentIndex + 3;
-    const int CourseIndex = contentIndex + 4;
+    const int BookIndex = contentIndex + 4;
 
     public static bool IsValid(string[] values)
     {
@@ -47,9 +47,9 @@ public static class AddWordModelConvertor
             Unit = int.Parse(values[UnitIndex]),
         };
 
-        if (values.Length > CourseIndex && !string.IsNullOrEmpty(values[CourseIndex]))
+        if (values.Length > BookIndex && !string.IsNullOrEmpty(values[BookIndex]))
         {
-            model.Course = values[CourseIndex];
+            model.BookId = int.Parse(values[BookIndex]);
         }
 
         return model;

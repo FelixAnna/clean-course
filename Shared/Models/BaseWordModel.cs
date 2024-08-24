@@ -4,9 +4,7 @@
     {
         public int WordId { get; set; }
 
-        public string SharedCode { get; set; }
-
-        public string Course { get; set; }
+        public int BookId { get; set; }
 
         public int Unit { get; set; }
 
@@ -17,15 +15,15 @@
 
         public bool IsEnglish()
         {
-            return Course == "英语" || Course == "English";
+            return true;// Course == "英语" || Course == "English";
         }
         public bool IsChinese()
         {
-            return Course == "语文" || Course == "Chinese";
+            return true;//Course == "语文" || Course == "Chinese";
         }
         public bool IsMath()
         {
-            return Course == "数学" || Course == "Math";
+            return true;//Course == "数学" || Course == "Math";
         }
 
         public bool IsLongText()

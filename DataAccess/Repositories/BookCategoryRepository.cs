@@ -65,6 +65,7 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
 
         return false;
     }
+
     public async Task<bool> SetDefaultAsync(int categoryId)
     {
         var allCategories = await courseContext.BookCategories.ToArrayAsync();

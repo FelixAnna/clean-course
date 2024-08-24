@@ -9,8 +9,7 @@ namespace Services.BookCategoryWords
         public WordModel(WordEntity entity)
         {
             WordId = entity.WordId;
-            SharedCode = entity.SharedCode;
-            Course = entity.Course;
+            BookId = entity.BookId;
             Content = entity.Content;
             Explanation = entity.Explanation;
             Details = entity.Details;
