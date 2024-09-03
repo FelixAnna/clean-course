@@ -5,7 +5,7 @@ namespace Services.Kids;
 public interface IKidService
 {
     Task<KidModel> AddKidAsync(AddKidModel model);
-    Task<bool> FreeKidAsync(int kidId);
+    Task<bool> UnRegisterKidAsync(int kidId);
     Task<SearchKidResult> GetAllAsync();
     Task<bool> SetDefaultAsync(int kidId);
     Task<KidModel> GetDefaultAsync();

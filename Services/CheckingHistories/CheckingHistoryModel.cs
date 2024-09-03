@@ -12,7 +12,7 @@ public class CheckingHistoryModel
         {
             WordId = wordEntity.WordId,
             Content = wordEntity.Content,
-            Course = wordEntity.Course,
+            BookId = wordEntity.BookId,
             Details = wordEntity.Details,
             Unit = wordEntity.Unit,
             Explanation = wordEntity.Explanation,

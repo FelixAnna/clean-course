@@ -1,0 +1,102 @@
+﻿@page "/books/{id:int}/update"
+@using Services.Books.Models
+@using Services.Books
+@using Services.Metadata
+@inject IBookService service
+@inject NavigationManager navigationManager
+
+<h3>教材</h3>
+
+<p>修改教材信息。</p>
+
+<hr class="hr" />
+
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="UpdateBook">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="col-md-5">
+        <label class="form-label">审核年份</label>
+        <select @bind="Model.AuditYear" class="form-select">
+            @foreach (var year in Years)
+            {
+                <option value="@year">@year</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">版本：</label>
+        <select @bind="Model.Version" class="form-select">
+            @foreach (var version in Versions)
+            {
+                <option value="@version">@version</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">年级</label>
+        <select @bind="Model.Grade" class="form-select">
+            @foreach (var grade in Grades)
+            {
+                <option value="@grade">@grade</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">学期</label>
+        <select @bind="Model.Semester" class="form-select">
+            @foreach (var semester in Semesters)
+            {
+                <option value="@semester">@semester</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label"></label>
+        <button type="submit" class="form-control btn btn-outline-primary" data-mdb-ripple-init>保存</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    [SupplyParameterFromForm]
+    public AddBookModel Model { get; set; }
+    public string[] Grades;
+    public string[] Versions;
+    public string[] Semesters;
+    public int[] Years;
+
+    public Update()
+    {
+        Grades = MetadataService.GetDefaultGrades();
+        Versions = MetadataService.GetDefaultVersions();
+        Semesters = MetadataService.GetDefaultSemesters();
+        Years = MetadataService.GetDefaultYears();
+        Model = new AddBookModel()
+            {
+                BookName = "",
+                Version = Versions.FirstOrDefault(),
+                Grade = Grades.FirstOrDefault(),
+                AuditYear = Years.FirstOrDefault(),
+                Semester = Semesters.FirstOrDefault(),
+            };
+    }
+
+    protected override async void OnInitialized()
+    {
+        var category = await service.GetByIdAsync(id);
+        Model = new AddBookModel()
+            {
+                BookName = "",
+            };
+
+    }
+
+    private async Task Submit()
+    {
+        await service.UpdateAsync(id, Model);
+        navigationManager.NavigateTo("/books");
+    }
+}

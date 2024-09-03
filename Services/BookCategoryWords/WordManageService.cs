@@ -13,7 +13,7 @@ namespace Services.BookCategoryWords
             var results = words.Select(x =>
             {
                 return new WordModel(x);
-            }).OrderBy(x => x.Course).ThenBy(x => x.Unit).ThenBy(x => x.Content).ToList();
+            }).OrderBy(x => x.BookId).ThenBy(x => x.Unit).ThenBy(x => x.Content).ToList();
 
             return new SearchWordsResult()
             {

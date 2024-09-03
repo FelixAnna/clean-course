@@ -9,6 +9,8 @@ namespace Services.Books.Models
 
         public required string BookName { get; set; }
 
+        public string Version { get; set; }
+
         public int AuditYear { get; set; }
 
         public string Grade { get; set; }

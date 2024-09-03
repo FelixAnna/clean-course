@@ -26,21 +26,22 @@ namespace Services.CheckingHistories.Services
             var index = 1;
             var results = words.Select(x =>
             {
-                var wordInfo = $"{index++}{splitter}{Encode(x.Content)}{splitter}{Encode(x.Explanation)}{splitter}{Encode(x.Details)}{splitter}{x.Unit}{splitter}{x.Course}";
+                var wordInfo = $"{index++}{splitter}{Encode(x.Content)}{splitter}{Encode(x.Explanation)}{splitter}{Encode(x.Details)}{splitter}{x.Unit}{splitter}{x.BookId}";
                 var checkingInfo = x.CheckingHistories
                                     .OrderBy(y => y.CreatedTime)
                                     .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
                                     .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{splitter}{value}");
                 var data = new
-                {
+                {/*
                     x.SharedCode,
-                    x.Course,
+                    x.Course,*/
+                    x.BookId,
                     x.Unit,
                     Value = $"{wordInfo}{splitter}{checkingInfo}"
                 };
 
                 return data;
-            }).OrderBy(x => x.SharedCode).ThenBy(x => x.Course).ThenBy(x => x.Unit)
+            }).OrderBy(x => x.BookId)/*.ThenBy(x => x.Course)*/.ThenBy(x => x.Unit)
             .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{Environment.NewLine}{value.Value}");
 
             return results;
@@ -113,12 +114,12 @@ namespace Services.CheckingHistories.Services
 
             return toBeInserted.Select(x => new WordHistoryModel()
             {
-                Course = x.Course,
+                //Course = x.Course,
                 Content = x.Content,
                 Explanation = x.Explanation,
                 Details = x.Details,
                 Unit = x.Unit,
-                SharedCode = model.SharedCode,
+                //SharedCode = model.SharedCode,
                 WordId = x.Id,
                 CheckingHistorySummary = $"{x.CheckingHistories.Count(x => x.Remark == CheckingRemark.Correct)}/ {x.CheckingHistories.Count}",
             }).ToList();
@@ -147,7 +148,7 @@ namespace Services.CheckingHistories.Services
                     var wordParts = line.Split(splitter).Select(x => x.Trim()).ToArray();
                     if (AddWordHistoryModelConvertor.IsValid(wordParts))
                     {
-                        var addModel = AddWordHistoryModelConvertor.FromLine(model.SharedCode, model.Course, wordParts);
+                        var addModel = AddWordHistoryModelConvertor.FromLine(model.BookId, wordParts);
                         providedWords.Add(addModel);
                     }
                 }
@@ -162,19 +163,19 @@ namespace Services.CheckingHistories.Services
 
             var existingWords = await wordRepository.FindAsync(new SearchWordAndHistoryCriteria()
             {
-                SharedCode = model.SharedCode,
-                Course = model.Course,
+                KidId = model.KidId,
+                BookId = model.BookId,
             });
 
 
             providedWords = (from word in existingWords
                              from history in providedWords
-                             where word.SharedCode == history.SharedCode && word.Course == history.Course && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
+                             where word.BookId == history.BookId /*&& word.CheckingHistories == history.KidId*/ && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
                              select new WordCheckingHistoriesModel()
                              {
-                                 Id = word.WordId,
+                                 Id = word.WordId,/*
                                  SharedCode = word.SharedCode,
-                                 Course = word.Course,
+                                 Course = word.Course,*/
                                  Content = word.Content,
                                  Unit = word.Unit,
                                  Explanation = word.Explanation,

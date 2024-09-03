@@ -1,4 +1,4 @@
-﻿@page "/history/import"
+﻿@* @page "/history/import"
 @using Services.CheckingHistories
 @using Services.CheckingHistories.Models
 @using Services.Metadata
@@ -149,9 +149,9 @@
     {
         Model = new ImportCheckingHistoryModel()
             {
-                SharedCode = appState.SharedCode,
+                //SharedCode = appState.SharedCode,
                 KidId = appState.KidId,
-                Course = Courses.First().Key,
+                //Course = Courses.First().Key,
                 Overwrite = ImportOptions.First().Key,
             };
 
@@ -197,4 +197,4 @@
         currentItems.Clear();
         previewWords.Clear();
     }
-}
+} *@

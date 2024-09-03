@@ -25,9 +25,6 @@ else
             <tr>
                 <th>#</th>
                 <th>教材名</th>
-                <th>出版年</th>
-                <th>年级</th>
-                <th>学期</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -42,9 +39,6 @@ else
                     <td>@category.CategoryName
                         <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
                     </td>
-                    <td>@category.Year</td>
-                    <td>@category.Grade</td>
-                    <td>@category.Semester</td>
                     <td>
                         <a href="/bookCategories/@(category.SharedCode)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
                         <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>

@@ -1,0 +1,126 @@
+﻿@page "/books"
+@using Services.Books
+@using Services.Books.Models
+@inject IBookService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+
+<h3>课本</h3>
+
+<p>
+    这里显示所有已登记的课本信息。
+    <a href="/books/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
+</p>
+<hr class="hr" />
+
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>书名</th>
+                <th>版本</th>
+                <th>出版年份</th>
+                <th>年级</th>
+                <th>学期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int x = 1;
+            }
+            @foreach (var book in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td>@book.BookName
+                    </td>
+                    <td>@book.Version</td>
+                    <td>@book.AuditYear</td>
+                    <td>@book.Grade</td>
+                    <td>@book.Semester</td>
+                    <td>
+                        <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+                        <a href="/bookCategories/@(book.BookId)/update" class="btn btn-outline-primary">更新</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if(pageIndex >1){
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+
+    private SearchBookResult result;
+
+    private int pageIndex;
+    private int totalPage;
+    private int pageSize;
+    private IList<BookModel> currentItems;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pageSize = appState.DefaultPageSize;
+        result = await service.GetAllAsync();
+        Refresh(1);
+    }
+
+    private async Task Delete(int id, string name)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联字词和宝宝的检查记录，您确定要删除教材： '{name}' 吗?"))
+            return;
+
+        if (await service.DeleteAsync(id))
+        {
+
+            result = new SearchBookResult()
+                {
+                    Books = result.Books.Where(x => x.BookId != id).ToArray(),
+                    Count = result.Count - 1,
+                };
+            Refresh(pageSize);
+        }
+    }
+
+    private void Refresh(int page)
+    {
+        totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
+        ChangePage(page);
+    }
+
+    private void ChangePage(int i)
+    {
+        if (i < 1)
+        {
+            i = 1;
+        }
+
+        if (i > totalPage)
+        {
+            i = totalPage;
+        }
+
+        pageIndex = i;
+        currentItems = result.Books.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+    }
+}

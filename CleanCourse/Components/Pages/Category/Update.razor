@@ -19,33 +19,6 @@
             <label class="form-label">教材版本：</label>
             <InputText @bind-Value="Model!.CategoryName" class="form-control rounded" />
         </div>
-        <div class="col-md-5">
-            <label class="form-label">出版年份：</label>
-            <select @bind="Model.Year" class="form-select">
-                @foreach (var year in Years)
-                {
-                    <option value="@year">@year</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-5">
-            <label class="form-label">年级：</label>
-            <select @bind="Model.Grade" class="form-select">
-                @foreach (var grade in Grades)
-                {
-                    <option value="@grade">@grade</option>
-                }
-            </select>
-        </div>
-        <div class="col-md-5">
-            <label class="form-label">学期：</label>
-            <select @bind="Model.Semester" class="form-select">
-                @foreach (var semester in Semesters)
-                {
-                    <option value="@semester">@semester</option>
-                }
-            </select>
-        </div>
     </div>
     <div class="col-md-5">
         <label class="form-label"></label>
@@ -60,15 +33,8 @@
     [SupplyParameterFromForm]
     public AddBookCategoryModel Model { get; set; }
 
-    public string[] Grades;
-    public string[] Semesters;
-    public int[] Years;
-
     public Update()
     {
-        Grades = MetadataService.GetDefaultGrades();
-        Semesters = MetadataService.GetDefaultSemesters();
-        Years = MetadataService.GetDefaultYears();
         Model = MetadataService.GetDefaultBookCategory();
     }
 
@@ -78,9 +44,6 @@
         Model = new AddBookCategoryModel()
             {
                 CategoryName = category.CategoryName,
-                Grade = category.Grade,
-                Semester = category.Semester,
-                Year = category.Year,
             };
 
     }

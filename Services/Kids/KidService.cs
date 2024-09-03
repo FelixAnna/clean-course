@@ -35,7 +35,7 @@ public class KidService(IKidRepository repository) : IKidService
         return new KidModel(result);
     }
 
-    public async Task<bool> FreeKidAsync(int kidId)
+    public async Task<bool> UnRegisterKidAsync(int kidId)
     {
         return await repository.RemoveAsync(kidId);
     }

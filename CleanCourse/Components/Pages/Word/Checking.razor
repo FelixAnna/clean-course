@@ -108,7 +108,7 @@ else
                         <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
                         <td class="w-auto">@word.Explanation</td>
                     }
-                    <td class="w-auto">@word.Course/@word.Unit</td>
+                    <td class="w-auto">@word.BookId/@word.Unit</td>
                     <td class="w-auto">
                         @word.CheckingHistorySummary
                    </td>
@@ -123,7 +123,7 @@ else
                             </button>
                             @if(word.IsLongText() && !word.IsMath())
                             {
-                                <a class="btn btn-danger mx-3 btn-sm" href="/bookCategories/@(word.SharedCode)/words/@(word.WordId)/addhoc">记录为新的错字</a>
+                                <a class="btn btn-danger mx-3 btn-sm" href="/books/@(word.BookId)/words/@(word.WordId)/addhoc">记录为新的错字</a>
                             }else if (word.IsEnglish())
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger mx-3 btn-sm">

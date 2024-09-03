@@ -71,12 +71,11 @@ namespace Services.CheckingHistories.Models
             return true;
         }
 
-        public static WordCheckingHistoriesModel FromLine(string shareCode, string course, string[] values)
+        public static WordCheckingHistoriesModel FromLine(int bookId, string[] values)
         {
             var model = new WordCheckingHistoriesModel()
             {
-                SharedCode = shareCode,
-                Course = course,
+                BookId = bookId,
                 Content = values[contentIndex],
                 Explanation = values[explanationIndex],
                 Details = values[detailsIndex],
@@ -85,7 +84,7 @@ namespace Services.CheckingHistories.Models
 
             if (values.Length > CourseIndex && !string.IsNullOrEmpty(values[CourseIndex]))
             {
-                model.Course = values[CourseIndex];
+                model.BookId = int.Parse(values[CourseIndex]);
             }
 
             if (values.Length > HistoryIndex)

@@ -14,7 +14,7 @@ public class WordHistoryService(IWordRepository repository) : IWordHistoryServic
         var results = words.Select(x =>
         {
             return new WordHistoryModel(x);
-        }).OrderBy(x => x.Course).ThenBy(x => x.Unit).ToList();
+        }).OrderBy(x => x.BookId).ThenBy(x => x.Unit).ToList();
 
         return new SearchWordAndHistoryResult()
         {

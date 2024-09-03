@@ -10,8 +10,8 @@ public class WordHistoryModel : BaseWordModel
     public WordHistoryModel(WordEntity entity)
     {
         WordId = entity.WordId;
-        SharedCode = entity.SharedCode;
-        Course = entity.Course;
+        /*SharedCode = entity.SharedCode;
+        Course = entity.Course;*/
         Content = entity.Content;
         Explanation = entity.Explanation;
         Details = entity.Details;

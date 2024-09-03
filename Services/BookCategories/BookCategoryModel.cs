@@ -10,13 +10,7 @@ public class BookCategoryModel(BookCategoryEntity entity)
 
     public string SharedCode { get; set; } = entity.SharedCode;
 
-    public int Year { get; set; } = entity.Year;
-
-    public string Grade { get; set; } = entity.Grade;
-
-    public string Semester { get; set; } = entity.Semester;
-
     public bool Selected { get; set; } = entity.Selected;
 
-    public string BookCategoryFullName => $"{CategoryName}-{Year}-{Grade}-{Semester}";
+    public string BookCategoryFullName => $"{CategoryName}";
 }

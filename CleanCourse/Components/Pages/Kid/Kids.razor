@@ -99,7 +99,7 @@ else
         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除有关联字词的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
             return;
 
-        if (await service.FreeKidAsync(id))
+        if (await service.UnRegisterKidAsync(id))
         {
             result = new SearchKidResult()
                 {

@@ -29,6 +29,7 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
             AuditYear = model.AuditYear,
             Grade = model.Grade,
             Semester = model.Semester,
+            Version = model.Version,
         });
 
         await courseContext.SaveChangesAsync();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services.BookCategories;
 using Services.BookCategoryWords;
+using Services.Books;
 using Services.CheckingHistories;
 using Services.Kids;
 using Services.WordAndHistory.Services;
@@ -19,6 +20,7 @@ public static class ServiceDependencyInjections
         services.AddSingleton<IWordBatchService, WordBatchService>();
         services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
         services.AddSingleton<IWordManageService, WordManageService>();
+        services.AddSingleton<IBookService, BookService>();
 
         return services;
     }

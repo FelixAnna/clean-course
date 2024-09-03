@@ -1,4 +1,4 @@
-﻿@page "/bookCategories/{sharedCode}/words"
+﻿@page "/books/{bookId:int}/words"
 @using Services.BookCategoryWords
 @using Services.BookCategoryWords.Models
 @using Services.Metadata
@@ -10,27 +10,18 @@
 <h3>字库</h3>
 
 <p>
-    查询当前教材(<span class="text-primary">@appState.BookCategoryFullName</span>)词条信息。
-    <a href="/bookCategories/@(sharedCode)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增/导入</a>
+    查询当前课本词条信息。
+    <a href="/books/@(bookId)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增/导入</a>
 </p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <InputText @bind-Value="Model.SharedCode" hidden="hidden" />
+    <InputText @bind-Value="Model.BookId.ToString()" hidden="hidden" />
 
     <table class="row gy-3 pe-1">
         <tbody>
             <tr class="form-group">
-                <td>
-                    <label class="form-label">课程：</label>
-                    <select @bind="Model.Course" class="form-select">
-                        @foreach (var course in Courses)
-                        {
-                            <option value="@course.Key">@course.Value</option>
-                        }
-                    </select>
-                </td>
                 <td>
                     <label class="form-label">
                         单元：
@@ -89,9 +80,9 @@ else
                     <td>@(x++)</td>
                     <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
-                    <td>@word.Course/@word.Unit</td>
+                    <td>@word.BookId/@word.Unit</td>
                     <td>
-                        <a href="/bookCategories/@sharedCode/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
+                        <a href="/bookCategories/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
                         <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
                             删除
                         </button>
@@ -117,7 +108,7 @@ else
 
 @code {
     [Parameter]
-    public string sharedCode { get; set; } = null!;
+    public int bookId { get; set; }
 
     [SupplyParameterFromForm]
     public SearchWordsCriteria Model { get; set; }
@@ -141,15 +132,15 @@ else
     protected override async Task OnInitializedAsync()
     {
         pageSize = appState.DefaultPageSize;
-        if (string.IsNullOrEmpty(sharedCode))
+        if (bookId<=0)
         {
-            navigationManager.NavigateTo("/bookCategories", true);
+            navigationManager.NavigateTo("/books", true);
             return;
         }
 
-        Model.SharedCode = sharedCode;
+        Model.BookId = bookId;
         var lastSearchCriteria = appState.SearchWordsCriteria;
-        if (lastSearchCriteria?.SharedCode == Model.SharedCode)
+        if (lastSearchCriteria?.BookId == Model.BookId)
         {
             Model = lastSearchCriteria;
         }

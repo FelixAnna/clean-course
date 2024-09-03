@@ -1,4 +1,5 @@
 ﻿using Services.BookCategories.Models;
+using Services.Books.Models;
 using Services.Kids.Models;
 
 namespace Services.Metadata;
@@ -20,6 +21,15 @@ public static class MetadataService
             "九年级",
         ];
     }
+    public static string[] GetDefaultVersions()
+    {
+        return
+        [
+            "人教版",
+            "苏教版",
+        ];
+    }
+    
 
     public static string[] GetDefaultSemesters()
     {
@@ -104,9 +114,17 @@ public static class MetadataService
         var category = new AddBookCategoryModel()
         {
             CategoryName = "",
-            Grade = GetDefaultGrades().First(),
-            Semester = GetDefaultSemesters().First(),
-            Year = DateTime.Now.Year,
+        };
+
+        return category;
+    }
+    public static AddBookModel GetDefaultBook()
+    {
+        var category = new AddBookModel()
+        {
+            BookName = "",
+            Grade="一年级",
+            Semester="上学期",
         };
 
         return category;

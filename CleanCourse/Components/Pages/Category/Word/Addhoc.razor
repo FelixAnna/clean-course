@@ -1,4 +1,4 @@
-﻿@page "/bookCategories/{sharedCode}/words/{id:int}/addhoc"
+﻿@* @page "/bookCategories/{sharedCode}/words/{id:int}/addhoc"
 @using Services.BookCategoryWords
 @using Services.BookCategoryWords.Models
 @using Services.Metadata
@@ -108,8 +108,7 @@
 
         Model = new AddWordModel()
             {
-                SharedCode = sharedCode,
-                Course = word.Course,
+                BookId = word.BookId,
                 Unit = word.Unit,
                 Overwrite = DuplicateOptions.First().Key,
             };
@@ -120,4 +119,4 @@
         await importService.AddWordAsync(Model);
         navigationManager.NavigateTo("words/checking");
     }
-}
+} *@
