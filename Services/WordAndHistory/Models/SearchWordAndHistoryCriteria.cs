@@ -1,4 +1,4 @@
-﻿using Services.BookCategoryWords.Models;
+﻿using Services.Words.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Services.WordAndHistory.Models;

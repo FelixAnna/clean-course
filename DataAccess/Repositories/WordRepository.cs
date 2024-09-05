@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
-using Services.BookCategoryWords.Models;
+using Services.Words.Models;
 using Services.WordAndHistory.Models;
 using Services.WordAndHistory.Repositories;
 
@@ -22,13 +22,9 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
     {
         var words = courseContext.Words.AsQueryable();
 
-        if (!string.IsNullOrEmpty(request.SharedCode))
+        if (request.BookId>0)
         {
-            var bookIds = courseContext.BookCategoryMappings
-                .Where(x=>x.BookCategory.SharedCode == request.SharedCode)
-                .Where(x=> string.IsNullOrEmpty(request.Course) || string.Equals(x.Book.BookName, request.Course, StringComparison.OrdinalIgnoreCase))
-                .Select(x=>x.BookId).ToList();
-            words = words.Where(x => bookIds.Contains(x.BookId));
+            words = words.Where(x => x.BookId == request.BookId);
         }
 
         if (request.Unit > 0)
@@ -74,17 +70,13 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
             }
         }
 
-        if (!string.IsNullOrEmpty(request.Content))
+        if (!string.IsNullOrEmpty(request.Keyword))
         {
             results = results.Where(x =>
-            x.Content.Contains(request.Content, StringComparison.OrdinalIgnoreCase)
-            || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Content, StringComparison.OrdinalIgnoreCase))
+            x.Content.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
+            || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
+            || x.Explanation.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
             ).ToList();
-        }
-
-        if (!string.IsNullOrEmpty(request.Explanation))
-        {
-            results = results.Where(x => x.Explanation.Contains(request.Explanation, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
         return results.ToList();

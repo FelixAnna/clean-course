@@ -1,6 +1,6 @@
 ﻿@page "/books/{bookId:int}/words/add"
-@using Services.BookCategoryWords
-@using Services.BookCategoryWords.Models
+@using Services.Words
+@using Services.Words.Models
 @using Services.Metadata
 @inject AppState appState
 @inject IWordBatchService importService
@@ -11,7 +11,7 @@
 
 <p>
     为当前课本添加词条。
-    <a href="/bookCategories/@(bookId)/words/import" class="btn btn-outline-primary" data-mdb-ripple-init>导入</a>
+    <a href="/books/@(bookId)/words/import" class="btn btn-outline-primary" data-mdb-ripple-init>导入</a>
 </p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="AddWord">

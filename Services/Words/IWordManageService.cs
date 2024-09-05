@@ -1,6 +1,6 @@
-﻿using Services.BookCategoryWords.Models;
+﻿using Services.Words.Models;
 
-namespace Services.BookCategoryWords
+namespace Services.Words
 {
     public interface IWordManageService
     {

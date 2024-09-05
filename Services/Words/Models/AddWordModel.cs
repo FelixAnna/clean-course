@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Services.BookCategoryWords.Models;
+namespace Services.Words.Models;
 
 public class AddWordModel : AddWordBaseModel
 {

@@ -1,4 +1,4 @@
-﻿using Services.BookCategoryWords.Models;
+﻿using Services.Words.Models;
 using Services.WordAndHistory.Models;
 
 namespace CleanCourse;

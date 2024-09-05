@@ -1,5 +1,5 @@
 ﻿using Entities.Entities;
-using Services.BookCategoryWords.Models;
+using Services.Words.Models;
 
 namespace Services.WordAndHistory.Repositories
 {

@@ -1,7 +1,7 @@
-﻿using Services.BookCategoryWords.Models;
+﻿using Services.Words.Models;
 using Services.WordAndHistory.Repositories;
 
-namespace Services.BookCategoryWords
+namespace Services.Words
 {
     public class WordManageService(IWordRepository repository) : IWordManageService
     {
@@ -27,6 +27,7 @@ namespace Services.BookCategoryWords
             var result = await repository.UpdateAsync(id, model);
             return new WordModel(result);
         }
+
         public async Task<WordModel> GetByIdAsync(int id)
         {
             var result = await repository.GetByIdAsync(id);

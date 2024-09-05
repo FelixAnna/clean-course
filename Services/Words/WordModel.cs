@@ -1,7 +1,7 @@
 ﻿using Entities.Entities;
 using Shared.Models;
 
-namespace Services.BookCategoryWords
+namespace Services.Words
 {
     public class WordModel : BaseWordModel
     {

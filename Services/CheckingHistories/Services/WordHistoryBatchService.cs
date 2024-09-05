@@ -18,7 +18,7 @@ namespace Services.CheckingHistories.Services
             var request = new SearchWordAndHistoryCriteria()
             {
                 KidId = model.KidId,
-                SharedCode = model.SharedCode
+                //SharedCode = model.SharedCode
             };
 
             var words = await wordRepository.FindAsync(request);
@@ -170,7 +170,7 @@ namespace Services.CheckingHistories.Services
 
             providedWords = (from word in existingWords
                              from history in providedWords
-                             where word.BookId == history.BookId /*&& word.CheckingHistories == history.KidId*/ && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
+                             where word.WordId == history.BookId /*&& word.CheckingHistories == history.KidId*/ && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
                              select new WordCheckingHistoriesModel()
                              {
                                  Id = word.WordId,/*

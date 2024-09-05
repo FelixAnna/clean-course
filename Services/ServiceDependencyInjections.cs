@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Services.BookCategories;
-using Services.BookCategoryWords;
+using Services.Words;
 using Services.Books;
 using Services.CheckingHistories;
 using Services.Kids;

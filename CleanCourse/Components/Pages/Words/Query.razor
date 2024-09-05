@@ -1,6 +1,6 @@
 ﻿@page "/books/{bookId:int}/words"
-@using Services.BookCategoryWords
-@using Services.BookCategoryWords.Models
+@using Services.Words
+@using Services.Words.Models
 @using Services.Metadata
 @inject IWordManageService service
 @inject IJSRuntime JSRuntime
@@ -11,7 +11,7 @@
 
 <p>
     查询当前课本词条信息。
-    <a href="/books/@(bookId)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增/导入</a>
+    <a href="/books/@(bookId)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
 </p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
@@ -34,12 +34,8 @@
                     </select>
                 </td>
                 <td>
-                    <label class="form-label">词条：</label>
-                    <InputText @bind-Value="Model!.Content" class="form-control rounded" />
-                </td>
-                <td>
-                    <label class="form-label">备注：</label>
-                    <InputText @bind-Value="Model!.Explanation" class="form-control rounded" />
+                    <label class="form-label">关键字：</label>
+                    <InputText @bind-Value="Model!.Keyword" class="form-control rounded" />
                 </td>
                 <td>
                     <label class="form-label"></label>
@@ -82,7 +78,7 @@ else
                     <td>@word.Explanation</td>
                     <td>@word.BookId/@word.Unit</td>
                     <td>
-                        <a href="/bookCategories/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
+                        <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
                         <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
                             删除
                         </button>

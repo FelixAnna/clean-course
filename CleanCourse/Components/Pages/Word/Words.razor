@@ -1,4 +1,4 @@
-﻿@page "/words"
+﻿@* @page "/words"
 @using Services.CheckingHistories.Models
 @using Services.WordAndHistory
 @using Services.WordAndHistory.Models
@@ -334,3 +334,4 @@ else
         IsReadyToCheckAll = !currentItems.All(x => toCheckedWords.Contains(x.WordId));
     }
 }
+ *@

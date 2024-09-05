@@ -1,9 +1,9 @@
 ﻿using Entities.Entities;
-using Services.BookCategoryWords.Models;
+using Services.Words.Models;
 using Services.WordAndHistory.Models;
 using Services.WordAndHistory.Repositories;
 
-namespace Services.BookCategoryWords
+namespace Services.Words
 {
     public class WordBatchService(IWordRepository repository) : IWordBatchService
     {

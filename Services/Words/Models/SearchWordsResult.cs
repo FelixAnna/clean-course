@@ -1,4 +1,4 @@
-﻿namespace Services.BookCategoryWords.Models;
+﻿namespace Services.Words.Models;
 
 public class SearchWordsResult
 {
