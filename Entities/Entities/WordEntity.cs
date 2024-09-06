@@ -17,4 +17,6 @@ public class WordEntity
     public int Unit { get; set; }
 
     public IList<CheckingHistoryEntity> CheckingHistories { get; set; }
+
+    public BookEntity Book { get; set; }
 }

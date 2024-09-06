@@ -17,8 +17,8 @@
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <InputText @bind-Value="Model.BookId.ToString()" hidden="hidden" />
-
+@*     <InputText @bind-Value="Model.BookId" hidden="hidden" />
+ *@
     <table class="row gy-3 pe-1">
         <tbody>
             <tr class="form-group">
@@ -55,14 +55,14 @@
 }
 else
 {
-
     <table class="table">
         <thead class="thead-light">
             <tr>
                 <th>#</th>
                 <th>词条</th>
                 <th>备注</th>
-                <th>课程/单元</th>
+                <th>单元</th>
+                <th>课本</th>
                 <th></th>
             </tr>
         </thead>
@@ -76,7 +76,8 @@ else
                     <td>@(x++)</td>
                     <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
-                    <td>@word.BookId/@word.Unit</td>
+                    <td>@word.Unit</td>
+                    <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.BookName</a></td>
                     <td>
                         <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
                         <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
@@ -122,7 +123,10 @@ else
     {
         Courses = MetadataService.GetDefaultCourses();
         Units = MetadataService.GetDefaultUnits();
-        Model = new SearchWordsCriteria();
+        Model = new SearchWordsCriteria()
+        {
+            BookId = bookId,
+        };
     }
 
     protected override async Task OnInitializedAsync()

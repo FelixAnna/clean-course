@@ -40,7 +40,8 @@ else
             {
                 <tr>
                     <td>@(x++)</td>
-                    <td>@book.BookName
+                    <td>
+                        <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
                     </td>
                     <td>@book.Version</td>
                     <td>@book.AuditYear</td>

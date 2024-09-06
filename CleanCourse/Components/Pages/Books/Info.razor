@@ -1,0 +1,71 @@
+﻿@page "/books/{id:int}/info"
+@using Services.Books.Models
+@using Services.Books
+@using Services.Metadata
+@inject IBookService service
+@inject NavigationManager navigationManager
+
+<h3>教材</h3>
+
+<p>教材信息。</p>
+
+<hr class="hr" />
+
+<div class="page">
+    <div class="col-md-5">
+        <label class="form-label">Id：</label>
+        <span class="text-primary">@Model.BookId</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">审核年份：</label>
+        <span class="text-primary">@Model.BookName</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">审核年份：</label>
+        <span class="text-primary">@Model.AuditYear</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">版本：</label>
+        <span class="text-primary">@Model.Version</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">年级：</label><span class="text-primary">@Model.Grade</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">学期：</label>
+        <span class="text-primary">@Model.Semester</span>
+    </div>
+    <div class="col-md-5">
+        <a href="/books/@(Model.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+        <a href="/bookCategories/@(Model.BookId)/update" class="btn btn-outline-primary">更新</a>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public BookModel Model { get; set; }
+    public string[] Grades;
+    public string[] Versions;
+    public string[] Semesters;
+    public int[] Years;
+
+    public Info()
+    {
+        Grades = MetadataService.GetDefaultGrades();
+        Versions = MetadataService.GetDefaultVersions();
+        Semesters = MetadataService.GetDefaultSemesters();
+        Years = MetadataService.GetDefaultYears();
+        Model = new BookModel(new Entities.Entities.BookEntity())
+            {
+                BookId = id,
+            };
+    }
+
+    protected override async void OnInitialized()
+    {
+        var category = await service.GetByIdAsync(id);
+        Model = await service.GetByIdAsync(id);
+    }
+}
