@@ -74,24 +74,19 @@
         Versions = MetadataService.GetDefaultVersions();
         Semesters = MetadataService.GetDefaultSemesters();
         Years = MetadataService.GetDefaultYears();
-        Model = new AddBookModel()
-            {
-                BookName = "",
-                Version = Versions.FirstOrDefault(),
-                Grade = Grades.FirstOrDefault(),
-                AuditYear = Years.FirstOrDefault(),
-                Semester = Semesters.FirstOrDefault(),
-            };
     }
 
     protected override async void OnInitialized()
     {
-        var category = await service.GetByIdAsync(id);
+        var book = await service.GetByIdAsync(id);
         Model = new AddBookModel()
-            {
-                BookName = "",
-            };
-
+        {
+            BookName = book.BookName,
+            AuditYear = book.AuditYear,
+            Grade = book.Grade,
+            Semester = book.Semester,
+            Version = book.Version
+        };
     }
 
     private async Task Submit()
