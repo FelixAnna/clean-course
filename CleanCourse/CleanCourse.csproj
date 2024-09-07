@@ -90,6 +90,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Remove="Components\Pages\BookCategoryMappings\Add.razor" />
+      <Content Remove="Components\Pages\BookCategoryMappings\Info.razor" />
       <Content Remove="Components\Pages\Books\Info.razor" />
       <Content Remove="Components\Pages\Category\Info.razor" />
       <Content Remove="Components\Pages\Words\Add.razor" />
@@ -98,6 +100,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="Components\Pages\BookCategoryMappings\Add.razor" />
+      <None Include="Components\Pages\BookCategoryMappings\Info.razor" />
       <None Include="Components\Pages\Books\Add.razor" />
       <None Include="Components\Pages\Books\Query.razor" />
       <None Include="Components\Pages\Books\Info.razor" />

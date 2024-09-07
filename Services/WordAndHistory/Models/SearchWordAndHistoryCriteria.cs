@@ -7,8 +7,6 @@ public class SearchWordAndHistoryCriteria : SearchWordsCriteria
 {
     [Required]
     public int CheckingResult { get; set; }
-
-    public int PageIndex {  get; set; }
 }
 
 public enum ECheckingResult

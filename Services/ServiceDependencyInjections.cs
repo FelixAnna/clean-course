@@ -5,6 +5,7 @@ using Services.Books;
 using Services.CheckingHistories;
 using Services.Kids;
 using Services.WordAndHistory.Services;
+using Services.BookCategoryMappings;
 
 namespace Services;
 
@@ -21,6 +22,7 @@ public static class ServiceDependencyInjections
         services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
         services.AddSingleton<IWordManageService, WordManageService>();
         services.AddSingleton<IBookService, BookService>();
+        services.AddSingleton<IBookCategoryMappingService, BookCategoryMappingService>();
 
         return services;
     }

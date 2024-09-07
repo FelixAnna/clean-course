@@ -1,0 +1,182 @@
+﻿@page "/bookCategories/{id:int}/mappings/add"
+@using Services.BookCategoryMappings.Models
+@using Services.BookCategoryMappings
+@using Services.Metadata
+@inject IBookCategoryMappingService service
+@inject NavigationManager navigationManager
+
+<h3>教材</h3>
+
+<p>添加新的教材到系统里。</p>
+
+<div class="page">
+    <div class="col-md-10">
+        <label class="form-label">教材：</label>
+        <span class="text-primary"><a href="/bookCategories/@(Model.BookCategory.Id)/info">@Model.BookCategory.BookCategoryFullName</a></span>
+    </div>
+    <div class="col-md-10">
+        <EditForm Model="@Criteria" OnValidSubmit="@Submit" FormName="SearchBooks">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <table class="row gy-3 pe-1">
+                <tbody>
+                    <tr class="form-group">
+                        <td class="m-2">
+                            <div>
+                                <label class="form-label">查询：</label>
+                                <InputText @bind-Value="Criteria!.Keywords" class="form-control rounded" />
+                            </div>
+                        </td>
+                        <td class="m-2">
+                            <div>
+                                <label class="form-label"></label>
+                                <div class="form-floating">
+                                    <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </EditForm>
+    </div>
+    <div class="col-md-10">
+        <hr class="hr" />
+
+        @if (Model.NewBooks == null || !Model.NewBooks.Any())
+        {
+            <p><em>没有可以添加的课本。</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>书名</th>
+                        <th>版本</th>
+                        <th>出版年份</th>
+                        <th>年级</th>
+                        <th>学期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int x = 1;
+                    }
+                    @foreach (var book in Model.NewBooks)
+                    {
+                        <tr>
+                            <td>@(x++)</td>
+                            <td>
+                                <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                            </td>
+                            <td>@book.Version</td>
+                            <td>@book.AuditYear</td>
+                            <td>@book.Grade</td>
+                            <td>@book.Semester</td>
+                            <td>
+                                <button @onclick="@(e => AddBook(book.BookId))" class="btn btn-outline-primary">
+                                    添加
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+
+
+    <div class="col-md-10">
+        <hr class="hr" />
+
+        @if (Model.LinkedBooks == null)
+        {
+            <p><em>您还没有添加任何课本。</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>书名</th>
+                        <th>版本</th>
+                        <th>出版年份</th>
+                        <th>年级</th>
+                        <th>学期</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        int x = 1;
+                    }
+                    @foreach (var book in Model.LinkedBooks)
+                    {
+                        <tr>
+                            <td>@(x++)</td>
+                            <td>
+                                <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                            </td>
+                            <td>@book.Version</td>
+                            <td>@book.AuditYear</td>
+                            <td>@book.Grade</td>
+                            <td>@book.Semester</td>
+                            <td>
+                                <button @onclick="@(e => Delete(book.BookId))" class="btn btn-outline-danger">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public BookSearchCriteria Criteria { get; set; }
+
+    public BookCategoryMappingsForAddModel Model { get; set; }
+
+    public Add()
+    {
+        Model = new BookCategoryMappingsForAddModel();
+        Criteria = new BookSearchCriteria();
+    }
+
+    protected override async void OnInitialized()
+    {
+        Refresh();
+    }
+
+    private async void AddBook(int bookId)
+    {
+        await service.AddBookCategoryMappingAsync(id, bookId);
+        Refresh();
+    }
+
+    private async void Delete(int bookId)
+    {
+        await service.RemoveBookCategoryMappingAsync(id, bookId);
+        Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        Model = await service.GetBookCategoryMappingsByForAdd(id, Criteria.Keywords);
+    }
+
+
+    private async Task Submit()
+    {
+        await Refresh();
+    }
+}

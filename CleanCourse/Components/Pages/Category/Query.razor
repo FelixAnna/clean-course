@@ -41,7 +41,7 @@ else
                         <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
                     </td>
                     <td>
-                        <a href="/bookCategories/@(category.Id)/mappings" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
+                        <a href="/bookCategories/@(category.Id)/mappings/info" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
                         <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
                         @if (!category.Selected)
                         {

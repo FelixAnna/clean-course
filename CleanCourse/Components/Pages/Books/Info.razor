@@ -69,7 +69,6 @@
 
     protected override async void OnInitialized()
     {
-        var book = await service.GetByIdAsync(id);
         Model = await service.GetByIdAsync(id);
     }
 

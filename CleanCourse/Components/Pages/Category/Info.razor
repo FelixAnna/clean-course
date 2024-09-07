@@ -22,7 +22,7 @@
         <span class="text-primary">@Model.CategoryName</span>
     </div>
     <div class="col-md-5">
-        <a href="/bookCategories/@(Model.Id)/mappings" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
+        <a href="/bookCategories/@(Model.Id)/mappings/info" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
         <a href="/bookCategories/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
         @if (!Model.Selected)
         {
@@ -49,7 +49,6 @@
 
     protected override async void OnInitialized()
     {
-        var book = await service.GetByIdAsync(id);
         Model = await service.GetByIdAsync(id);
     }
 

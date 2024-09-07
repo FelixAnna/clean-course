@@ -13,6 +13,7 @@ namespace Services.Books
         public int AuditYear { get; set; } = entity.AuditYear;
 
         public string Grade { get; set; } = entity.Grade;
+
         public string Semester { get; set; } = entity.Semester;
     }
 }
