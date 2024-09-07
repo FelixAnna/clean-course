@@ -17,7 +17,7 @@ namespace Services.Books
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return null;
+                throw;
             }
         }
 

@@ -1,0 +1,61 @@
+﻿@page "/bookCategories/{id:int}/info"
+@using Services.BookCategories.Models
+@using Services.BookCategories
+@using Services.Metadata
+@inject IBookCategoryService service
+@inject IJSRuntime JSRuntime
+@inject NavigationManager navigationManager
+
+<h3>教材</h3>
+
+<p>教材信息。</p>
+
+<hr class="hr" />
+
+<div class="page">
+    <div class="col-md-5">
+        <label class="form-label">Id：</label>
+        <span class="text-primary">@Model.Id</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">教材版本：</label>
+        <span class="text-primary">@Model.CategoryName</span>
+    </div>
+    <div class="col-md-5">
+        <a href="/bookCategories/@(Model.Id)/mappings" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
+        <a href="/bookCategories/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
+        @if (!Model.Selected)
+        {
+            <button @onclick="@(e => Delete())" class="btn btn-outline-danger">
+                删除
+            </button>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public BookCategoryModel Model { get; set; }
+
+    public Info()
+    {
+        Model = new BookCategoryModel(new Entities.Entities.BookCategoryEntity())
+            {
+                Id = id,
+            };
+    }
+
+    protected override async void OnInitialized()
+    {
+        var book = await service.GetByIdAsync(id);
+        Model = await service.GetByIdAsync(id);
+    }
+
+    private async void Delete()
+    {
+        await service.DeleteAsync(id);
+        navigationManager.NavigateTo($"/bookcategories");
+    }
+}

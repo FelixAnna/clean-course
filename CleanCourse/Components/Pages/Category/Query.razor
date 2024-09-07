@@ -36,20 +36,18 @@ else
             {
                 <tr>
                     <td>@(x++)</td>
-                    <td>@category.CategoryName
+                    <td>
+                        <a href="/bookCategories/@(category.Id)/info">@category.BookCategoryFullName</a>
                         <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
                     </td>
                     <td>
-                        <a href="/bookCategories/@(category.SharedCode)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+                        <a href="/bookCategories/@(category.Id)/mappings" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
                         <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
                         @if (!category.Selected)
                         {
                             <span class="px-1"></span>
                             <button @onclick="@(e => Select(category.Id, category.SharedCode, category.CategoryName))" class="btn btn-outline-info">
                                 设为默认
-                            </button>
-                            <button @onclick="@(e => Delete(category.Id, category.CategoryName))" class="btn btn-outline-danger">
-                                删除
                             </button>
                         }
                     </td>

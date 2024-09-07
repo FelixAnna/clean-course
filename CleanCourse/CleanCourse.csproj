@@ -91,6 +91,7 @@
 
     <ItemGroup>
       <Content Remove="Components\Pages\Books\Info.razor" />
+      <Content Remove="Components\Pages\Category\Info.razor" />
       <Content Remove="Components\Pages\Words\Add.razor" />
       <Content Remove="Components\Pages\Words\Query.razor" />
       <Content Remove="Components\Pages\Words\Update.razor" />
@@ -101,6 +102,7 @@
       <None Include="Components\Pages\Books\Query.razor" />
       <None Include="Components\Pages\Books\Info.razor" />
       <None Include="Components\Pages\Books\Update.razor" />
+      <None Include="Components\Pages\Category\Info.razor" />
       <None Include="Components\Pages\Words\Add.razor" />
       <None Include="Components\Pages\Words\Query.razor" />
       <None Include="Components\Pages\Words\Update.razor" />

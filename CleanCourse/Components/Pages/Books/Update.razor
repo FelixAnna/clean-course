@@ -92,6 +92,6 @@
     private async Task Submit()
     {
         await service.UpdateAsync(id, Model);
-        navigationManager.NavigateTo("/books");
+        navigationManager.NavigateTo($"/books/{id}/info");
     }
 }
