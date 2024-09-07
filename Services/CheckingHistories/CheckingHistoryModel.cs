@@ -1,4 +1,5 @@
 ﻿using Entities.Entities;
+using Services.Books;
 using Services.CheckingHistories.Models;
 using Services.Kids;
 
@@ -16,6 +17,7 @@ public class CheckingHistoryModel
             Details = wordEntity.Details,
             Unit = wordEntity.Unit,
             Explanation = wordEntity.Explanation,
+            Book = new BookModel(wordEntity.Book)
         };
 
         var histories = history.Select(x =>

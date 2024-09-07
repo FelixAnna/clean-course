@@ -1,4 +1,4 @@
-﻿@* @page "/words/checking"
+﻿@page "/history/checking"
 @using Services.CheckingHistories.Models
 @using Services.WordAndHistory
 @using Services.WordAndHistory.Models
@@ -6,8 +6,8 @@
 @using Services.CheckingHistories.Services
 @using Services.WordAndHistory.Services
 @using System.Text
-@inject             Services.WordAndHistory.IWordHistoryService service
-@inject             Services.CheckingHistories.Services.IWordHistoryBatchService historyService
+@inject Services.WordAndHistory.IWordHistoryService service
+@inject Services.CheckingHistories.Services.IWordHistoryBatchService historyService
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -189,11 +189,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         pageSize = appState.DefaultPageSize;
-        if (string.IsNullOrEmpty(appState.SharedCode))
-        {
-            navigationManager.NavigateTo("/bookCategories", true);
-            return;
-        }
 
         if (appState.KidId <= 0)
         {
@@ -201,7 +196,7 @@ else
             return;
         }
 
-        result = preCheckService.GetAll(appState.KidId, appState.SharedCode);
+        result = await preCheckService.GetAllAsync(appState.KidId, appState.BookCategoryId);
         Refresh(1);
     }
 
@@ -307,6 +302,5 @@ else
         await Clipboard.SetTextAsync(contentBuilder.ToString());
         await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
     }
-    
+
 }
- *@
