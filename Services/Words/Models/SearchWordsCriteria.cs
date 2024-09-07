@@ -6,6 +6,8 @@ public class SearchWordsCriteria
 {
     public string Keyword { get; set; }
 
+    public int BookCategoryId { get; set; }
+
     public int Unit { get; set; }
 
     public int BookId { get; set; }

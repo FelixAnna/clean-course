@@ -74,11 +74,11 @@ else
                 appState.KidName = kid.Name;
             }
 
-            if (string.IsNullOrEmpty(appState.SharedCode))
+            if (appState.BookCategoryId <= 0)
             {
                 category = await categoryService.GetDefaultAsync();
                 appState.BookCategoryFullName = category.BookCategoryFullName;
-                appState.SharedCode = category.SharedCode;
+                appState.BookCategoryId = category.Id;
             }
         }catch(Exception ex)
         {

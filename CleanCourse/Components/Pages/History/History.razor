@@ -1,148 +1,148 @@
-﻿@page "/history/{wordId:int}"
-@using Services.CheckingHistories
-@using Services.CheckingHistories.Models
-@inject ICheckingHistoryService service
-@inject IJSRuntime JSRuntime
-@inject AppState appState
+﻿ @page "/history/{wordId:int}"
+ @using Services.CheckingHistories
+ @using Services.CheckingHistories.Models
+ @inject ICheckingHistoryService service
+ @inject IJSRuntime JSRuntime
+ @inject AppState appState
 
-@if (historyRecords == null)
-{
-    <h3>检查记录</h3>
+ @if (historyRecords == null)
+ {
+     <h3>检查记录</h3>
 
-    <p>这里显示当前词条的检查记录。</p>
-    <hr class="hr" />
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <h3>@historyRecords.Word.Content</h3>
+     <p>这里显示当前词条的检查记录。</p>
+     <hr class="hr" />
+     <p><em>Loading...</em></p>
+ }
+ else
+ {
+     <h3>@historyRecords.Word.Content</h3>
 
-    <p>@historyRecords.Word.Explanation</p>
-    <hr class="hr" />
-    <table class="row gy-3 pe-1">
-            <tr class="form-group">
-                <td class="col-md-4">
-                    <label class="form-label">课程：</label>
-                    <span class="text-primary">@historyRecords.Word.BookId</span>
-                </td>
-                <td class="col-md-4">
-                    <label class="form-label">单元：</label>
-                    <span class="text-primary">@historyRecords.Word.Unit</span>
-                </td>
-                <td class="col-md-4">
-                    <label class="form-label">教材：</label>
-                    <span class="text-primary">@appState.BookCategoryFullName</span>
-                </td>
-            </tr>
-        @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
-        <tr class="form-group">
-            <td class="m-2">
-                <label class="form-label">详细描述：</label>
-                <div class="text-secondary">@historyRecords.Word.Details</div>
-            </td>
-        </tr>
-        }
-    </table>
-    <hr class="hr" />
-    <table class="table">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">宝宝</th>
-                <th scope="col">结果</th>
-                <th scope="col">备注</th>
-                <th scope="col">记录时间</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int x = 1;
-            }
-            @foreach (var history in currentItems)
-            {
-                <tr>
-                    <td>@(x++)</td>
-                    <td>@history.Kid.Name</td>
-                    <td>@(history.IsCorrect?"正确":"错误")</td>
-                    <td>@history.GetFormattedRemark()</td>
-                    <td>@history.CreatedTime</td>
-                    <td>
-                        <button @onclick="@(e => Delete(history.Id))" class="btn btn-outline-danger">
-                            删除
-                        </button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+     <p>@historyRecords.Word.Explanation</p>
+     <hr class="hr" />
+     <table class="row gy-3 pe-1">
+             <tr class="form-group">
+                 <td class="col-md-4">
+                     <label class="form-label">课程：</label>
+                     <span class="text-primary">@historyRecords.Word.BookId</span>
+                 </td>
+                 <td class="col-md-4">
+                     <label class="form-label">单元：</label>
+                     <span class="text-primary">@historyRecords.Word.Unit</span>
+                 </td>
+                 <td class="col-md-4">
+                     <label class="form-label">教材：</label>
+                     <span class="text-primary">@appState.BookCategoryFullName</span>
+                 </td>
+             </tr>
+         @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
+         <tr class="form-group">
+             <td class="m-2">
+                 <label class="form-label">详细描述：</label>
+                 <div class="text-secondary">@historyRecords.Word.Details</div>
+             </td>
+         </tr>
+         }
+     </table>
+     <hr class="hr" />
+     <table class="table">
+         <thead class="thead-dark">
+             <tr>
+                 <th scope="col">#</th>
+                 <th scope="col">宝宝</th>
+                 <th scope="col">结果</th>
+                 <th scope="col">备注</th>
+                 <th scope="col">记录时间</th>
+                 <th></th>
+             </tr>
+         </thead>
+         <tbody>
+             @{
+                 int x = 1;
+             }
+             @foreach (var history in currentItems)
+             {
+                 <tr>
+                     <td>@(x++)</td>
+                     <td>@history.Kid.Name</td>
+                     <td>@(history.IsCorrect?"正确":"错误")</td>
+                     <td>@history.GetFormattedRemark()</td>
+                     <td>@history.CreatedTime</td>
+                     <td>
+                         <button @onclick="@(e => Delete(history.Id))" class="btn btn-outline-danger">
+                             删除
+                         </button>
+                     </td>
+                 </tr>
+             }
+         </tbody>
+     </table>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            @if(pageIndex >1){
-                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
-            }
-            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
-            @if (pageIndex < totalPage)
-            {
-                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
-            }
-        </ul>
-    </nav>
-}
+     <nav aria-label="Page navigation example">
+         <ul class="pagination">
+             @if(pageIndex >1){
+                 <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+             }
+             <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+             @if (pageIndex < totalPage)
+             {
+                 <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+             }
+         </ul>
+     </nav>
+ }
 
-@code {
-    [Parameter]
-    public int WordId { get; set; }
+ @code {
+     [Parameter]
+     public int WordId { get; set; }
 
-    private Services.CheckingHistories.CheckingHistoryModel historyRecords;
+     private Services.CheckingHistories.CheckingHistoryModel historyRecords;
 
-    private int pageIndex;
-    private int totalPage;
-    private int pageSize;
-    private IList<CheckingHistory> currentItems;
+     private int pageIndex;
+     private int totalPage;
+     private int pageSize;
+     private IList<CheckingHistory> currentItems;
 
 
-    protected override async Task OnInitializedAsync()
-    {
-        pageSize = appState.DefaultPageSize;
-        historyRecords = await service.GetByWordAndKidAsync(WordId, appState.KidId);
-        Refresh(1);
-    }
+     protected override async Task OnInitializedAsync()
+     {
+         pageSize = appState.DefaultPageSize;
+         historyRecords = await service.GetByWordAndKidAsync(WordId, appState.KidId);
+         Refresh(1);
+     }
 
-    private async Task Delete(int id)
-    {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"您确定要删除检查记录： 'No={id}' 吗?"))
-            return;
+     private async Task Delete(int id)
+     {
+         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"您确定要删除检查记录： 'No={id}' 吗?"))
+             return;
 
-        if (await service.DeleteAsync(id))
-        {
-            historyRecords.Histories = historyRecords.Histories.Where(x => x.Id != id).ToArray();
-            historyRecords.Count = historyRecords.Count - 1;
+         if (await service.DeleteAsync(id))
+         {
+             historyRecords.Histories = historyRecords.Histories.Where(x => x.Id != id).ToArray();
+             historyRecords.Count = historyRecords.Count - 1;
 
-            Refresh(pageIndex);
-        }
-    }
+             Refresh(pageIndex);
+         }
+     }
 
-    private void Refresh(int page)
-    {
-        totalPage = (int)Math.Ceiling(historyRecords.Count * 1.0 / pageSize);
-        ChangePage(page);
-    }
+     private void Refresh(int page)
+     {
+         totalPage = (int)Math.Ceiling(historyRecords.Count * 1.0 / pageSize);
+         ChangePage(page);
+     }
 
-    private void ChangePage(int i)
-    {
-        if (i < 1)
-        {
-            i = 1;
-        }
+     private void ChangePage(int i)
+     {
+         if (i < 1)
+         {
+             i = 1;
+         }
 
-        if (i > totalPage)
-        {
-            i = totalPage;
-        }
+         if (i > totalPage)
+         {
+             i = totalPage;
+         }
 
-        pageIndex = i;
-        currentItems = historyRecords.Histories.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-    }
-}
+         pageIndex = i;
+         currentItems = historyRecords.Histories.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+     }
+ }

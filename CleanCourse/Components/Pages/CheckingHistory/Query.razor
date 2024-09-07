@@ -1,0 +1,332 @@
+﻿@page "/words"
+@using Services.CheckingHistories.Models
+@using Services.WordAndHistory
+@using Services.WordAndHistory.Models
+@using Services.Metadata
+@using Services.CheckingHistories.Services
+@using Services.WordAndHistory.Services
+@inject Services.WordAndHistory.IWordHistoryService service
+@inject IWordPreCheckService preCheckService
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+@inject NavigationManager navigationManager
+
+<h3>词条</h3>
+
+<p>
+    查询词条及听写信息。
+    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
+    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
+</p>
+<hr class="hr" />
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <InputNumber @bind-Value="Model.BookCategoryId" hidden="hidden" />
+    <InputNumber @bind-Value="Model.KidId" hidden="hidden" />
+    <table class="row gy-3 pe-1">
+        <tbody>
+            <tr class="form-group">
+                <td class="m-2">
+                    <div class="flex-row">
+                        <label class="form-label">课程：</label>
+                        <select @bind="Model.BookId" class="form-select small">
+                            @foreach (var course in Courses)
+                            {
+                                <option value="@course.Key">@course.Value</option>
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex-row">
+                        <label class="form-label">
+                            单元：
+                        </label>
+                        <select @bind="Model.Unit" class="form-select">
+                            @foreach (var unit in Units)
+                            {
+                                <option value="@unit.Key">@unit.Value</option>
+                            }
+                        </select>
+                    </div>
+                </td>
+                <td class="m-2">
+                    <div class="flex-row">
+                        <label class="form-label">检查情况：</label>
+
+                        <select @bind="Model.CheckingResult" class="form-select" aria-describedby="search-addon">
+                            @{
+                                int index = 0;
+                            }
+                            @foreach (var status in CheckingStatuses)
+                            {
+                                <option value="@index">@status</option>
+                                index++;
+                            }
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr class="form-group">
+                <td class="m-2">
+                    <div>
+                        <label class="form-label">词条：</label>
+                        <InputText @bind-Value="Model!.Keyword" class="form-control rounded" />
+                    </div>
+                </td>
+                <td class="m-2">
+                    <div>
+                        <label class="form-label"></label>
+                        <div class="form-floating">
+                            <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
+                            @if (IsReadyToCheckAll)
+                            {
+                                <button type="button" @onclick="@(e => ToCheckAll())" class="btn btn-outline-primary m-2">
+                                    准备听写本页
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" @onclick="@(e => ToUnCheckAll())" class="btn btn-secondary m-2">
+                                    取消听写本页
+                                </button>
+                            }
+                            @if (toCheckedWords.Any())
+                            {
+                                <a href="/words/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+                            }
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</EditForm>
+@if (result == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul class="pagination">
+        @if (Model.PageIndex > 1)
+        {
+            <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex-1))">&lt;&lt;</text></li>
+        }
+        <li class="page-item"><text id="pg-@(Model.PageIndex)" class="page-link">第 @(Model.PageIndex)/@(totalPage) 页</text></li>
+        @if (Model.PageIndex < totalPage)
+        {
+            <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex+1))">>></text></li>
+        }
+    </ul>
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th class="w-5">#</th>
+                <th class="w-25">词条</th>
+                <th class="w-25">备注</th>
+                <th class="w-20">课程/单元</th>
+                <th class="w-15">检查情况</th>
+                <th class="w-10"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var x = 1;
+            }
+            @foreach (var word in currentItems)
+            {
+                <tr>
+                    <td>@(x++)</td>
+                    <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                    <td>@word.Explanation</td>
+                    <td>@word.BookId/@word.Unit</td>
+                    <td>
+                        @word.CheckingHistorySummary
+                </td>
+                    <td>
+                        @if (!toCheckedWords.Contains(word.WordId))
+                        {
+                            <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success btn-sm">
+                                准备
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-secondary btn-sm">
+                                取消
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (Model.PageIndex > 1)
+            {
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(Model.PageIndex)" class="page-link">第 @(Model.PageIndex)/@(totalPage) 页</text></li>
+            @if (Model.PageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
+}
+
+@code {
+
+    [SupplyParameterFromForm]
+    public SearchWordAndHistoryCriteria Model { get; set; }
+
+    private SearchWordAndHistoryResult result;
+
+    private Dictionary<string, string> Courses;
+    private Dictionary<int, string> Units;
+    private string[] CheckingStatuses;
+
+    private List<int> toCheckedWords;
+
+    private int totalPage;
+    private int pageSize;
+    private IList<WordHistoryModel> currentItems;
+
+    private bool IsReadyToCheckAll = true;
+
+    public Query()
+    {
+        toCheckedWords = new List<int>();
+        Courses = MetadataService.GetDefaultCourses();
+        Units = MetadataService.GetDefaultUnits();
+        CheckingStatuses = MetadataService.GetDefaultCheckingStatuses();
+        Model = new SearchWordAndHistoryCriteria();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Validate();
+
+        pageSize = appState.DefaultPageSize;
+        Model.BookCategoryId = appState.BookCategoryId;
+        Model.KidId = appState.KidId;
+
+        var lastSearchCriteria = appState.SearchWordAndHistoryCriteria;
+        if (lastSearchCriteria?.KidId == Model.KidId && lastSearchCriteria?.BookCategoryId == Model.BookCategoryId)
+        {
+            Model = lastSearchCriteria;
+        }
+
+        await Search();
+    }
+
+    private void Validate()
+    {
+        if (appState.BookCategoryId<=0)
+        {
+            navigationManager.NavigateTo("/bookCategories", true);
+            return;
+        }
+
+        if (appState.KidId <= 0)
+        {
+            navigationManager.NavigateTo("/kids", true);
+            return;
+        }
+    }
+
+    private async Task Submit()
+    {
+        Model.PageIndex = 1;
+        await Search();
+    }
+
+    private async Task Search()
+    {
+        var precheck = await preCheckService.GetAllAsync(Model.KidId, Model.BookCategoryId);
+        toCheckedWords = precheck.Words.Select(x => x.WordId).ToList();
+        result = await service.GetWordsAsync(Model);
+        Refresh();
+
+        appState.SearchWordAndHistoryCriteria = Model;
+    }
+
+    private void Refresh()
+    {
+        var pageIndex = Model.PageIndex;
+        totalPage = (int)Math.Ceiling(result.Count * 1.0 / pageSize);
+        ChangePage(pageIndex);
+    }
+
+    private void ChangePage(int pageIndex)
+    {
+        if (pageIndex < 1)
+        {
+            pageIndex = 1;
+        }
+
+        if (pageIndex > totalPage)
+        {
+            pageIndex = totalPage;
+        }
+
+        Model.PageIndex = pageIndex;
+        currentItems = result.Words.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+
+        UpdateReadyToCheckAll();
+    }
+
+    private async Task ToCheck(int id)
+    {
+        preCheckService.Add(Model.KidId, result.Words.First(x => x.WordId == id));
+        toCheckedWords.Add(id);
+        UpdateReadyToCheckAll();
+    }
+
+    private async Task CancelCheck(int id)
+    {
+        preCheckService.Remove(Model.KidId, id);
+        toCheckedWords.Remove(id);
+        UpdateReadyToCheckAll();
+    }
+
+    private async Task ToCheckAll()
+    {
+        foreach (var item in currentItems)
+        {
+            if (toCheckedWords.Contains(item.WordId))
+            {
+                continue;
+            }
+
+            preCheckService.Add(Model.KidId, result.Words.First(x => x.WordId == item.WordId));
+            toCheckedWords.Add(item.WordId);
+        }
+
+        UpdateReadyToCheckAll();
+    }
+
+    private async Task ToUnCheckAll()
+    {
+        foreach (var item in currentItems)
+        {
+            if (!toCheckedWords.Contains(item.WordId))
+            {
+                continue;
+            }
+
+            preCheckService.Remove(Model.KidId, item.WordId);
+            toCheckedWords.Remove(item.WordId);
+        }
+        UpdateReadyToCheckAll();
+    }
+
+    private void UpdateReadyToCheckAll()
+    {
+        IsReadyToCheckAll = !currentItems.All(x => toCheckedWords.Contains(x.WordId));
+    }
+}
+     

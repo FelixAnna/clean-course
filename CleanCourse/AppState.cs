@@ -7,7 +7,7 @@ public class AppState
 {
     public int KidId { get; set; }
     public string KidName { get; set; }
-    public string SharedCode { get; set; }
+    public int BookCategoryId { get; set; }
     public string BookCategoryFullName { get; set; }
     public SearchWordsCriteria SearchWordsCriteria { get; set; }
     public SearchWordAndHistoryCriteria SearchWordAndHistoryCriteria { get; set; }

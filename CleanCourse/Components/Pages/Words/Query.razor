@@ -17,8 +17,6 @@
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
     <DataAnnotationsValidator />
     <ValidationSummary />
-@*     <InputText @bind-Value="Model.BookId" hidden="hidden" />
- *@
     <table class="row gy-3 pe-1">
         <tbody>
             <tr class="form-group">
@@ -40,9 +38,6 @@
                 <td>
                     <label class="form-label"></label>
                     <button type="submit" class="btn btn-primary form-control mx-3" data-mdb-ripple-init>查询</button>
-                </td>
-                <td>
-                    
                 </td>
             </tr>
         </tbody>

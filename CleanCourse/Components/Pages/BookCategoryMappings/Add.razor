@@ -5,9 +5,9 @@
 @inject IBookCategoryMappingService service
 @inject NavigationManager navigationManager
 
-<h3>教材</h3>
+<h3>管理课本</h3>
 
-<p>添加新的教材到系统里。</p>
+<p>添加新的课本到当前教材里。</p>
 
 <div class="page">
     <div class="col-md-10">
@@ -15,7 +15,7 @@
         <span class="text-primary"><a href="/bookCategories/@(Model.BookCategory.Id)/info">@Model.BookCategory.BookCategoryFullName</a></span>
     </div>
     <div class="col-md-10">
-        <EditForm Model="@Criteria" OnValidSubmit="@Submit" FormName="SearchBooks">
+        <EditForm Model="@Criteria" OnValidSubmit="@Submit" FormName="AddMappings">
             <DataAnnotationsValidator />
             <ValidationSummary />
             <table class="row gy-3 pe-1">
@@ -49,6 +49,7 @@
         }
         else
         {
+            <label class="text-decoration-underline">可添加课本列表:</label>
             <table class="table">
                 <thead>
                     <tr>
@@ -77,7 +78,7 @@
                             <td>@book.Grade</td>
                             <td>@book.Semester</td>
                             <td>
-                                <button @onclick="@(e => AddBook(book.BookId))" class="btn btn-outline-primary">
+                                <button @onclick="@(e => AttachBook(book.BookId))" class="btn btn-outline-primary">
                                     添加
                                 </button>
                             </td>
@@ -98,6 +99,7 @@
         }
         else
         {
+            <label class="text-decoration-underline">已添加课本列表:</label>
             <table class="table">
                 <thead>
                     <tr>
@@ -126,7 +128,7 @@
                             <td>@book.Grade</td>
                             <td>@book.Semester</td>
                             <td>
-                                <button @onclick="@(e => Delete(book.BookId))" class="btn btn-outline-danger">
+                                <button @onclick="@(e => DetachBook(book.BookId))" class="btn btn-outline-danger">
                                     删除
                                 </button>
                             </td>
@@ -154,19 +156,19 @@
 
     protected override async void OnInitialized()
     {
-        Refresh();
+        await Refresh();
     }
 
-    private async void AddBook(int bookId)
+    private async void AttachBook(int bookId)
     {
         await service.AddBookCategoryMappingAsync(id, bookId);
-        Refresh();
+        await Refresh();
     }
 
-    private async void Delete(int bookId)
+    private async void DetachBook(int bookId)
     {
         await service.RemoveBookCategoryMappingAsync(id, bookId);
-        Refresh();
+        await Refresh();
     }
 
     private async Task Refresh()

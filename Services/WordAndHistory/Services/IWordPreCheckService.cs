@@ -4,7 +4,7 @@ namespace Services.WordAndHistory.Services
 {
     public interface IWordPreCheckService
     {
-        SearchWordAndHistoryResult GetAll(int kidId, string sharedCode);
+        Task<SearchWordAndHistoryResult> GetAllAsync(int kidId, int bookCategoryId);
         void Remove(int kidId, int id);
         void Add(int kidId, WordHistoryModel word);
     }

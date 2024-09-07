@@ -22,9 +22,17 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
     {
         var words = courseContext.Words.AsQueryable();
 
-        if (request.BookId>0)
+        if (request.BookId > 0)
         {
             words = words.Where(x => x.BookId == request.BookId);
+        }
+        else
+        {
+            if (request.BookCategoryId > 0)
+            {
+                var bookIds = courseContext.BookCategoryMappings.Where(x => x.BookCategoryId == request.BookCategoryId).Select(x => x.BookId).ToList();
+                words = words.Where(x => bookIds.Contains(x.BookId));
+            }
         }
 
         if (request.Unit > 0)

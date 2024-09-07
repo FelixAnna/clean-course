@@ -2,6 +2,9 @@
 @using Services.BookCategories.Models
 @using Services.BookCategories
 @using Services.Metadata
+@using Services.BookCategoryMappings.Models
+@using Services.BookCategoryMappings
+@inject IBookCategoryMappingService bookCategoryMappingService
 @inject IBookCategoryService service
 @inject IJSRuntime JSRuntime
 @inject NavigationManager navigationManager
@@ -22,7 +25,7 @@
         <span class="text-primary">@Model.CategoryName</span>
     </div>
     <div class="col-md-5">
-        <a href="/bookCategories/@(Model.Id)/mappings/info" class="btn btn-outline-primary" data-mdb-ripple-init>课本列表</a>
+        <a href="/bookCategories/@(Model.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
         <a href="/bookCategories/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
         @if (!Model.Selected)
         {
@@ -33,11 +36,60 @@
     </div>
 </div>
 
+<div class="col-md-10">
+    <hr class="hr" />
+
+    @if (MappingModel.LinkedBooks == null)
+    {
+        <p><em>您还没有添加任何课本。</em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>书名</th>
+                    <th>版本</th>
+                    <th>出版年份</th>
+                    <th>年级</th>
+                    <th>学期</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int x = 1;
+                }
+                @foreach (var book in MappingModel.LinkedBooks)
+                {
+                    <tr>
+                        <td>@(x++)</td>
+                        <td>
+                            <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                        </td>
+                        <td>@book.Version</td>
+                        <td>@book.AuditYear</td>
+                        <td>@book.Grade</td>
+                        <td>@book.Semester</td>
+                        <td>
+                            <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+                                    <button @onclick="@(e => DeleteMapping(book.BookId))" class="btn btn-outline-danger">
+                                删除
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 @code {
     [Parameter]
     public int id { get; set; }
 
     public BookCategoryModel Model { get; set; }
+    public BookCategoryMappingsResult MappingModel { get; set; }
 
     public Info()
     {
@@ -45,16 +97,29 @@
             {
                 Id = id,
             };
+        MappingModel = new BookCategoryMappingsResult();
     }
 
     protected override async void OnInitialized()
     {
         Model = await service.GetByIdAsync(id);
+        await RefreshMappingAsync(id);
+    }
+
+    private async void DeleteMapping(int bookId)
+    {
+        await bookCategoryMappingService.RemoveBookCategoryMappingAsync(id, bookId);
+        await RefreshMappingAsync(id);
     }
 
     private async void Delete()
     {
         await service.DeleteAsync(id);
         navigationManager.NavigateTo($"/bookcategories");
+    }
+
+    private async Task RefreshMappingAsync(int id)
+    {
+        MappingModel = await bookCategoryMappingService.GetBookCategoryMappingsById(id);
     }
 }

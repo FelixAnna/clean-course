@@ -109,7 +109,7 @@ else
     private int checkingThreshold;
     private int recentThreshold;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         dataFileLocation = Preferences.Get(Constants.DBFileLocationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
         pageSize = appState.DefaultPageSize;
