@@ -36,7 +36,7 @@
                     <label class="form-label">
                         教材：
                     </label>
-                    <span class="text-primary">@appState.BookCategoryFullName</span>
+                    <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
                 </div>
             </td>
         </tr>
@@ -122,7 +122,7 @@ else
                             </button>
                             @if(word.IsLongText() && !word.IsMath())
                             {
-                                <a class="btn btn-danger mx-3 btn-sm" href="/history/checking/@(word.WordId)/addhoc">记录为新的错字</a>
+                                <a class="btn btn-danger mx-3 btn-sm" href="/books/@(word.BookId)/words/@(word.WordId)/addhoc">记录为新的错字</a>
                             }else if (word.IsEnglish())
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger mx-3 btn-sm">

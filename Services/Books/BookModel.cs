@@ -17,7 +17,7 @@ namespace Services.Books
 
         public string Semester { get; set; } = entity.Semester;
 
-        public string FriendlyName => $"{Grade}{BookName}{Semester}({Version})";
+        public string FriendlyName => $"{Grade} {BookName} {Semester}({Version})";
         public string ShortName => $"{BookName}";
 
         public IList<int> Units { get; set; } = entity.Words?.Select(x=>x.Unit).OrderBy(x=>x).Distinct().ToList()??[];

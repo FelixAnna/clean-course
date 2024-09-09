@@ -10,7 +10,7 @@
 <h3>词条</h3>
 
 <p>
-    为当前教材(<span class="text-primary">@appState.BookCategoryFullName</span>)添加词条。
+    为当前教材(<span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>)添加词条。
 </p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="UpdateWord">

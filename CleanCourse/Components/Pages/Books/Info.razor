@@ -74,7 +74,7 @@
 
     private async void Delete()
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联字词和宝宝的检查记录，您确定要删除教材： '{Model.FriendlyName}' 吗?"))
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联字词和宝宝的检查记录，您确定要删除课本： '{Model.FriendlyName}' 吗?"))
             return;
 
         await service.DeleteAsync(id);
