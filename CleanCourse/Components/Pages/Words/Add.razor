@@ -1,9 +1,11 @@
 ﻿@page "/books/{bookId:int}/words/add"
+@using Services.Books
 @using Services.Words
 @using Services.Words.Models
 @using Services.Metadata
 @inject AppState appState
 @inject IWordBatchService importService
+@inject IBookService bookService
 @inject NavigationManager navigationManager
 
 
@@ -20,6 +22,12 @@
     
     <table class="table">
         <tr class="form-group">
+            <td class="m-2">
+                <label class="form-label">
+                    课程：
+                </label>
+                <span class="text-primary">@Model.BookName</span>
+            </td>
             <td>
                 <label class="form-label">
                     单元：
@@ -86,11 +94,13 @@
         DuplicateOptions = MetadataService.GetDefaultDuplicateOption();
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        var book = await bookService.GetByIdAsync(bookId);
         Model = new AddWordModel()
             {
                 BookId = bookId,
+                BookName = book.FriendlyName,
                 Unit = Units.First().Key,
                 Overwrite = DuplicateOptions.First().Key,
             };

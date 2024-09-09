@@ -72,7 +72,7 @@ else
                     <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
                     <td>@word.Unit</td>
-                    <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.BookName</a></td>
+                    <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.ShortName</a></td>
                     <td>
                         <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
                         <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">

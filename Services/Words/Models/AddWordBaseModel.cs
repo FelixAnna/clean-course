@@ -7,6 +7,8 @@ namespace Services.Words.Models
         [Required]
         public int BookId { get; set; }
 
+        public string BookName { get; set; }
+
         [Required]
         public string Overwrite { get; set; }
         public bool IsOverwrite => Overwrite == "1";

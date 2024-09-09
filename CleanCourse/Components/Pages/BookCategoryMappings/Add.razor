@@ -71,7 +71,7 @@
                         <tr>
                             <td>@(x++)</td>
                             <td>
-                                <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                                <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                             </td>
                             <td>@book.Version</td>
                             <td>@book.AuditYear</td>
@@ -121,7 +121,7 @@
                         <tr>
                             <td>@(x++)</td>
                             <td>
-                                <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                                <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                             </td>
                             <td>@book.Version</td>
                             <td>@book.AuditYear</td>
@@ -161,19 +161,19 @@
 
     private async void AttachBook(int bookId)
     {
-        await service.AddBookCategoryMappingAsync(id, bookId);
+        await service.AddAsync(id, bookId);
         await Refresh();
     }
 
     private async void DetachBook(int bookId)
     {
-        await service.RemoveBookCategoryMappingAsync(id, bookId);
+        await service.RemoveAsync(id, bookId);
         await Refresh();
     }
 
     private async Task Refresh()
     {
-        Model = await service.GetBookCategoryMappingsByForAdd(id, Criteria.Keywords);
+        Model = await service.GetByForAdd(id, Criteria.Keywords);
     }
 
 

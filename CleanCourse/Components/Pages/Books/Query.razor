@@ -41,7 +41,7 @@ else
                 <tr>
                     <td>@(x++)</td>
                     <td>
-                        <a href="/books/@book.BookId/info" class="text-info">@book.BookName</a>
+                        <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                     </td>
                     <td>@book.Version</td>
                     <td>@book.AuditYear</td>
@@ -84,23 +84,6 @@ else
         pageSize = appState.DefaultPageSize;
         result = await service.GetAllAsync();
         Refresh(1);
-    }
-
-    private async Task Delete(int id, string name)
-    {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联字词和宝宝的检查记录，您确定要删除教材： '{name}' 吗?"))
-            return;
-
-        if (await service.DeleteAsync(id))
-        {
-
-            result = new SearchBookResult()
-                {
-                    Books = result.Books.Where(x => x.BookId != id).ToArray(),
-                    Count = result.Count - 1,
-                };
-            Refresh(pageSize);
-        }
     }
 
     private void Refresh(int page)

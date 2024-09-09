@@ -1,4 +1,5 @@
 ﻿using Entities.Entities;
+using Services.Words;
 
 namespace Services.Books
 {
@@ -15,5 +16,10 @@ namespace Services.Books
         public string Grade { get; set; } = entity.Grade;
 
         public string Semester { get; set; } = entity.Semester;
+
+        public string FriendlyName => $"{Grade}{BookName}{Semester}({Version})";
+        public string ShortName => $"{BookName}";
+
+        public IList<int> Units { get; set; } = entity.Words?.Select(x=>x.Unit).OrderBy(x=>x).Distinct().ToList()??[];
     }
 }

@@ -8,8 +8,6 @@ public class BookCategoryModel(BookCategoryEntity entity)
 
     public string CategoryName { get; set; } = entity.CategoryName;
 
-    public string SharedCode { get; set; } = entity.SharedCode;
-
     public bool Selected { get; set; } = entity.Selected;
 
     public string BookCategoryFullName => $"{CategoryName}";

@@ -85,7 +85,8 @@ else
             Console.WriteLine(ex);
             appState.KidId = -1;
             appState.KidName = appState.KidName?? "设置";
-            appState.BookCategoryFullName = appState.BookCategoryFullName;
+            appState.BookCategoryFullName = appState.BookCategoryFullName??"设置";
+            appState.BookCategoryId = -1;
         }
         finally
         {

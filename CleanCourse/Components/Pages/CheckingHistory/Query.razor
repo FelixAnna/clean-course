@@ -1,4 +1,5 @@
 ﻿@page "/history"
+@using Services.BookCategoryMappings
 @using Services.CheckingHistories.Models
 @using Services.WordAndHistory
 @using Services.WordAndHistory.Models
@@ -6,6 +7,7 @@
 @using Services.CheckingHistories.Services
 @using Services.WordAndHistory.Services
 @inject Services.WordAndHistory.IWordHistoryService service
+@inject IBookCategoryMappingService mappingService
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -185,7 +187,7 @@ else
 
     private SearchWordAndHistoryResult result;
 
-    private Dictionary<string, string> Courses;
+    private Dictionary<int, string> Courses;
     private Dictionary<int, string> Units;
     private string[] CheckingStatuses;
 
@@ -200,10 +202,15 @@ else
     public Query()
     {
         toCheckedWords = new List<int>();
-        Courses = MetadataService.GetDefaultCourses();
+        Courses = new Dictionary<int, string>();
         Units = MetadataService.GetDefaultUnits();
         CheckingStatuses = MetadataService.GetDefaultCheckingStatuses();
-        Model = new SearchWordAndHistoryCriteria();
+        Model = new SearchWordAndHistoryCriteria()
+        {
+            BookId=-1,
+            Unit=-1,
+            PageIndex=1
+        };
     }
 
     protected override async Task OnInitializedAsync()
@@ -219,6 +226,13 @@ else
         {
             Model = lastSearchCriteria;
         }
+
+        var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
+        Courses = mappings.LinkedBooks.ToDictionary(x => x.BookId, y => y.BookName);
+        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+
+        Units = mappings.LinkedBooks.SelectMany(x => x.Units).ToDictionary(x => x, y => $"第{y}课");
+        Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         await Search();
     }

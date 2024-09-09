@@ -19,6 +19,12 @@
 
     <table class="table">
         <tr class="form-group">
+            <td class="m-2">
+                <label class="form-label">
+                    课程：
+                </label>
+                <span class="text-primary">@Model.BookName</span>
+            </td>
             <td>
                 <label class="form-label">
                     单元：
@@ -81,6 +87,7 @@
         Model = new AddWordModel()
             {
                 BookId = word.BookId,
+                BookName = word.Book.ShortName,
                 Unit = word.Unit,
                 Content = word.Content,
                 Explanation = word.Explanation,

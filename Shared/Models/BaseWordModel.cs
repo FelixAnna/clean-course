@@ -14,18 +14,6 @@
 
         public string Details { get; set; }
 
-        public bool IsEnglish()
-        {
-            return true;// Course == "英语" || Course == "English";
-        }
-        public bool IsChinese()
-        {
-            return true;//Course == "语文" || Course == "Chinese";
-        }
-        public bool IsMath()
-        {
-            return true;//Course == "数学" || Course == "Math";
-        }
 
         public bool IsLongText()
         {

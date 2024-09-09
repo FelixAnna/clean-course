@@ -20,7 +20,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
     public async Task<IList<WordEntity>> FindAsync(SearchWordsCriteria request)
     {
-        var words = courseContext.Words.AsQueryable();
+        var words = courseContext.Words.Include(x=>x.Book).AsQueryable();
 
         if (request.BookId > 0)
         {

@@ -21,7 +21,7 @@ namespace Services.WordAndHistory.Services
                 _preCheckWordsForKids[kidId] = new List<WordHistoryModel>();
             }
 
-            var books = await _bookCategoryMappingService.GetBookCategoryMappingsById(bookCategoryId);
+            var books = await _bookCategoryMappingService.GetByBookCategoryIdAsync(bookCategoryId);
             if (books?.LinkedBooks == null || !books.LinkedBooks.Any())
             {
                 return new SearchWordAndHistoryResult()

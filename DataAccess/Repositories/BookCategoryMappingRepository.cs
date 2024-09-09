@@ -13,7 +13,8 @@ public class BookCategoryMappingRepository(AbstractCourseContext courseContext) 
     {
         var mappings = await courseContext.BookCategoryMappings
             .Include(x=>x.BookCategory)
-            .Include(x=>x.Book)
+            .Include(x => x.Book)
+            .Include(x => x.Book.Words)
             .Where(x=>x.BookCategoryId == bookCategoryId)
             .ToListAsync();
         return mappings;

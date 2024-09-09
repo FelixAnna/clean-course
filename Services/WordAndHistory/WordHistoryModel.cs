@@ -1,11 +1,14 @@
 ﻿using Entities.Entities;
+using Services.Books;
 using Shared.Models;
 using System.Globalization;
+using System.Linq;
 
 namespace Services.WordAndHistory;
 
 public class WordHistoryModel : BaseWordModel
 {
+    public BookModel Book { get; set; }
     public WordHistoryModel() { }
     public WordHistoryModel(WordEntity entity)
     {
@@ -17,6 +20,8 @@ public class WordHistoryModel : BaseWordModel
         Unit = entity.Unit;
 
         SetHistorySummary(entity.CheckingHistories);
+
+        Book = new BookModel(entity.Book);
     }
 
 
@@ -43,4 +48,29 @@ public class WordHistoryModel : BaseWordModel
     }
 
 
+    public bool IsEnglish()
+    {
+        return IsMatch("英语" ,"English");
+    }
+    public bool IsChinese()
+    {
+        return IsMatch("语文", "Chinese");
+    }
+    public bool IsMath()
+    {
+        return IsMatch("数学", "Math");
+    }
+
+    private bool IsMatch(params string[] patterns)
+    {
+        foreach (var pattern in patterns)
+        {
+            if (Book.FriendlyName.Contains(pattern))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

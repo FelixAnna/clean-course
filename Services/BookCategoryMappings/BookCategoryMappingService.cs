@@ -18,7 +18,7 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         _bookService = bookService;
     }
 
-    public async Task<BookCategoryMappingsForAddModel> GetBookCategoryMappingsByForAdd(int bookCategoryId, string keywords)
+    public async Task<BookCategoryMappingsForAddModel> GetByForAdd(int bookCategoryId, string keywords)
     {
         var mappings = await _repository.GetByBookCategoryIdAsync(bookCategoryId);
         var books = await _bookService.GetAllAsync();
@@ -46,17 +46,17 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         return result;
     }
 
-    public async Task AddBookCategoryMappingAsync(int bookCategoryId, int bookId)
+    public async Task AddAsync(int bookCategoryId, int bookId)
     {
         await _repository.AddAsync(bookCategoryId, bookId);
     }
 
-    public async Task RemoveBookCategoryMappingAsync(int bookCategoryId, int bookId)
+    public async Task RemoveAsync(int bookCategoryId, int bookId)
     {
         await _repository.RemoveAsync(bookCategoryId, bookId);
     }
 
-    public async Task<BookCategoryMappingsResult> GetBookCategoryMappingsById(int bookCategoryId)
+    public async Task<BookCategoryMappingsResult> GetByBookCategoryIdAsync(int bookCategoryId)
     {
         var mappings = await _repository.GetByBookCategoryIdAsync(bookCategoryId);
 
