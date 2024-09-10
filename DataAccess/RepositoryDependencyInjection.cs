@@ -6,7 +6,7 @@ using Services.BookCategoryMappings.Repository;
 using Services.Books.Repositories;
 using Services.CheckingHistories.Repositories;
 using Services.Kids.Repositories;
-using Services.WordAndHistory.Repositories;
+using Services.Words.Repositories;
 
 namespace DataAccess;
 

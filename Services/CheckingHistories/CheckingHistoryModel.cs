@@ -1,46 +1,80 @@
 ﻿using Entities.Entities;
 using Services.Books;
 using Services.CheckingHistories.Models;
-using Services.Kids;
+using Shared.Models;
+using System.Globalization;
 
 namespace Services.CheckingHistories;
 
-public class CheckingHistoryModel
+public class CheckingHistoryModel : BaseWordModel
 {
-    public CheckingHistoryModel(WordEntity wordEntity, params CheckingHistoryEntity[] history)
+    public BookModel Book { get; set; }
+
+    public CheckingHistoryModel(WordEntity entity, IEnumerable<CheckingHistoryEntity> historyEntities)
     {
-        var word = new CheckingWord()
-        {
-            WordId = wordEntity.WordId,
-            Content = wordEntity.Content,
-            BookId = wordEntity.BookId,
-            Details = wordEntity.Details,
-            Unit = wordEntity.Unit,
-            Explanation = wordEntity.Explanation,
-            Book = new BookModel(wordEntity.Book)
-        };
+        WordId = entity.WordId;
+        BookId = entity.BookId;
+        Content = entity.Content;
+        Explanation = entity.Explanation;
+        Details = entity.Details;
+        Unit = entity.Unit;
 
-        var histories = history.Select(x =>
-        {
-            var model = new CheckingHistory()
-            {
-                CreatedTime = x.CreatedTime,
-                Id = x.Id,
-                Kid = new KidModel(x.Kid),
-                IsCorrect = x.IsCorrect,
-                Remark = x.Remark,
-            };
+        Histories = historyEntities.Select(x=>new CheckingHistory(x)).ToList(); 
+        SetHistorySummary(historyEntities);
 
-            return model;
-        }).ToList();
-
-        Word = word;
-        Histories = histories;
-
-        Count = histories.Count;
+        Book = new BookModel(entity.Book);
     }
-    public CheckingWord Word { get; set; }
-    public IEnumerable<CheckingHistory> Histories { get; set; }
-    public int Count { get; set; }
 
+    public IEnumerable<CheckingHistory> Histories { get; set; }
+
+    public string? CheckingHistorySummary { get; set; }
+
+    private void SetHistorySummary(IEnumerable<CheckingHistoryEntity> histories)
+    {
+        var result = string.Empty;
+
+        if (histories != null && histories.Any())
+        {
+            var success = histories.Count(x => x.IsCorrect);
+            var failed = histories.Count(x => !x.IsCorrect);
+
+            var percent = (success * 1.0 / (success + failed)).ToString("0%", CultureInfo.InvariantCulture);
+            result = $"{percent}({success}/{success + failed})";
+        }
+        else
+        {
+            result = "--";
+        }
+
+        CheckingHistorySummary = result;
+    }
+
+
+    public bool IsEnglish()
+    {
+        return IsMatch("英语", "English");
+    }
+
+    public bool IsChinese()
+    {
+        return IsMatch("语文", "Chinese");
+    }
+
+    public bool IsMath()
+    {
+        return IsMatch("数学", "Math");
+    }
+
+    private bool IsMatch(params string[] patterns)
+    {
+        foreach (var pattern in patterns)
+        {
+            if (Book.FriendlyName.Contains(pattern))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

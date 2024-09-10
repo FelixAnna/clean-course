@@ -1,7 +1,7 @@
 ﻿using Services.Words.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Services.WordAndHistory.Models;
+namespace Services.CheckingHistories.Models;
 
 public class SearchWordAndHistoryCriteria : SearchWordsCriteria
 {

@@ -18,31 +18,22 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         _bookService = bookService;
     }
 
-    public async Task<BookCategoryMappingsForAddModel> GetByForAdd(int bookCategoryId, string keywords)
+    public async Task<BookCategoryMappingsForAddModel> GetByBookCategoryIdForAddAsync(int bookCategoryId, string keywords)
     {
         var mappings = await _repository.GetByBookCategoryIdAsync(bookCategoryId);
-        var books = await _bookService.GetAllAsync();
-
-        var relatedBooks = books.Books.ToList();
-        if (!string.IsNullOrEmpty(keywords)){
-            relatedBooks = relatedBooks.Where(x => x.BookName.Contains(keywords)
-                                    || x.Semester.Contains(keywords)
-                                    || x.Version.Contains(keywords)
-                                    || x.AuditYear.ToString().Contains(keywords)
-                                    || x.Grade.Contains(keywords)).ToList();
-        }
+        var relatedBooks = await _bookService.FindAsync(keywords);
 
         var result = new BookCategoryMappingsForAddModel();
         if (!mappings.Any())
         {
             result.BookCategory = await _categoryService.GetByIdAsync(bookCategoryId);
-            result.NewBooks = relatedBooks.ToList();
+            result.NewBooks = relatedBooks.Books.ToList();
             return result;
         }
 
         result.BookCategory = new BookCategoryModel(mappings.First()!.BookCategory);
         result.LinkedBooks = mappings.Select(x => new BookModel(x.Book)).ToList();
-        result.NewBooks = relatedBooks.Where(x=> !result.LinkedBooks.Any(y=>x.BookId == y.BookId)).ToList();
+        result.NewBooks = relatedBooks.Books.Where(x=> !result.LinkedBooks.Any(y=>x.BookId == y.BookId)).ToList();
         return result;
     }
 

@@ -1,5 +1,5 @@
 ﻿using Services.Words.Models;
-using Services.WordAndHistory.Repositories;
+using Services.Words.Repositories;
 
 namespace Services.Words
 {

@@ -173,7 +173,7 @@
 
     private async Task Refresh()
     {
-        Model = await service.GetByForAdd(id, Criteria.Keywords);
+        Model = await service.GetByBookCategoryIdForAddAsync(id, Criteria.Keywords);
     }
 
 

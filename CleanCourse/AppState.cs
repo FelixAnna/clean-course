@@ -1,5 +1,5 @@
 ﻿using Services.Words.Models;
-using Services.WordAndHistory.Models;
+using Services.CheckingHistories.Models;
 
 namespace CleanCourse;
 

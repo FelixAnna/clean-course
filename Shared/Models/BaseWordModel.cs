@@ -12,7 +12,7 @@
 
         public string Explanation { get; set; }
 
-        public string Details { get; set; }
+        public string? Details { get; set; }
 
 
         public bool IsLongText()

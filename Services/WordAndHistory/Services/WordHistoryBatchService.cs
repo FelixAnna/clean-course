@@ -1,11 +1,10 @@
 ﻿using Entities.Entities;
 using Services.CheckingHistories.Models;
 using Services.CheckingHistories.Repositories;
-using Services.WordAndHistory;
 using Services.WordAndHistory.Models;
-using Services.WordAndHistory.Repositories;
+using Services.Words.Repositories;
 
-namespace Services.CheckingHistories.Services
+namespace Services.WordAndHistory.Services
 {
     public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWordRepository wordRepository) : IWordHistoryBatchService
     {
@@ -127,13 +126,7 @@ namespace Services.CheckingHistories.Services
         private async Task<IEnumerable<CheckingHistory>> AddAsync(params AddCheckingHistoryModel[] models)
         {
             var results = await repository.AddAsync([.. models]);
-            return results.Select(x => new CheckingHistory()
-            {
-                Id = x.Id,
-                IsCorrect = x.IsCorrect,
-                CreatedTime = x.CreatedTime,
-                Remark = x.Remark,
-            });
+            return results.Select(x => new CheckingHistory(x));
         }
 
         private static List<WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)

@@ -1,7 +1,8 @@
 ﻿using Services.CheckingHistories.Models;
 using Services.WordAndHistory;
+using Services.WordAndHistory.Models;
 
-namespace Services.CheckingHistories.Services
+namespace Services.WordAndHistory.Services
 {
     public interface IWordHistoryBatchService
     {

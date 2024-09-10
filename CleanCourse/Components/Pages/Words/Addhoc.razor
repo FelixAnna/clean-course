@@ -1,10 +1,12 @@
 ﻿@page "/books/{bookId:int}/words/{id:int}/addhoc"
 @using Services.Words
 @using Services.Words.Models
+@using Services.CheckingHistories.Services
 @using Services.Metadata
 @inject AppState appState
 @inject IWordManageService service
 @inject IWordBatchService importService
+@inject IWordPreCheckService preCheckService
 @inject NavigationManager navigationManager
 
 
@@ -12,7 +14,7 @@
 
 <p>为当前教材(<span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>)添加临时词条。</p>
 <hr class="hr" />
-<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="AddWord">
+<EditForm Model="@Model" OnValidSubmit="@Submit" FormName="AddHoc">
     <DataAnnotationsValidator />
     <ValidationSummary />
     
@@ -112,6 +114,7 @@
     private async Task Submit()
     {
         await importService.AddWordAsync(Model);
-        navigationManager.NavigateTo("history/checking");
+        preCheckService.Remove(appState.KidId, id);
+        navigationManager.NavigateTo("history/add");
     }
 }

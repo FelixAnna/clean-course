@@ -1,7 +1,7 @@
 ﻿using Entities.Entities;
 using Services.Words.Models;
-using Services.WordAndHistory.Models;
-using Services.WordAndHistory.Repositories;
+using Services.Words.Repositories;
+using Services.CheckingHistories.Models;
 
 namespace Services.Words
 {

@@ -6,6 +6,7 @@ using Services.CheckingHistories;
 using Services.Kids;
 using Services.WordAndHistory.Services;
 using Services.BookCategoryMappings;
+using Services.CheckingHistories.Services;
 
 namespace Services;
 
@@ -15,9 +16,8 @@ public static class ServiceDependencyInjections
     {
         services.AddSingleton<IBookCategoryService, BookCategoryService>();
         services.AddSingleton<IKidService, KidService>();
-        services.AddSingleton<WordAndHistory.IWordHistoryService, WordAndHistory.WordHistoryService>();
         services.AddSingleton<ICheckingHistoryService, CheckingHistoryService>();
-        services.AddSingleton<CheckingHistories.Services.IWordHistoryBatchService, CheckingHistories.Services.WordHistoryBatchService>();
+        services.AddSingleton<IWordHistoryBatchService, WordHistoryBatchService>();
         services.AddSingleton<IWordBatchService, WordBatchService>();
         services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
         services.AddSingleton<IWordManageService, WordManageService>();

@@ -1,7 +1,7 @@
 ﻿using Entities.Entities;
 using Services.Words.Models;
 
-namespace Services.WordAndHistory.Repositories
+namespace Services.Words.Repositories
 {
     public interface IWordRepository
     {

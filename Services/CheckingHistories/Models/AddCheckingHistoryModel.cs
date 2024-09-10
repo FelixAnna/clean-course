@@ -3,8 +3,11 @@
 public class AddCheckingHistoryModel
 {
     public int WordId { get; set; }
+    
     public int KidId { get; set; }
+    
     public bool IsCorrect { get; set; }
+
     public string? Remark { get; set; }
 
     public DateTime? CreatedTime { get; set; }

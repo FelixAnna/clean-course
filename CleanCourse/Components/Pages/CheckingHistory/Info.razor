@@ -1,4 +1,4 @@
-﻿ @page "/history/{wordId:int}"
+﻿ @page "/history/{wordId:int}/info"
  @using Services.CheckingHistories
  @using Services.CheckingHistories.Models
  @inject ICheckingHistoryService service
@@ -15,30 +15,30 @@
  }
  else
  {
-     <h3>@historyRecords.Word.Content</h3>
+     <h3>@historyRecords.Content</h3>
 
-     <p>@historyRecords.Word.Explanation</p>
+     <p>@historyRecords.Explanation</p>
      <hr class="hr" />
      <table class="row gy-3 pe-1">
              <tr class="form-group">
                  <td class="col-md-5">
                      <label class="form-label">课程：</label>
-                     <span class="text-primary"><a href="/books/@historyRecords.Word.BookId/info" class="text-info">@historyRecords.Word.Book.FriendlyName</a></span>
+                     <span class="text-primary"><a href="/books/@historyRecords.BookId/info" class="text-info">@historyRecords.Book.FriendlyName</a></span>
                  </td>
                  <td class="col-md-2">
                      <label class="form-label">单元：</label>
-                     <span class="text-primary">@historyRecords.Word.Unit</span>
+                     <span class="text-primary">@historyRecords.Unit</span>
                  </td>
                  <td class="col-md-3">
                      <label class="form-label">教材：</label>
                     <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
                 </td>
              </tr>
-         @if (!string.IsNullOrEmpty(historyRecords.Word.Details)){
+         @if (!string.IsNullOrEmpty(historyRecords.Details)){
          <tr class="form-group">
              <td class="m-2">
                  <label class="form-label">详细描述：</label>
-                 <div class="text-secondary">@historyRecords.Word.Details</div>
+                 <div class="text-secondary">@historyRecords.Details</div>
              </td>
          </tr>
          }
@@ -118,15 +118,13 @@
          if (await service.DeleteAsync(id))
          {
              historyRecords.Histories = historyRecords.Histories.Where(x => x.Id != id).ToArray();
-             historyRecords.Count = historyRecords.Count - 1;
-
              Refresh(pageIndex);
          }
      }
 
      private void Refresh(int page)
      {
-         totalPage = (int)Math.Ceiling(historyRecords.Count * 1.0 / pageSize);
+        totalPage = (int)Math.Ceiling(historyRecords.Histories.Count() * 1.0 / pageSize);
          ChangePage(page);
      }
 

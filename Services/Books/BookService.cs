@@ -33,7 +33,23 @@ namespace Services.Books
             var results = categories.Select(x =>
             {
                 return new BookModel(x);
-            }).OrderByDescending(x => x.AuditYear).ThenBy(x=>x.BookName).ToList();
+            }).OrderByDescending(x => x.AuditYear).ThenBy(x => x.BookName).ToList();
+
+            return new SearchBookResult()
+            {
+                Books = results,
+                Count = results.Count
+            };
+        }
+
+        public async Task<SearchBookResult> FindAsync(string keywords)
+        {
+            var categories = await repository.FindAsync(keywords);
+
+            var results = categories.Select(x =>
+            {
+                return new BookModel(x);
+            }).OrderByDescending(x => x.AuditYear).ThenBy(x => x.BookName).ToList();
 
             return new SearchBookResult()
             {

@@ -1,24 +1,24 @@
-﻿using Services.BookCategories;
-using Services.BookCategoryMappings;
-using Services.WordAndHistory.Models;
+﻿using Services.BookCategoryMappings;
+using Services.CheckingHistories.Models;
 
-namespace Services.WordAndHistory.Services
+namespace Services.CheckingHistories.Services
 {
     public class WordPreCheckService : IWordPreCheckService
     {
+        private static Dictionary<int, List<CheckingHistoryModel>> _preCheckWordsForKids = [];
+
         private readonly IBookCategoryMappingService _bookCategoryMappingService;
+
         public WordPreCheckService(IBookCategoryMappingService bookCategoryMappingService)
         {
             _bookCategoryMappingService = bookCategoryMappingService;
         }
-
-        private static Dictionary<int, List<WordHistoryModel>> _preCheckWordsForKids = [];
-
+        
         public async Task<SearchWordAndHistoryResult> GetAllAsync(int kidId, int bookCategoryId)
         {
             if (!_preCheckWordsForKids.ContainsKey(kidId))
             {
-                _preCheckWordsForKids[kidId] = new List<WordHistoryModel>();
+                _preCheckWordsForKids[kidId] = new List<CheckingHistoryModel>();
             }
 
             var books = await _bookCategoryMappingService.GetByBookCategoryIdAsync(bookCategoryId);
@@ -26,7 +26,7 @@ namespace Services.WordAndHistory.Services
             {
                 return new SearchWordAndHistoryResult()
                 {
-                    Words = new List<WordHistoryModel>(),
+                    Words = new List<CheckingHistoryModel>(),
                     Count = 0
                 };
             }
@@ -41,16 +41,16 @@ namespace Services.WordAndHistory.Services
             };
         }
 
-        public void Add(int kidId, WordHistoryModel word)
+        public void Add(int kidId, CheckingHistoryModel word)
         {
             if (!_preCheckWordsForKids.ContainsKey(kidId))
             {
-                _preCheckWordsForKids[kidId] = new List<WordHistoryModel>();
+                _preCheckWordsForKids[kidId] = new List<CheckingHistoryModel>();
             }
 
             _preCheckWordsForKids[kidId].Add(word);
         }
-
+ 
         public void Remove(int kidId, int id)
         {
             if (_preCheckWordsForKids.ContainsKey(kidId))

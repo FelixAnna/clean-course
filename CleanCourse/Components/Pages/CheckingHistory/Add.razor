@@ -1,12 +1,11 @@
-﻿@page "/history/checking"
+﻿@page "/history/add"
 @using Services.CheckingHistories.Models
-@using Services.WordAndHistory
-@using Services.WordAndHistory.Models
+@using Services.CheckingHistories
 @using Services.Metadata
 @using Services.CheckingHistories.Services
-@using Services.WordAndHistory.Services
 @using System.Text
-@inject Services.CheckingHistories.Services.IWordHistoryBatchService historyService
+@using Services.WordAndHistory.Services
+@inject IWordHistoryBatchService historyService
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -176,10 +175,10 @@ else
     private int pageIndex;
     private int totalPage;
     private int pageSize;
-    private IList<WordHistoryModel> currentItems;
+    private IList<CheckingHistoryModel> currentItems;
 
 
-    public Checking()
+    public Add()
     {
         checkedWords = new List<int>();
         errorWords = new List<int>();

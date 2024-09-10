@@ -1,6 +1,6 @@
 ﻿using Services.Words.Models;
 
-namespace Services.CheckingHistories.Models
+namespace Services.WordAndHistory.Models
 {
     public class ImportCheckingHistoryModel : ImportWordsModel
     {

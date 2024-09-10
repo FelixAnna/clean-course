@@ -1,18 +1,19 @@
-﻿using Services.Kids;
+﻿using Entities.Entities;
+using Services.Kids;
 
 namespace Services.CheckingHistories.Models;
 
-public class CheckingHistory
+public class CheckingHistory(CheckingHistoryEntity historyEntity)
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = historyEntity.Id;
 
-    public bool IsCorrect { get; set; }
+    public bool IsCorrect { get; set; } = historyEntity.IsCorrect;
 
-    public string? Remark { get; set; }
+    public string? Remark { get; set; } = historyEntity.Remark;
 
-    public DateTime CreatedTime { get; set; }
+    public DateTime CreatedTime { get; set; } = historyEntity.CreatedTime;
 
-    public KidModel Kid { get; set; }
+    public KidModel Kid { get; set; } = new KidModel(historyEntity.Kid);
 
 
     public string GetFormattedRemark()

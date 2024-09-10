@@ -36,6 +36,23 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
         return result.Entity;
     }
 
+
+    public async Task<IEnumerable<BookEntity>> FindAsync(string keywords)
+    {
+        var books = courseContext.Books.AsQueryable();
+
+        if (!string.IsNullOrEmpty(keywords))
+        {
+            books = books.Where(x => x.BookName.Contains(keywords)
+                                    || x.Semester.Contains(keywords)
+                                    || x.Version.Contains(keywords)
+                                    || x.AuditYear.ToString().Contains(keywords)
+                                    || x.Grade.Contains(keywords));
+        }
+
+        return await books.ToListAsync();
+    }
+
     public async Task<BookEntity> UpdateAsync(int bookId, AddBookModel model)
     {
         var book = await courseContext.Books.FirstAsync(x => x.BookId == bookId);

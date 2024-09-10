@@ -1,6 +1,6 @@
 ﻿using Services.CheckingHistories.Models;
 using Services.CheckingHistories.Repositories;
-using Services.WordAndHistory.Repositories;
+using Services.Words.Repositories;
 
 namespace Services.CheckingHistories;
 
@@ -8,6 +8,22 @@ public class CheckingHistoryService(ICheckingHistoryRepository repository, IWord
 {
     private readonly ICheckingHistoryRepository repository = repository;
     private readonly IWordRepository wordRepository = wordRepository;
+
+    public async Task<SearchWordAndHistoryResult> GetWordsAsync(SearchWordAndHistoryCriteria request)
+    {
+        var words = await wordRepository.FindAsync(request);
+
+        var results = words.Select(x =>
+        {
+            return new CheckingHistoryModel(x, x.CheckingHistories);
+        }).OrderBy(x => x.BookId).ThenBy(x => x.Unit).ToList();
+
+        return new SearchWordAndHistoryResult()
+        {
+            Words = results,
+            Count = results.Count
+        };
+    }
 
     public async Task<CheckingHistoryModel> GetByWordAndKidAsync(int wordId, int kidId)
     {
@@ -21,7 +37,7 @@ public class CheckingHistoryService(ICheckingHistoryRepository repository, IWord
     {
         var word = await wordRepository.GetByIdAsync(model.WordId);
         var result = await repository.AddAsync(model);
-        return new CheckingHistoryModel(word!, result);
+        return new CheckingHistoryModel(word!, []);
     }
 
     public async Task<bool> DeleteAsync(int historyId)

@@ -113,7 +113,6 @@
       <None Include="Components\Pages\Category\Add.razor" />
       <None Include="Components\Pages\Category\Query.razor" />
       <None Include="Components\Pages\Category\Update.razor" />
-      <None Include="Components\Pages\Category\Word\Addhoc.razor" />
       <None Include="Components\Pages\Category\Word\Import.razor" />
     </ItemGroup>
 

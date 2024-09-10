@@ -1,13 +1,13 @@
 ﻿@page "/history"
 @using Services.BookCategoryMappings
+@using Services.CheckingHistories
 @using Services.CheckingHistories.Models
 @using Services.WordAndHistory
 @using Services.WordAndHistory.Models
 @using Services.Metadata
 @using Services.CheckingHistories.Services
-@using Services.WordAndHistory.Services
-@inject Services.WordAndHistory.IWordHistoryService service
 @inject IBookCategoryMappingService mappingService
+@inject ICheckingHistoryService service
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -96,7 +96,7 @@
                             }
                             @if (toCheckedWords.Any())
                             {
-                                <a href="/history/checking" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+                                <a href="/history/add" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
                             }
                         </div>
                     </div>
@@ -141,7 +141,7 @@ else
             {
                 <tr>
                     <td>@(x++)</td>
-                    <td><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                    <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
                     <td>@word.Book.BookName/@word.Unit</td>
                     <td>
@@ -195,7 +195,7 @@ else
 
     private int totalPage;
     private int pageSize;
-    private IList<WordHistoryModel> currentItems;
+    private IList<CheckingHistoryModel> currentItems;
 
     private bool IsReadyToCheckAll = true;
 

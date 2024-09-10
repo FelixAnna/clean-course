@@ -8,6 +8,6 @@ public interface ICheckingHistoryRepository
     Task<IEnumerable<CheckingHistoryEntity>> GetByWordAndKidAsync(int wordId, int kidId);
     Task<CheckingHistoryEntity> AddAsync(AddCheckingHistoryModel model);
     Task<IEnumerable<CheckingHistoryEntity>> AddAsync(params AddCheckingHistoryModel[] models);
-    Task<bool> RemoveAsync(int wordId);
+    Task<bool> RemoveAsync(int historyId);
     Task RemoveByWordIdsAsync(int kidId, params int[] wordIds);
 }
