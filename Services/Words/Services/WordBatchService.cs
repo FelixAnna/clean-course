@@ -58,7 +58,7 @@ namespace Services.Words
         {
             if(model.Source == "pdf")
             {
-                return EngWordFromPdfHelper.ParseWords(model);
+                return model.Book.IsEnglish() ? EngWordFromPdfHelper.ParseWords(model) : WordFromPdfHelper.ParseWords(model);
             }
             else
             {

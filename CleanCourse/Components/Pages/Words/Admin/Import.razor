@@ -25,8 +25,8 @@
                     导入类型：
                 </label>
                 <select @bind="Model.Source" class="form-select">
-                    <option value="excel">从Excel复制后导入</option>
                     <option value="pdf">从PDF复制后导入</option>
+                    <option value="excel">从Excel复制后导入</option>
                 </select>
             </td>
             <td>
@@ -146,6 +146,7 @@
             {
                 BookId = bookId,
                 BookName = book.FriendlyName,
+                Book = book,
                 Overwrite = DuplicateOptions.First().Key,
             };
 

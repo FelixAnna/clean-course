@@ -21,5 +21,33 @@ namespace Services.Books
         public string ShortName => $"{BookName}";
 
         public IList<int> Units { get; set; } = entity.Words?.Select(x=>x.Unit).OrderBy(x=>x).Distinct().ToList()??[];
+
+        public bool IsEnglish()
+        {
+            return IsMatch("英语", "English");
+        }
+
+        public bool IsChinese()
+        {
+            return IsMatch("语文", "Chinese");
+        }
+
+        public bool IsMath()
+        {
+            return IsMatch("数学", "Math");
+        }
+
+        private bool IsMatch(params string[] patterns)
+        {
+            foreach (var pattern in patterns)
+            {
+                if (FriendlyName.Contains(pattern))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
     }
 }

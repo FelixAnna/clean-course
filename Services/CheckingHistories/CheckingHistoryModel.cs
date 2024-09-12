@@ -52,29 +52,16 @@ public class CheckingHistoryModel : BaseWordModel
 
     public bool IsEnglish()
     {
-        return IsMatch("英语", "English");
+        return Book.IsEnglish();
     }
 
     public bool IsChinese()
     {
-        return IsMatch("语文", "Chinese");
+        return Book.IsChinese();
     }
 
     public bool IsMath()
     {
-        return IsMatch("数学", "Math");
-    }
-
-    private bool IsMatch(params string[] patterns)
-    {
-        foreach (var pattern in patterns)
-        {
-            if (Book.FriendlyName.Contains(pattern))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return Book.IsMath();
     }
 }

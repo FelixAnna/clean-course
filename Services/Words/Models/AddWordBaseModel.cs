@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Services.Books;
+using System.ComponentModel.DataAnnotations;
 
 namespace Services.Words.Models
 {
@@ -8,6 +9,8 @@ namespace Services.Words.Models
         public int BookId { get; set; }
 
         public string BookName { get; set; }
+
+        public BookModel Book { get; set; }
 
         [Required]
         public string Source { get; set; }
