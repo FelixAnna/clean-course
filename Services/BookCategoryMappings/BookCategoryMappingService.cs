@@ -55,6 +55,7 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         if (!mappings.Any())
         {
             result.BookCategory = await _categoryService.GetByIdAsync(bookCategoryId);
+            result.LinkedBooks = [];
             return result;
         }
 

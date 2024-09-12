@@ -340,7 +340,7 @@ else
 
     private void UpdateReadyToCheckAll()
     {
-        IsReadyToCheckAll = !currentItems.All(x => toCheckedWords.Contains(x.WordId));
+        IsReadyToCheckAll = !currentItems.Any() || !currentItems.All(x => toCheckedWords.Contains(x.WordId));
     }
 }
      

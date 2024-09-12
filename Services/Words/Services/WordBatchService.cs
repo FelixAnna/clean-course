@@ -1,13 +1,12 @@
 ﻿using Entities.Entities;
+using Services.CheckingHistories.Models;
 using Services.Words.Models;
 using Services.Words.Repositories;
-using Services.CheckingHistories.Models;
 
 namespace Services.Words
 {
     public class WordBatchService(IWordRepository repository) : IWordBatchService
     {
-        private const string splitter = "\t";
         private readonly IWordRepository repository = repository;
         public async Task<WordModel> AddWordAsync(AddWordModel model)
         {
@@ -21,7 +20,9 @@ namespace Services.Words
 
         public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. ParseWords(model)]);
+            var words = GetWords(model);
+
+            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
 
             await repository.UpdateAllAsync([.. tobeUpdated]);
             var results = await repository.AddAsync([.. tobeInserted]);
@@ -31,7 +32,9 @@ namespace Services.Words
 
         public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. ParseWords(model)]);
+            var words = GetWords(model);
+
+            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
 
             return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
             {
@@ -51,27 +54,21 @@ namespace Services.Words
             }).ToList();
         }
 
-        private static List<AddWordModel> ParseWords(ImportWordsModel model)
+        private List<AddWordModel> GetWords(ImportWordsModel model)
         {
-            var tobeInsertedNewWords = new List<AddWordModel>();
-            var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            for (int i = 0; i < wordsText?.Length; i++)
+            if(model.Source == "pdf")
             {
-                var wordParts = wordsText[i].Split(splitter).Select(x => x.Trim()).ToArray();
-
-                if (AddWordModelConvertor.IsValid(wordParts))
-                {
-                    var addModel = AddWordModelConvertor.FromLine(model.BookId, wordParts);
-                    tobeInsertedNewWords.Add(addModel);
-                }
+                return EngWordFromPdfHelper.ParseWords(model);
             }
-
-            return tobeInsertedNewWords;
+            else
+            {
+                return WordFromExcelHelper.ParseWords(model);
+            }
         }
 
         private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel, params AddWordModel[] words)
         {
-            var tobeInsertedNewWords = words.Where(x => string.Equals(x.BookId, addModel.BookId)).ToArray();
+            var tobeInsertedNewWords = words.Where(x => Equals(x.BookId, addModel.BookId)).ToArray();
             var tobeUpdated = new List<WordEntity>();
             if (words != null && words.Length > 0)
             {
@@ -85,19 +82,19 @@ namespace Services.Words
 
                 if (isOverwrite)
                 {
-                    foreach (var w in existingWords)
+                    foreach (var existingWord in existingWords)
                     {
-                        var nw = tobeInsertedNewWords.Where(nw => w.BookId == nw.BookId && w.Content == nw.Content).FirstOrDefault();
-                        if (nw != null)
+                        var newWord = tobeInsertedNewWords.Where(nw => existingWord.BookId == nw.BookId && existingWord.Content == nw.Content).FirstOrDefault();
+                        if (newWord != null)
                         {
-                            w.Explanation = nw.Explanation;
-                            w.Details = nw.Details;
-                            if (w.Unit <= 0)
+                            existingWord.Explanation = newWord.Explanation;
+                            existingWord.Details = newWord.Details;
+                            if (existingWord.Unit <= 0)
                             {
-                                w.Unit = nw.Unit;
+                                existingWord.Unit = newWord.Unit;
                             }
 
-                            tobeUpdated.Add(w);
+                            tobeUpdated.Add(existingWord);
                         }
                     }
 

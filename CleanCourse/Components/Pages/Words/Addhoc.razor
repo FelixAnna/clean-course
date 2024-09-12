@@ -12,7 +12,7 @@
 
 <h3>词条</h3>
 
-<p>为当前教材(<span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>)添加临时词条。</p>
+<p>为当前课本((<span class="text-primary"><a href="/books/@bookId/info" class="text-info">@Model.BookName</a></span>))添加临时词条。</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="AddHoc">
     <DataAnnotationsValidator />

@@ -10,6 +10,9 @@ namespace Services.Words.Models
         public string BookName { get; set; }
 
         [Required]
+        public string Source { get; set; }
+
+        [Required]
         public string Overwrite { get; set; }
         public bool IsOverwrite => Overwrite == "1";
     }

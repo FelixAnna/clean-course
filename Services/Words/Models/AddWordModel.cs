@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Services.Kids;
+using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Services.Words.Models;
 
@@ -18,15 +20,36 @@ public class AddWordModel : AddWordBaseModel
     [Required]
     public int Unit { get; set; }
 }
-public static class AddWordModelConvertor
+public static class WordFromExcelHelper
 {
+    private const string splitter = "\t";
+
     const int contentIndex = 1;
     const int explanationIndex = contentIndex + 1;
     const int detailsIndex = contentIndex + 2;
     const int UnitIndex = contentIndex + 3;
     const int BookIndex = contentIndex + 4;
 
-    public static bool IsValid(string[] values)
+    public static List<AddWordModel> ParseWords(ImportWordsModel model)
+    {
+        var tobeInsertedNewWords = new List<AddWordModel>();
+        var wordsText = model.Content?.Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        for (int i = 0; i < wordsText?.Length; i++)
+        {
+            var wordParts = wordsText[i].Split(splitter).Select(x => x.Trim()).ToArray();
+
+            if (IsValid(wordParts))
+            {
+                var addModel = FromLine(model.BookId, wordParts);
+                tobeInsertedNewWords.Add(addModel);
+            }
+        }
+
+        return tobeInsertedNewWords;
+    }
+
+
+    private static bool IsValid(string[] values)
     {
         if (values.Length < UnitIndex + 1 || !int.TryParse(values[UnitIndex], out _))
         {
@@ -36,7 +59,7 @@ public static class AddWordModelConvertor
         return true;
     }
 
-    public static AddWordModel FromLine(int bookId, string[] values)
+    private static AddWordModel FromLine(int bookId, string[] values)
     {
         var model = new AddWordModel()
         {
@@ -63,4 +86,117 @@ public static class AddWordModelConvertor
         return decodedValue;
     }
 
+}
+
+public static class WordFromPdfHelper
+{
+    public static List<AddWordModel> ParseWords(ImportWordsModel model)
+    {
+        var tobeInsertedNewWords = new List<AddWordModel>();
+        var wordsText = model.Content?.Split(['\n', ' ', '.']).Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        var currentUnit = 0;
+        for (int i = 0; i < wordsText?.Length; i++)
+        {
+            if (int.TryParse(wordsText[i], out int unit) && unit < currentUnit + 5)
+            {
+                currentUnit = unit;
+                continue;
+            }
+            else
+            {
+                if (currentUnit == 0) {
+                    continue;
+                }
+
+                var addModel = new AddWordModel()
+                {
+                    BookId = model.BookId,
+                    Content = wordsText[i],
+                    Explanation = "NA",
+                    Details = string.Empty,
+                    Unit = currentUnit
+                };
+
+                tobeInsertedNewWords.Add(addModel);
+            }
+        }
+
+        return tobeInsertedNewWords;
+    }
+}
+public static class EngWordFromPdfHelper
+{
+    public static List<AddWordModel> ParseWords(ImportWordsModel model)
+    {
+        var tobeInsertedNewWords = new List<AddWordModel>();
+        var wordsText = model.Content?.Split(['\n', '.']).Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        var currentUnit = 0;
+        for (int i = 0; i < wordsText?.Length; i++)
+        {
+            if (Regex.IsMatch(wordsText[i], @"(Unit)\s+\b+"))
+            {
+                currentUnit = int.Parse(wordsText[i].Split(' ').Last());
+                continue;
+            }
+            else
+            {
+                if (currentUnit == 0 || wordsText[i].Length<1)
+                {
+                    continue;
+                }
+
+                var word = wordsText[i];
+                var splitIndex = GetSplitIndex(word);
+                while (splitIndex == word.Length - 1) {
+                    word += " " + wordsText[++i]; //handle line break
+                    splitIndex = GetSplitIndex(word);
+                }
+
+                if (splitIndex == -1) {
+                    continue;
+                }
+
+                var addModel = new AddWordModel()
+                {
+                    BookId = model.BookId,
+                    Content = word[..splitIndex].Trim(),
+                    Explanation = word[splitIndex..].Trim(),
+                    Details = string.Empty,
+                    Unit = currentUnit
+                };
+
+                tobeInsertedNewWords.Add(addModel);
+            }
+        }
+
+        return tobeInsertedNewWords;
+    }
+
+    private static int GetSplitIndex(string wordAndMeaning)
+    {
+        var splitIndex = -1;
+        for(int i=0; i<wordAndMeaning.Length; i++)
+        {
+            var ch = wordAndMeaning[i];
+            if (ch >= 'a' && ch <= 'z')
+            {
+                splitIndex = i;
+            }
+
+            if (ch >= 'A' && ch <= 'Z')
+            {
+                splitIndex = i;
+            }
+        }
+
+        if( splitIndex > 0 && wordAndMeaning.Substring(splitIndex).IndexOf(' ') < 0)
+        {
+            splitIndex = wordAndMeaning.Length-1;
+        }else if(splitIndex > 0 && wordAndMeaning.Substring(splitIndex).IndexOf(' ') > 0)
+        {
+            splitIndex += wordAndMeaning.Substring(splitIndex).IndexOf(' ');
+        }
+
+        return splitIndex;
+    }
 }

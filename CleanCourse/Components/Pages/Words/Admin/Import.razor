@@ -1,32 +1,32 @@
-﻿@* @page "/bookCategories/{sharedCode}/words/import"
-@using Services.BookCategoryWords
-@using Services.BookCategoryWords.Models
+﻿@page "/books/{bookId:int}/words/import"
+@using Services.Books
 @using Services.Metadata
 @using Services.BookCategories.Models
+@using Services.Words
+@using Services.Words.Models
 @inject AppState appState
 @inject IWordBatchService importService
+@inject IBookService bookService
 @inject NavigationManager navigationManager
 
 
 <h3>词条</h3>
 
-<p>为当前教材(<span class="text-primary">@appState.BookCategoryFullName</span>)批量导入词条。</p>
+<p>为当前课本(<span class="text-primary"><a href="/books/@bookId/info" class="text-info">@Model.BookName</a></span>)批量导入词条。</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="ImportWord">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    
+
     <table class="table">
         <tr class="form-group">
-            <td class="m-2">
+            <td>
                 <label class="form-label">
-                    课程：
+                    导入类型：
                 </label>
-                <select @bind="Model.Course" class="form-select">
-                    @foreach (var course in Courses)
-                    {
-                        <option value="@course.Key">@course.Value</option>
-                    }
+                <select @bind="Model.Source" class="form-select">
+                    <option value="excel">从Excel复制后导入</option>
+                    <option value="pdf">从PDF复制后导入</option>
                 </select>
             </td>
             <td>
@@ -85,7 +85,6 @@
                 <th>备注</th>
                 <th>详细(字数）</th>
                 <th>单元</th>
-                <th>课程</th>
             </tr>
         </thead>
         <tbody>
@@ -100,7 +99,6 @@
                     <td>@word.Explanation</td>
                     <td>@(string.IsNullOrEmpty(word.Details)?"--":word.Details.Length)</td>
                     <td>@word.Unit</td>
-                    <td>@word.Course</td>
                 </tr>
             }
         </tbody>
@@ -122,12 +120,11 @@
 
 @code {
     [Parameter]
-    public string sharedCode { get; set; } = null!;
+    public int bookId { get; set; }
 
     [SupplyParameterFromForm]
     public ImportWordsModel Model { get; set; }
 
-    private Dictionary<string, string> Courses;
     private Dictionary<string, string> DuplicateOptions;
     private IList<WordModel> previewWords;
 
@@ -138,16 +135,17 @@
 
     public Import()
     {
-        Courses = MetadataService.GetDefaultCourses().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary();
         DuplicateOptions = MetadataService.GetDefaultDuplicateOption();
     }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        var book = await bookService.GetByIdAsync(bookId);
+
         Model = new ImportWordsModel()
             {
-                SharedCode = sharedCode,
-                Course = Courses.First().Key,
+                BookId = bookId,
+                BookName = book.FriendlyName,
                 Overwrite = DuplicateOptions.First().Key,
             };
 
@@ -157,7 +155,7 @@
     private async Task Submit()
     {
         await importService.ImportWordsAsync(Model);
-        navigationManager.NavigateTo($"/bookCategories/{sharedCode}/words");
+        navigationManager.NavigateTo($"/books/{bookId}/words");
     }
 
     private async Task Preview()
@@ -193,4 +191,4 @@
         currentItems.Clear();
         previewWords.Clear();
     }
-} *@
+}
