@@ -174,6 +174,7 @@ public static class EngWordFromPdfHelper
 
     private static int GetSplitIndex(string wordAndMeaning)
     {
+        bool dot3dUsed = false;
         var splitIndex = -1;
         for(int i=0; i<wordAndMeaning.Length; i++)
         {
@@ -187,14 +188,25 @@ public static class EngWordFromPdfHelper
             {
                 splitIndex = i;
             }
+            
+            if(ch == '…' && !dot3dUsed)
+            {
+                dot3dUsed = true;
+                splitIndex = i;
+            }
         }
 
-        if( splitIndex > 0 && wordAndMeaning.Substring(splitIndex).IndexOf(' ') < 0)
+        if (splitIndex > 0)
         {
-            splitIndex = wordAndMeaning.Length-1;
-        }else if(splitIndex > 0 && wordAndMeaning.Substring(splitIndex).IndexOf(' ') > 0)
-        {
-            splitIndex += wordAndMeaning.Substring(splitIndex).IndexOf(' ');
+            var indexOfNextSpace = wordAndMeaning.Substring(splitIndex).IndexOf(' ');
+            if (indexOfNextSpace < 0)
+            {
+                splitIndex = wordAndMeaning.Length - 1;
+            }
+            else if (indexOfNextSpace >= 0)
+            {
+                splitIndex += indexOfNextSpace;
+            }
         }
 
         return splitIndex;

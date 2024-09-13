@@ -21,6 +21,7 @@ public static class MetadataService
             "九年级",
         ];
     }
+
     public static string[] GetDefaultVersions()
     {
         return
@@ -34,17 +35,6 @@ public static class MetadataService
     public static string[] GetDefaultSemesters()
     {
         return ["上学期", "下学期"];
-    }
-
-    public static Dictionary<string, string> GetDefaultCourses()
-    {
-        return new Dictionary<string, string>
-        {
-            { "", "全部" },
-            {"语文", "语文" },
-            {"英语", "英语" },
-            {"数学", "数学" }
-        };
     }
 
     public static Dictionary<string, string> GetDefaultDuplicateOption()
@@ -114,17 +104,6 @@ public static class MetadataService
         var category = new AddBookCategoryModel()
         {
             CategoryName = "",
-        };
-
-        return category;
-    }
-    public static AddBookModel GetDefaultBook()
-    {
-        var category = new AddBookModel()
-        {
-            BookName = "",
-            Grade="一年级",
-            Semester="上学期",
         };
 
         return category;

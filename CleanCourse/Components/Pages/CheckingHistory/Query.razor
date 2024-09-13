@@ -203,7 +203,7 @@ else
     {
         toCheckedWords = new List<int>();
         Courses = new Dictionary<int, string>();
-        Units = MetadataService.GetDefaultUnits();
+        Units = new Dictionary<int, string>();
         CheckingStatuses = MetadataService.GetDefaultCheckingStatuses();
         Model = new SearchWordAndHistoryCriteria()
         {
@@ -228,10 +228,10 @@ else
         }
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
-        Courses = mappings.LinkedBooks.ToDictionary(x => x.BookId, y => y.BookName);
+        Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
-        Units = mappings.LinkedBooks.SelectMany(x => x.Units).ToDictionary(x => x, y => $"第{y}课");
+        Units = mappings.LinkedBooks.SelectMany(x => x.Units).Distinct().ToDictionary(x => x, y => $"第{y}课");
         Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         await Search();

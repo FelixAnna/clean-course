@@ -18,4 +18,6 @@ public class BookEntity
     public string Semester { get; set; }
 
     public IList<WordEntity> Words { get; set; }
+
+    public IList<BookCategoryMappingsEntity> BookCategoryMappings { get; set; }
 }

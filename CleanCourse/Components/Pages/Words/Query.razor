@@ -1,8 +1,10 @@
 ﻿@page "/books/{bookId:int}/words"
+@using Services.Books
 @using Services.Words
 @using Services.Words.Models
 @using Services.Metadata
 @inject IWordManageService service
+@inject IBookService bookService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 @inject NavigationManager navigationManager
@@ -10,7 +12,7 @@
 <h3>字库</h3>
 
 <p>
-    查询当前课本词条信息。
+    查询当前课本(<a href="/books/@(bookId)/info">@Model.BookName</a>)词条信息。
     <a href="/books/@(bookId)/words/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
     <a href="/books/@(bookId)/words/import" class="btn btn-outline-primary" data-mdb-ripple-init>导入</a>
 </p>
@@ -108,7 +110,6 @@ else
 
     private SearchWordsResult result;
 
-    private Dictionary<string, string> Courses;
     private Dictionary<int, string> Units;
 
     private int totalPage;
@@ -117,7 +118,6 @@ else
 
     public Query()
     {
-        Courses = MetadataService.GetDefaultCourses();
         Units = MetadataService.GetDefaultUnits();
         Model = new SearchWordsCriteria()
         {
@@ -133,8 +133,9 @@ else
             navigationManager.NavigateTo("/books", true);
             return;
         }
-
+        var book = await bookService.GetByIdAsync(bookId);
         Model.BookId = bookId;
+        Model.BookName = book.BookName;
         var lastSearchCriteria = appState.SearchWordsCriteria;
         if (lastSearchCriteria?.BookId == Model.BookId)
         {

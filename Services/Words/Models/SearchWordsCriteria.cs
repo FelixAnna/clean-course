@@ -12,6 +12,8 @@ public class SearchWordsCriteria
 
     public int BookId { get; set; }
 
+    public string BookName { get; set; }
+
     [Required]
     public int KidId { get; set; }
 

@@ -1,7 +1,10 @@
-﻿namespace Entities.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Entities.Entities;
 
 public class CheckingHistoryEntity
 {
+    [Key]
     public int Id { get; set; }
 
     public bool IsCorrect { get; set; }
@@ -16,6 +19,4 @@ public class CheckingHistoryEntity
 
     public WordEntity Word { get; set; }
     public KidEntity Kid { get; set; }
-
-
 }

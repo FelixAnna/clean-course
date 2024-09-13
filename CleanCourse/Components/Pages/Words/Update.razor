@@ -72,12 +72,10 @@
     [SupplyParameterFromForm]
     public AddWordModel Model { get; set; }
 
-    private Dictionary<string, string> Courses;
     private Dictionary<int, string> Units;
 
     public Update()
     {
-        Courses = MetadataService.GetDefaultCourses().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary();
         Units = MetadataService.GetDefaultUnits().Where(x => x.Key > 0).ToDictionary();
     }
 

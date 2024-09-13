@@ -69,6 +69,8 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
         var book = await courseContext.Books.Include(x => x.Words).FirstOrDefaultAsync(x => x.BookId == bookId);
         if (book != null)
         {
+            var words = courseContext.Words.Include(x=>x.CheckingHistories).Where(x=>x.BookId == bookId);
+            courseContext.Words.RemoveRange(words);
             courseContext.Books.Remove(book);
             await courseContext.SaveChangesAsync();
             return true;

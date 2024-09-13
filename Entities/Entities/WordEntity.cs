@@ -12,6 +12,7 @@ public class WordEntity
     public required string Content { get; set; }
 
     public required string Explanation { get; set; }
+
     public string? Details { get; set; }
 
     public int Unit { get; set; }
