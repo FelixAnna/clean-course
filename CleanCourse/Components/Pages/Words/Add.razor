@@ -35,7 +35,7 @@
                 <select @bind="Model.Unit" class="form-select">
                     @foreach (var unit in Units)
                     {
-                        <option value="@unit.Key">@unit.Value</option>
+                        <option value="@unit.Key">第@(unit.Value)课</option>
                     }
                 </select>
             </td>
