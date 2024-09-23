@@ -1,7 +1,6 @@
-﻿using Services.CheckingHistories.Models;
-using Services.Words.Models;
+﻿using Services.Words.Models;
 
-namespace Services.WordAndHistory.Models
+namespace Services.CheckingHistories.Models.Admin
 {
     public class WordCheckingHistoriesModel : AddWordModel
     {

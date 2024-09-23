@@ -1,14 +1,17 @@
-﻿@* @page "/history/import"
+﻿@page "/history/import"
 @using Services.CheckingHistories
 @using Services.CheckingHistories.Models
 @using Services.Metadata
-@using Services.CheckingHistories.Services
+@using Services.CheckingHistories.Services;
+@using Services.CheckingHistories.Models.Admin
+@using Services.BookCategoryMappings
+@inject IBookCategoryMappingService mappingService
 @inject AppState appState
 @inject IWordHistoryBatchService service
 @inject NavigationManager navigationManager
 
 
-<h3>词条</h3>
+<h3>检查记录</h3>
 
 <p>为当前教材批量导入词条的检查记录。</p>
 <hr class="hr" />
@@ -19,15 +22,15 @@
     <table class="table">
         <tr class="form-group">
             <td class="m-2">
-                <label class="form-label">
-                    课程：
-                </label>
-                <select @bind="Model.Course" class="form-select">
-                    @foreach (var course in Courses)
-                    {
-                        <option value="@course.Key">@course.Value</option>
-                    }
-                </select>
+                <div class="flex-row">
+                    <label class="form-label">课程：</label>
+                    <select @bind="Model.BookId" class="form-select small">
+                        @foreach (var course in Courses)
+                        {
+                            <option value="@course.Key">@course.Value</option>
+                        }
+                    </select>
+                </div>
             </td>
             <td>
                 <label class="form-label">
@@ -104,7 +107,7 @@
                     <td>@word.Content</td>
                     <td>@word.Explanation</td>
                     <td>@word.Unit</td>
-                    <td>@word.Course</td>
+                    <td>@word.Book.FriendlyName</td>
                     <td>@word.CheckingHistorySummary</td>
                 </tr>
             }
@@ -130,30 +133,33 @@
     [SupplyParameterFromForm]
     public ImportCheckingHistoryModel Model { get; set; }
 
-    private Dictionary<string, string> Courses;
+    private Dictionary<int, string> Courses;
     private Dictionary<string, string> ImportOptions;
-    private IList<Services.WordAndHistory.WordHistoryModel> previewWords;
+    private IList<CheckingHistoryModel> previewWords;
 
     private int pageIndex;
     private int totalPage;
     private int pageSize;
-    private IList<Services.WordAndHistory.WordHistoryModel> currentItems;
+    private IList<CheckingHistoryModel> currentItems;
 
     public Import()
     {
-        Courses = MetadataService.GetDefaultCourses().Where(x => !string.IsNullOrEmpty(x.Key)).ToDictionary();
+        Courses = new Dictionary<int, string>();
         ImportOptions = MetadataService.GetDefaultImportOption();
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Model = new ImportCheckingHistoryModel()
             {
-                //SharedCode = appState.SharedCode,
+                BookCategoryId = appState.BookCategoryId,
                 KidId = appState.KidId,
-                //Course = Courses.First().Key,
                 Overwrite = ImportOptions.First().Key,
             };
+
+        var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
+        Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);
+        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         pageSize = appState.DefaultPageSize;
     }
@@ -161,7 +167,7 @@
     private async Task Submit()
     {
         await service.ImportHistoryAsync(Model);
-        navigationManager.NavigateTo($"/words");
+        navigationManager.NavigateTo($"/history");
     }
 
     private async Task Preview()
@@ -197,4 +203,4 @@
         currentItems.Clear();
         previewWords.Clear();
     }
-} *@
+}

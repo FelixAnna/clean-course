@@ -27,7 +27,7 @@ public class CheckingHistoryRepository(AbstractCourseContext courseContext) : IC
             WordId = model.WordId,
             KidId = model.KidId,
             IsCorrect = model.IsCorrect,
-            Remark = model.Remark,
+            Remark = model.Remark?.ToString(),
             CreatedTime = DateTime.Now,
         });
         await courseContext.SaveChangesAsync();

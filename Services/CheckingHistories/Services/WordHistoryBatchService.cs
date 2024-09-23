@@ -1,10 +1,11 @@
 ﻿using Entities.Entities;
+using Services.Books;
 using Services.CheckingHistories.Models;
+using Services.CheckingHistories.Models.Admin;
 using Services.CheckingHistories.Repositories;
-using Services.WordAndHistory.Models;
 using Services.Words.Repositories;
 
-namespace Services.WordAndHistory.Services
+namespace Services.CheckingHistories.Services
 {
     public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWordRepository wordRepository) : IWordHistoryBatchService
     {
@@ -17,7 +18,8 @@ namespace Services.WordAndHistory.Services
             var request = new SearchWordAndHistoryCriteria()
             {
                 KidId = model.KidId,
-                //SharedCode = model.SharedCode
+                BookCategoryId = model.BookCategoryId,
+                BookId =  model.BookId??0,
             };
 
             var words = await wordRepository.FindAsync(request);
@@ -31,16 +33,14 @@ namespace Services.WordAndHistory.Services
                                     .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
                                     .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{splitter}{value}");
                 var data = new
-                {/*
-                    x.SharedCode,
-                    x.Course,*/
+                {
                     x.BookId,
                     x.Unit,
                     Value = $"{wordInfo}{splitter}{checkingInfo}"
                 };
 
                 return data;
-            }).OrderBy(x => x.BookId)/*.ThenBy(x => x.Course)*/.ThenBy(x => x.Unit)
+            }).OrderBy(x => x.BookId).ThenBy(x => x.Unit)
             .Aggregate(string.Empty, (accumulate, value) => $"{accumulate}{Environment.NewLine}{value.Value}");
 
             return results;
@@ -52,18 +52,6 @@ namespace Services.WordAndHistory.Services
 
             var encodedValue = value.Replace("\n", "\\n").Trim();
             return encodedValue;
-        }
-
-        public async Task SaveCheckingStatusAsync(int wordId, int kidId, CheckingRemark status)
-        {
-            var model = new AddCheckingHistoryModel()
-            {
-                IsCorrect = status == CheckingRemark.Correct,
-                WordId = wordId,
-                KidId = kidId,
-                Remark = status.ToString(),
-            };
-            await repository.AddAsync(model);
         }
 
         public async Task<int> ImportHistoryAsync(ImportCheckingHistoryModel model)
@@ -102,31 +90,26 @@ namespace Services.WordAndHistory.Services
             return results.Count();
         }
 
-        public async Task<IList<WordHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
+        public async Task<IList<CheckingHistoryModel>> PreviewHistoryAsync(ImportCheckingHistoryModel model)
         {
             var toBeInserted = await GetWordWithHistoryAsync(model);
 
             if (toBeInserted.Count <= 0)
             {
-                return new List<WordHistoryModel>();
+                return new List<CheckingHistoryModel>();
             }
 
-            return toBeInserted.Select(x => new WordHistoryModel()
+            return toBeInserted.Select(x => new CheckingHistoryModel()
             {
-                //Course = x.Course,
+                BookId = model.BookId??0,
+                Book = x.Book,
                 Content = x.Content,
                 Explanation = x.Explanation,
                 Details = x.Details,
                 Unit = x.Unit,
-                //SharedCode = model.SharedCode,
                 WordId = x.Id,
                 CheckingHistorySummary = $"{x.CheckingHistories.Count(x => x.Remark == CheckingRemark.Correct)}/ {x.CheckingHistories.Count}",
             }).ToList();
-        }
-        private async Task<IEnumerable<CheckingHistory>> AddAsync(params AddCheckingHistoryModel[] models)
-        {
-            var results = await repository.AddAsync([.. models]);
-            return results.Select(x => new CheckingHistory(x));
         }
 
         private static List<WordCheckingHistoriesModel> ParseWords(ImportCheckingHistoryModel model)
@@ -141,7 +124,7 @@ namespace Services.WordAndHistory.Services
                     var wordParts = line.Split(splitter).Select(x => x.Trim()).ToArray();
                     if (AddWordHistoryModelConvertor.IsValid(wordParts))
                     {
-                        var addModel = AddWordHistoryModelConvertor.FromLine(model.BookId, wordParts);
+                        var addModel = AddWordHistoryModelConvertor.FromLine(model.BookId??0, wordParts);
                         providedWords.Add(addModel);
                     }
                 }
@@ -157,18 +140,19 @@ namespace Services.WordAndHistory.Services
             var existingWords = await wordRepository.FindAsync(new SearchWordAndHistoryCriteria()
             {
                 KidId = model.KidId,
-                BookId = model.BookId,
+                BookId = model.BookId??0,
+                BookCategoryId = model.BookCategoryId,
             });
 
 
             providedWords = (from word in existingWords
                              from history in providedWords
-                             where word.WordId == history.BookId /*&& word.CheckingHistories == history.KidId*/ && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
+                             where word.BookId == history.BookId && word.Content == history.Content && (word.Unit == history.Unit || history.Unit <= 0)
                              select new WordCheckingHistoriesModel()
                              {
-                                 Id = word.WordId,/*
-                                 SharedCode = word.SharedCode,
-                                 Course = word.Course,*/
+                                 Id = word.WordId,
+                                 Book = new BookModel(word.Book),
+                                 BookId = word.BookId,
                                  Content = word.Content,
                                  Unit = word.Unit,
                                  Explanation = word.Explanation,

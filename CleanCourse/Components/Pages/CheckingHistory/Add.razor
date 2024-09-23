@@ -4,8 +4,7 @@
 @using Services.Metadata
 @using Services.CheckingHistories.Services
 @using System.Text
-@using Services.WordAndHistory.Services
-@inject IWordHistoryBatchService historyService
+@inject ICheckingHistoryService historyService
 @inject IWordPreCheckService preCheckService
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -200,7 +199,14 @@ else
 
     private async Task SaveCheckingStatus(int id, CheckingRemark status)
     {
-        await historyService.SaveCheckingStatusAsync(id, appState.KidId, status);
+        await historyService.AddAsync(new AddCheckingHistoryModel()
+        {
+            KidId = appState.KidId,
+            WordId = id,
+            Remark = status.ToString(),
+            CreatedTime = DateTime.Now,
+            IsCorrect = status == CheckingRemark.Correct
+        });
 
         checkedWords.Add(id);
         if (status != CheckingRemark.Correct)

@@ -13,9 +13,6 @@ namespace Services.Words.Models
         public BookModel Book { get; set; }
 
         [Required]
-        public string Source { get; set; }
-
-        [Required]
         public string Overwrite { get; set; }
         public bool IsOverwrite => Overwrite == "1";
     }

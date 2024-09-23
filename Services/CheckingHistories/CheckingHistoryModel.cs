@@ -25,6 +25,10 @@ public class CheckingHistoryModel : BaseWordModel
         Book = new BookModel(entity.Book);
     }
 
+    public CheckingHistoryModel()
+    {
+    }
+
     public IEnumerable<CheckingHistory> Histories { get; set; }
 
     public string? CheckingHistorySummary { get; set; }
