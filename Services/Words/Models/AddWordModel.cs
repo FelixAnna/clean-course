@@ -96,8 +96,14 @@ public static class WordFromPdfHelper
         var currentUnit = 0;
         for (int i = 0; i < wordsText?.Length; i++)
         {
-            if (int.TryParse(wordsText[i], out int unit) && unit < currentUnit + 5)
+            if (int.TryParse(wordsText[i], out int unit))
             {
+                if (unit > currentUnit + 5)
+                {
+                    //might be page number
+                    continue;
+                }
+
                 currentUnit = unit;
                 continue;
             }
