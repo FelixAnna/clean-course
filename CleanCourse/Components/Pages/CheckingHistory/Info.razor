@@ -8,7 +8,6 @@
  @if (historyRecords == null)
  {
      <h3>检查记录</h3>
-
      <p>这里显示当前词条的检查记录。</p>
      <hr class="hr" />
      <p><em>Loading...</em></p>
@@ -16,7 +15,6 @@
  else
  {
      <h3>@historyRecords.Content</h3>
-
      <p>@historyRecords.Explanation</p>
      <hr class="hr" />
      <table class="row gy-3 pe-1">
@@ -101,7 +99,6 @@
      private int totalPage;
      private int pageSize;
      private IList<CheckingHistory> currentItems;
-
 
      protected override async Task OnInitializedAsync()
      {

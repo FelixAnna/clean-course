@@ -42,10 +42,9 @@
     {
         var category = await service.GetByIdAsync(id);
         Model = new AddBookCategoryModel()
-            {
-                CategoryName = category.CategoryName,
-            };
-
+        {
+            CategoryName = category.CategoryName,
+        };
     }
 
     private async Task Submit()

@@ -179,7 +179,6 @@ else
 }
 
 @code {
-
     [SupplyParameterFromForm]
     public SearchWordAndHistoryCriteria Model { get; set; }
 
@@ -333,6 +332,7 @@ else
             preCheckService.Remove(Model.KidId, item.WordId);
             toCheckedWords.Remove(item.WordId);
         }
+
         UpdateReadyToCheckAll();
     }
 

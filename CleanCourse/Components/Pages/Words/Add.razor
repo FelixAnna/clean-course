@@ -8,7 +8,6 @@
 @inject IBookService bookService
 @inject NavigationManager navigationManager
 
-
 <h3>词条</h3>
 
 <p>
@@ -96,12 +95,12 @@
     {
         var book = await bookService.GetByIdAsync(bookId);
         Model = new AddWordModel()
-            {
-                BookId = bookId,
-                BookName = book.FriendlyName,
-                Unit = Units.First().Key,
-                Overwrite = DuplicateOptions.First().Key,
-            };
+        {
+            BookId = bookId,
+            BookName = book.FriendlyName,
+            Unit = Units.First().Key,
+            Overwrite = DuplicateOptions.First().Key,
+        };
     }
 
     private async Task Submit()

@@ -7,7 +7,7 @@
 
 <h3>课本</h3>
 
-<p>添加新的课本到系统里。</p>
+<p>添加新的课本。</p>
 
 <hr class="hr" />
 
@@ -79,9 +79,9 @@
         Years = MetadataService.GetDefaultYears();
         Model = new AddBookModel()
         {
-            BookName = "",
+            BookName = string.Empty,
             Version=Versions.FirstOrDefault(),
-                Grade = Grades.FirstOrDefault(),
+            Grade = Grades.FirstOrDefault(),
             AuditYear = Years.FirstOrDefault(),
             Semester = Semesters.FirstOrDefault(),
         };

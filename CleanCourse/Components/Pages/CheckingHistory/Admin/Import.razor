@@ -151,11 +151,11 @@
     protected override async Task OnInitializedAsync()
     {
         Model = new ImportCheckingHistoryModel()
-            {
-                BookCategoryId = appState.BookCategoryId,
-                KidId = appState.KidId,
-                Overwrite = ImportOptions.First().Key,
-            };
+        {
+            BookCategoryId = appState.BookCategoryId,
+            KidId = appState.KidId,
+            Overwrite = ImportOptions.First().Key,
+        };
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
         Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);

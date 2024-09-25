@@ -88,12 +88,8 @@ else
 
     private async Task Delete(int id, string name)
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除教材也会清除所有关联字词和宝宝的检查记录，您确定要删除教材： '{name}' 吗?"))
-            return;
-
         if (await service.DeleteAsync(id))
         {
-
             result = new SearchBookCategoryResult()
                 {
                     Categories = result.Categories.Where(x => x.Id != id).ToArray(),

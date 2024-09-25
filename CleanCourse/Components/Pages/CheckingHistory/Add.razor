@@ -176,7 +176,6 @@ else
     private int pageSize;
     private IList<CheckingHistoryModel> currentItems;
 
-
     public Add()
     {
         checkedWords = new List<int>();
@@ -306,5 +305,4 @@ else
         await Clipboard.SetTextAsync(contentBuilder.ToString());
         await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
     }
-
 }

@@ -14,32 +14,7 @@
         <label class="form-label">教材：</label>
         <span class="text-primary"><a href="/bookCategories/@(Model.BookCategory.Id)/info">@Model.BookCategory.BookCategoryFullName</a></span>
     </div>
-    <div class="col-md-10">
-        <EditForm Model="@Criteria" OnValidSubmit="@Submit" FormName="AddMappings">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <table class="row gy-3 pe-1">
-                <tbody>
-                    <tr class="form-group">
-                        <td class="m-2">
-                            <div>
-                                <label class="form-label">查询：</label>
-                                <InputText @bind-Value="Criteria!.Keywords" class="form-control rounded" />
-                            </div>
-                        </td>
-                        <td class="m-2">
-                            <div>
-                                <label class="form-label"></label>
-                                <div class="form-floating">
-                                    <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </EditForm>
-    </div>
+    
     <div class="col-md-10">
         <hr class="hr" />
 
@@ -50,6 +25,27 @@
         else
         {
             <label class="text-decoration-underline">可添加课本列表:</label>
+            <div class="col-md-10">
+                <EditForm Model="@Criteria" OnValidSubmit="@Submit" FormName="Add">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <table class="row gy-3 pe-1">
+                        <tbody>
+                            <tr class="form-group">
+                                <td class="m-2">
+                                    <label class="text-decoration-underline w-100">可添加课本列表:</label>
+                                </td>
+                                <td class="m-2">
+                                    <InputText @bind-Value="Criteria!.Keywords" class="form-control roundedm m-2" />
+                                </td>
+                                <td class="m-2">
+                                    <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </EditForm>
+            </div>
             <table class="table">
                 <thead>
                     <tr>

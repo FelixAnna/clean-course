@@ -5,7 +5,6 @@
 @inject IKidService service
 @inject NavigationManager navigationManager
 
-
 <h3>宝宝</h3>
 
 <p>修改宝宝信息。</p>
@@ -54,10 +53,10 @@
     {
         var kid = await service.GetByIdAsync(id);
         Model = new AddKidModel()
-            {
-                Name = kid.Name,
-                StartSchoolYear = kid.StartSchoolYear
-            };
+        {
+            Name = kid.Name,
+            StartSchoolYear = kid.StartSchoolYear
+        };
     }
 
     private async Task Submit()
