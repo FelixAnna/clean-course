@@ -1,19 +1,18 @@
 ﻿using Services.Books;
 using System.ComponentModel.DataAnnotations;
 
-namespace Services.Words.Models
+namespace Services.Words.Models;
+
+public abstract class AddWordBaseModel
 {
-    public abstract class AddWordBaseModel
-    {
-        [Required]
-        public int BookId { get; set; }
+    [Required]
+    public int BookId { get; set; }
 
-        public string BookName { get; set; }
+    public string BookName { get; set; }
 
-        public BookModel Book { get; set; }
+    public BookModel Book { get; set; }
 
-        [Required]
-        public string Overwrite { get; set; }
-        public bool IsOverwrite => Overwrite == "1";
-    }
+    [Required]
+    public string Overwrite { get; set; }
+    public bool IsOverwrite => Overwrite == "1";
 }

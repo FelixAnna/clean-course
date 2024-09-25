@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Database.SQLite;
+namespace Database.AzureSql;
 
 public class SqlServerCourseContext : AbstractCourseContext
 {

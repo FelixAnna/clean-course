@@ -3,110 +3,109 @@ using Services.CheckingHistories.Models;
 using Services.Words.Models;
 using Services.Words.Repositories;
 
-namespace Services.Words
+namespace Services.Words;
+
+public class WordBatchService(IWordRepository repository) : IWordBatchService
 {
-    public class WordBatchService(IWordRepository repository) : IWordBatchService
+    private readonly IWordRepository repository = repository;
+    public async Task<WordModel> AddWordAsync(AddWordModel model)
     {
-        private readonly IWordRepository repository = repository;
-        public async Task<WordModel> AddWordAsync(AddWordModel model)
+        var (tobeInserted, tobeUpdated) = await GetWords(model, model);
+
+        await repository.UpdateAllAsync([.. tobeUpdated]);
+        var result = await repository.AddAsync([.. tobeInserted]);
+
+        return new WordModel(result.First());
+    }
+
+    public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
+    {
+        var words = GetWords(model);
+
+        var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
+
+        await repository.UpdateAllAsync([.. tobeUpdated]);
+        var results = await repository.AddAsync([.. tobeInserted]);
+
+        return results.Select(x => new WordModel(x)).ToList();
+    }
+
+    public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
+    {
+        var words = GetWords(model);
+
+        var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
+
+        return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
         {
-            var (tobeInserted, tobeUpdated) = await GetWords(model, model);
+            Content = x.Content,
+            BookId = x.BookId,
+            Unit = x.Unit,
+            Explanation = x.Explanation,
+            Details = x.Details,
+        })).Select(x => new WordModel()
+        {
+            BookId = x.BookId,
+            Content = x.Content,
+            Explanation = x.Explanation,
+            Details = x.Details,
+            Unit = x.Unit,
+            WordId = -1
+        }).ToList();
+    }
 
-            await repository.UpdateAllAsync([.. tobeUpdated]);
-            var result = await repository.AddAsync([.. tobeInserted]);
-
-            return new WordModel(result.First());
+    private List<AddWordModel> GetWords(ImportWordsModel model)
+    {
+        if(model.Source == "pdf")
+        {
+            return model.Book.IsEnglish() ? EngWordFromPdfHelper.ParseWords(model) : WordFromPdfHelper.ParseWords(model);
         }
-
-        public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)
+        else
         {
-            var words = GetWords(model);
-
-            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
-
-            await repository.UpdateAllAsync([.. tobeUpdated]);
-            var results = await repository.AddAsync([.. tobeInserted]);
-
-            return results.Select(x => new WordModel(x)).ToList();
+            return WordFromExcelHelper.ParseWords(model);
         }
+    }
 
-        public async Task<IList<WordModel>> PreviewWordsAsync(ImportWordsModel model)
+    private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel, params AddWordModel[] words)
+    {
+        var tobeInsertedNewWords = words.Where(x => Equals(x.BookId, addModel.BookId)).ToArray();
+        var tobeUpdated = new List<WordEntity>();
+        if (words != null && words.Length > 0)
         {
-            var words = GetWords(model);
+            var bookId = addModel.BookId;
+            var isOverwrite = addModel.IsOverwrite;
 
-            var (tobeInserted, tobeUpdated) = await GetWords(model, [.. words]);
+            var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
+            {
+                BookId = bookId,
+            });
 
-            return tobeInserted.Concat(tobeUpdated.Select(x => new AddWordModel()
+            if (isOverwrite)
             {
-                Content = x.Content,
-                BookId = x.BookId,
-                Unit = x.Unit,
-                Explanation = x.Explanation,
-                Details = x.Details,
-            })).Select(x => new WordModel()
-            {
-                BookId = x.BookId,
-                Content = x.Content,
-                Explanation = x.Explanation,
-                Details = x.Details,
-                Unit = x.Unit,
-                WordId = -1
-            }).ToList();
-        }
+                foreach (var existingWord in existingWords)
+                {
+                    var newWord = tobeInsertedNewWords.Where(nw => existingWord.BookId == nw.BookId && existingWord.Content == nw.Content).FirstOrDefault();
+                    if (newWord != null)
+                    {
+                        existingWord.Explanation = newWord.Explanation;
+                        existingWord.Details = newWord.Details;
+                        if (existingWord.Unit <= 0)
+                        {
+                            existingWord.Unit = newWord.Unit;
+                        }
 
-        private List<AddWordModel> GetWords(ImportWordsModel model)
-        {
-            if(model.Source == "pdf")
-            {
-                return model.Book.IsEnglish() ? EngWordFromPdfHelper.ParseWords(model) : WordFromPdfHelper.ParseWords(model);
+                        tobeUpdated.Add(existingWord);
+                    }
+                }
+
+                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
             }
             else
             {
-                return WordFromExcelHelper.ParseWords(model);
+                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
             }
         }
 
-        private async Task<(IList<AddWordModel> tobeInserted, List<WordEntity> tobeDeleted)> GetWords(AddWordBaseModel addModel, params AddWordModel[] words)
-        {
-            var tobeInsertedNewWords = words.Where(x => Equals(x.BookId, addModel.BookId)).ToArray();
-            var tobeUpdated = new List<WordEntity>();
-            if (words != null && words.Length > 0)
-            {
-                var bookId = addModel.BookId;
-                var isOverwrite = addModel.IsOverwrite;
-
-                var existingWords = await repository.FindAsync(new SearchWordAndHistoryCriteria()
-                {
-                    BookId = bookId,
-                });
-
-                if (isOverwrite)
-                {
-                    foreach (var existingWord in existingWords)
-                    {
-                        var newWord = tobeInsertedNewWords.Where(nw => existingWord.BookId == nw.BookId && existingWord.Content == nw.Content).FirstOrDefault();
-                        if (newWord != null)
-                        {
-                            existingWord.Explanation = newWord.Explanation;
-                            existingWord.Details = newWord.Details;
-                            if (existingWord.Unit <= 0)
-                            {
-                                existingWord.Unit = newWord.Unit;
-                            }
-
-                            tobeUpdated.Add(existingWord);
-                        }
-                    }
-
-                    tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
-                }
-                else
-                {
-                    tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
-                }
-            }
-
-            return (tobeInsertedNewWords, tobeUpdated);
-        }
+        return (tobeInsertedNewWords, tobeUpdated);
     }
 }

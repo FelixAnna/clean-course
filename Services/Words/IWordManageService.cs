@@ -1,12 +1,11 @@
 ﻿using Services.Words.Models;
 
-namespace Services.Words
+namespace Services.Words;
+
+public interface IWordManageService
 {
-    public interface IWordManageService
-    {
-        Task<SearchWordsResult> GetWordsForBookCategoryAsync(SearchWordsCriteria criteria);
-        Task<bool> DeleteWordAsync(int wordId);
-        Task<WordModel> UpdateWordAsync(int id, AddWordModel model);
-        Task<WordModel> GetByIdAsync(int id);
-    }
+    Task<SearchWordsResult> GetWordsForBookCategoryAsync(SearchWordsCriteria criteria);
+    Task<bool> DeleteWordAsync(int wordId);
+    Task<WordModel> UpdateWordAsync(int id, AddWordModel model);
+    Task<WordModel> GetByIdAsync(int id);
 }

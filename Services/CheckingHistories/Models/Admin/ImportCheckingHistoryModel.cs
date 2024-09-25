@@ -1,11 +1,10 @@
 ﻿using Services.Words.Models;
 
-namespace Services.CheckingHistories.Models.Admin
+namespace Services.CheckingHistories.Models.Admin;
+
+public class ImportCheckingHistoryModel : ImportWordsModel
 {
-    public class ImportCheckingHistoryModel : ImportWordsModel
-    {
-        public int KidId { get; set; }
-        public int BookCategoryId { get; set; }
-        public int? BookId { get; set; }
-    }
+    public int KidId { get; set; }
+    public int BookCategoryId { get; set; }
+    public int? BookId { get; set; }
 }

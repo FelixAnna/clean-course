@@ -1,9 +1,8 @@
-﻿namespace Services.Books.Models
-{
-    public class SearchBookResult
-    {
-        public IEnumerable<BookModel> Books { get; set; }
+﻿namespace Services.Books.Models;
 
-        public int Count { get; set; }
-    }
+public class SearchBookResult
+{
+    public IEnumerable<BookModel> Books { get; set; }
+
+    public int Count { get; set; }
 }

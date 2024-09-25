@@ -1,9 +1,8 @@
-﻿namespace Services.Kids.Models
-{
-    public class SearchKidResult
-    {
-        public IEnumerable<KidModel> Kids { get; set; }
+﻿namespace Services.Kids.Models;
 
-        public int Count { get; set; }
-    }
+public class SearchKidResult
+{
+    public IEnumerable<KidModel> Kids { get; set; }
+
+    public int Count { get; set; }
 }

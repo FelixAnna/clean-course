@@ -1,78 +1,77 @@
-﻿namespace Shared.Models
+﻿namespace Shared.Models;
+
+public abstract class BaseWordModel : IComparable<BaseWordModel>, IEquatable<BaseWordModel>
 {
-    public abstract class BaseWordModel : IComparable<BaseWordModel>, IEquatable<BaseWordModel>
+    public int WordId { get; set; }
+
+    public int BookId { get; set; }
+
+    public int Unit { get; set; }
+
+    public string Content { get; set; }
+
+    public string Explanation { get; set; }
+
+    public string? Details { get; set; }
+
+
+    public bool IsLongText()
     {
-        public int WordId { get; set; }
+        return !string.IsNullOrEmpty(Details) && Details.Length > 8;
+    }
 
-        public int BookId { get; set; }
+    public int CompareTo(BaseWordModel? other)
+    {
+        return other?.WordId ?? 0 - this.WordId;
+    }
 
-        public int Unit { get; set; }
+    public bool Equals(BaseWordModel? other)
+    {
+        return other?.WordId == this.WordId;
+    }
 
-        public string Content { get; set; }
+    public override bool Equals(object? obj)
+    {
+        return Equals(obj as BaseWordModel);
+    }
 
-        public string Explanation { get; set; }
+    public override int GetHashCode()
+    {
+        return this.WordId.GetHashCode();
+    }
 
-        public string? Details { get; set; }
-
-
-        public bool IsLongText()
+    public static bool operator ==(BaseWordModel left, BaseWordModel right)
+    {
+        if (left is null)
         {
-            return !string.IsNullOrEmpty(Details) && Details.Length > 8;
+            return right is null;
         }
 
-        public int CompareTo(BaseWordModel? other)
-        {
-            return other?.WordId ?? 0 - this.WordId;
-        }
+        return left.Equals(right);
+    }
 
-        public bool Equals(BaseWordModel? other)
-        {
-            return other?.WordId == this.WordId;
-        }
+    public static bool operator !=(BaseWordModel left, BaseWordModel right)
+    {
+        return !(left == right);
+    }
 
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as BaseWordModel);
-        }
+    public static bool operator <(BaseWordModel left, BaseWordModel right)
+    {
+        return left is null ? right is not null : left.CompareTo(right) < 0;
+    }
 
-        public override int GetHashCode()
-        {
-            return this.WordId.GetHashCode();
-        }
+    public static bool operator <=(BaseWordModel left, BaseWordModel right)
+    {
+        return left is null || left.CompareTo(right) <= 0;
+    }
 
-        public static bool operator ==(BaseWordModel left, BaseWordModel right)
-        {
-            if (left is null)
-            {
-                return right is null;
-            }
+    public static bool operator >(BaseWordModel left, BaseWordModel right)
+    {
+        return left is not null && left.CompareTo(right) > 0;
+    }
 
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(BaseWordModel left, BaseWordModel right)
-        {
-            return !(left == right);
-        }
-
-        public static bool operator <(BaseWordModel left, BaseWordModel right)
-        {
-            return left is null ? right is not null : left.CompareTo(right) < 0;
-        }
-
-        public static bool operator <=(BaseWordModel left, BaseWordModel right)
-        {
-            return left is null || left.CompareTo(right) <= 0;
-        }
-
-        public static bool operator >(BaseWordModel left, BaseWordModel right)
-        {
-            return left is not null && left.CompareTo(right) > 0;
-        }
-
-        public static bool operator >=(BaseWordModel left, BaseWordModel right)
-        {
-            return left is null ? right is null : left.CompareTo(right) >= 0;
-        }
+    public static bool operator >=(BaseWordModel left, BaseWordModel right)
+    {
+        return left is null ? right is null : left.CompareTo(right) >= 0;
     }
 }

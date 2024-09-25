@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Database.SQLite;
+namespace Database.AzureSql;
 
 public static class SqlServerDependencyInjections
 {

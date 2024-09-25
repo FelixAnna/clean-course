@@ -1,5 +1,4 @@
-﻿using Services.Kids;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace Services.Words.Models;

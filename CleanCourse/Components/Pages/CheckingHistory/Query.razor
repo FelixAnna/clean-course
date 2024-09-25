@@ -290,21 +290,21 @@ else
         UpdateReadyToCheckAll();
     }
 
-    private async Task ToCheck(int id)
+    private void ToCheck(int id)
     {
         preCheckService.Add(Model.KidId, result.Words.First(x => x.WordId == id));
         toCheckedWords.Add(id);
         UpdateReadyToCheckAll();
     }
 
-    private async Task CancelCheck(int id)
+    private void CancelCheck(int id)
     {
         preCheckService.Remove(Model.KidId, id);
         toCheckedWords.Remove(id);
         UpdateReadyToCheckAll();
     }
 
-    private async Task ToCheckAll()
+    private void ToCheckAll()
     {
         foreach (var item in currentItems)
         {
@@ -320,7 +320,7 @@ else
         UpdateReadyToCheckAll();
     }
 
-    private async Task ToUnCheckAll()
+    private void ToUnCheckAll()
     {
         foreach (var item in currentItems)
         {
