@@ -16,6 +16,7 @@ public class CheckingHistoryModel : BaseWordModel
         BookId = entity.BookId;
         Content = entity.Content;
         Explanation = entity.Explanation;
+        Source = entity.Source;
         Details = entity.Details;
         Unit = entity.Unit;
 

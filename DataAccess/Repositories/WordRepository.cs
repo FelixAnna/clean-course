@@ -40,6 +40,11 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
             words = words.Where(x => x.Unit == request.Unit);
         }
 
+        if (!string.IsNullOrEmpty(request.Source))
+        {
+            words =words.Where(x =>x.Source == request.Source);
+        }
+
         IList<WordEntity> results = await words.ToListAsync();
         if (request.KidId > 0)
         {
@@ -102,6 +107,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
                 Explanation = model.Explanation,
                 Details = model.Details,
                 Unit = model.Unit,
+                Source = model.Source,
             });
 
             results.Add(result.Entity);
@@ -119,6 +125,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         word.Details = model.Details;
         word.Unit = model.Unit;
         word.BookId = model.BookId;
+        word.Source = model.Source;
         await courseContext.SaveChangesAsync();
         return word;
     }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shared;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace Services.Words.Models;
@@ -15,6 +16,10 @@ public class AddWordModel : AddWordBaseModel
 
     [StringLength(1000, ErrorMessage = "Details is too long (>1000).")]
     public string Details { get; set; }
+
+    [Required]
+    [StringLength(20, ErrorMessage = "Source is too long (>20).")]
+    public string Source { get; set; }
 
     [Required]
     public int Unit { get; set; }
@@ -40,6 +45,7 @@ public static class WordFromExcelHelper
             if (IsValid(wordParts))
             {
                 var addModel = FromLine(model.BookId, wordParts);
+                addModel.Source = Constants.DefaultSource;
                 tobeInsertedNewWords.Add(addModel);
             }
         }
@@ -119,7 +125,8 @@ public static class WordFromPdfHelper
                     Content = wordsText[i],
                     Explanation = "NA",
                     Details = string.Empty,
-                    Unit = currentUnit
+                    Unit = currentUnit,
+                    Source = Constants.DefaultSource
                 };
 
                 tobeInsertedNewWords.Add(addModel);

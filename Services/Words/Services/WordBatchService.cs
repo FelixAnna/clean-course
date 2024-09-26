@@ -42,12 +42,14 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
             BookId = x.BookId,
             Unit = x.Unit,
             Explanation = x.Explanation,
+            Source = x.Source,
             Details = x.Details,
         })).Select(x => new WordModel()
         {
             BookId = x.BookId,
             Content = x.Content,
             Explanation = x.Explanation,
+            Source = x.Source,
             Details = x.Details,
             Unit = x.Unit,
             WordId = -1
@@ -88,6 +90,7 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
                     if (newWord != null)
                     {
                         existingWord.Explanation = newWord.Explanation;
+                        existingWord.Source = existingWord.Source ?? newWord.Source;
                         existingWord.Details = newWord.Details;
                         if (existingWord.Unit <= 0)
                         {

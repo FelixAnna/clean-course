@@ -4,6 +4,7 @@ using Services.CheckingHistories.Models;
 using Services.CheckingHistories.Models.Admin;
 using Services.CheckingHistories.Repositories;
 using Services.Words.Repositories;
+using Shared;
 
 namespace Services.CheckingHistories.Services;
 
@@ -27,7 +28,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
         var index = 1;
         var results = words.Select(x =>
         {
-            var wordInfo = $"{index++}{splitter}{Encode(x.Content)}{splitter}{Encode(x.Explanation)}{splitter}{Encode(x.Details)}{splitter}{x.Unit}{splitter}{x.BookId}";
+            var wordInfo = $"{index++}{splitter}{Encode(x.Content)}{splitter}{Encode(x.Explanation)}{splitter}{Encode(x.Details)}{splitter}{x.Unit}{splitter}{x.Source}{splitter}{x.BookId}";
             var checkingInfo = x.CheckingHistories
                                 .OrderBy(y => y.CreatedTime)
                                 .Select(y => (!string.IsNullOrEmpty(y.Remark) ? y.Remark : y.IsCorrect ? 1 : 0) + "|" + y.CreatedTime.ToString("yyyy-MM-dd HH:mm:ss"))
@@ -105,6 +106,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
             Book = x.Book,
             Content = x.Content,
             Explanation = x.Explanation,
+            Source = x.Source,
             Details = x.Details,
             Unit = x.Unit,
             WordId = x.Id,
@@ -156,6 +158,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
                              Content = word.Content,
                              Unit = word.Unit,
                              Explanation = word.Explanation,
+                             Source = word.Source,
                              Details = word.Details,
                              Overwrite = history.Overwrite,
                              CheckingRecords = history.CheckingRecords,

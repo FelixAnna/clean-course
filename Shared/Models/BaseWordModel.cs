@@ -14,6 +14,8 @@ public abstract class BaseWordModel : IComparable<BaseWordModel>, IEquatable<Bas
 
     public string? Details { get; set; }
 
+    public string Source { get; set; }
+
 
     public bool IsLongText()
     {

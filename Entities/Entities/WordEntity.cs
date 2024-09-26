@@ -16,6 +16,8 @@ public class WordEntity
     public string? Details { get; set; }
 
     public int Unit { get; set; }
+    
+    public string Source { get; set; }
 
     public IList<CheckingHistoryEntity> CheckingHistories { get; set; }
 

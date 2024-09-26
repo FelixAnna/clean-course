@@ -47,6 +47,12 @@ public abstract class AbstractCourseContext : DbContext
             .OnDelete(DeleteBehavior.ClientCascade);
 
         modelBuilder
+            .Entity<BookEntity>()
+            .HasMany(e => e.Words)
+            .WithOne(e => e.Book)
+            .OnDelete(DeleteBehavior.ClientCascade);
+
+        modelBuilder
             .Entity<KidEntity>()
             .HasMany(e => e.CheckingHistories)
             .WithOne(e => e.Kid)
