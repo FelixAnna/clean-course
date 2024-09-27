@@ -24,17 +24,6 @@
                 </label>
                 <span class="text-primary">@Model.BookName</span>
             </td>
-            <td>
-                <label class="form-label">
-                    单元：
-                </label>
-                <select @bind="Model.Unit" class="form-select">
-                    @foreach (var unit in Units)
-                    {
-                        <option value="@unit.Key">@unit.Value</option>
-                    }
-                </select>
-            </td>
         </tr>
         <tr class="form-group">
             <td class="m-2">
@@ -50,6 +39,30 @@
             <td class="m-3">
                 <label class="form-label">详细描述：</label>
                 <textarea @bind="Model!.Details" class="form-control rounded" rows="8" placeholder="选填内容" />
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td>
+                <label class="form-label">
+                    单元：
+                </label>
+                <select @bind="Model.Unit" class="form-select">
+                    @foreach (var unit in Units)
+                    {
+                        <option value="@unit.Key">第@(unit.Value)课</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <label class="form-label">
+                    来源：
+                </label>
+                <select @bind="Model.Source" class="form-select">
+                    @foreach (var source in Sources)
+                    {
+                        <option value="@source">@(source)</option>
+                    }
+                </select>
             </td>
         </tr>
         <tr class="form-group">
@@ -72,10 +85,12 @@
     public AddWordModel Model { get; set; }
 
     private Dictionary<int, string> Units;
+    private string[] Sources;
 
     public Update()
     {
         Units = MetadataService.GetDefaultUnits().Where(x => x.Key > 0).ToDictionary();
+        Sources = MetadataService.GetDefaultSources();
     }
 
     protected override async void OnInitialized()
@@ -89,6 +104,7 @@
                 Content = word.Content,
                 Explanation = word.Explanation,
                 Details=word.Details,
+                Source = word.Source,
                 Overwrite = "1",
             };
     }

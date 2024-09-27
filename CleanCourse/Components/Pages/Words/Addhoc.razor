@@ -25,17 +25,6 @@
                 </label>
                 <span class="text-primary">@Model.BookName</span>
             </td>
-            <td>
-                <label class="form-label">
-                    单元：
-                </label>
-                <select @bind="Model.Unit" class="form-select">
-                    @foreach (var unit in Units)
-                    {
-                        <option value="@unit.Key">@unit.Value</option>
-                    }
-                </select>
-            </td>
         </tr>
         <tr class="form-group">
             <td class="m-2">
@@ -51,6 +40,30 @@
             <td class="m-2">
                 <label class="form-label">详细描述：</label>
                 <textarea @bind="Model!.Details" class="form-control rounded" rows="8" placeholder="@word.Details" />
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td>
+                <label class="form-label">
+                    单元：
+                </label>
+                <select @bind="Model.Unit" class="form-select">
+                    @foreach (var unit in Units)
+                    {
+                        <option value="@unit.Key">@unit.Value</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <label class="form-label">
+                    来源：
+                </label>
+                <select @bind="Model.Source" class="form-select">
+                    @foreach (var source in Sources)
+                    {
+                        <option value="@source">@(source)</option>
+                    }
+                </select>
             </td>
         </tr>
         <tr class="form-group">
@@ -87,11 +100,13 @@
 
     private Dictionary<string, string> DuplicateOptions;
     private Dictionary<int, string> Units;
+    private string[] Sources;
 
     public Addhoc()
     {
         Units = MetadataService.GetDefaultUnits().Where(x => x.Key > 0).ToDictionary();
         DuplicateOptions = MetadataService.GetDefaultDuplicateOption();
+        Sources = MetadataService.GetDefaultSources();
         word = new WordModel();
     }
 
@@ -105,6 +120,7 @@
                 BookName = word.Book.ShortName,
                 Unit = word.Unit,
                 Overwrite = DuplicateOptions.First().Key,
+                Source = Sources.First()
             };
     }
 

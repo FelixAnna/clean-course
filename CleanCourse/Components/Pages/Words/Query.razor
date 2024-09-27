@@ -59,6 +59,7 @@ else
                 <th>#</th>
                 <th>词条</th>
                 <th>备注</th>
+                <th>来源</th>
                 <th>单元</th>
                 <th>课本</th>
                 <th></th>
@@ -75,6 +76,7 @@ else
                     <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
                     <td>@word.Unit</td>
+                    <td>@word.Source</td>
                     <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.ShortName</a></td>
                     <td>
                         <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>

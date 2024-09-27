@@ -124,8 +124,9 @@ else
         <thead class="thead-light">
             <tr>
                 <th class="w-5">#</th>
-                <th class="w-25">词条</th>
-                <th class="w-25">备注</th>
+                <th class="w-20">词条</th>
+                <th class="w-20">备注</th>
+                <th class="w-10">来源</th>
                 <th class="w-20">课程/单元</th>
                 <th class="w-15">检查情况</th>
                 <th class="w-10"></th>
@@ -141,6 +142,7 @@ else
                     <td>@(x++)</td>
                     <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
+                    <td>@word.Source</td>
                     <td>@word.Book.BookName/@word.Unit</td>
                     <td>
                         @word.CheckingHistorySummary

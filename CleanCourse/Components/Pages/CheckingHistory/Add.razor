@@ -97,12 +97,12 @@ else
                     <td class="w-auto">@(x++)</td>
                     @if (word.IsMath())
                     {
-                        <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                        <td class="w-auto"><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                         <td class="w-auto">@word.Details</td>
                     }
                     else
                     {
-                        <td class="w-auto"><a href="/history/@word.WordId" class="text-info">@word.Content</a></td>
+                        <td class="w-auto"><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                         <td class="w-auto">@word.Explanation</td>
                     }
                     <td class="w-auto">@word.Book.BookName/@word.Unit</td>

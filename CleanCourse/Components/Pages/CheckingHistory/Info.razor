@@ -8,30 +8,40 @@
  @if (historyRecords == null)
  {
      <h3>检查记录</h3>
-     <p>这里显示当前词条的检查记录。</p>
+    <p>这里显示当前词条的检查记录。</p>
      <hr class="hr" />
      <p><em>Loading...</em></p>
  }
  else
  {
-     <h3>@historyRecords.Content</h3>
+    <h3>@historyRecords.Content</h3>
      <p>@historyRecords.Explanation</p>
      <hr class="hr" />
      <table class="row gy-3 pe-1">
-             <tr class="form-group">
-                 <td class="col-md-5">
-                     <label class="form-label">课程：</label>
-                     <span class="text-primary"><a href="/books/@historyRecords.BookId/info" class="text-info">@historyRecords.Book.FriendlyName</a></span>
-                 </td>
-                 <td class="col-md-2">
-                     <label class="form-label">单元：</label>
-                     <span class="text-primary">@historyRecords.Unit</span>
-                 </td>
-                 <td class="col-md-3">
-                     <label class="form-label">教材：</label>
-                    <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
-                </td>
-             </tr>
+        <tr class="form-group">
+            <td class="col-md-5">
+                <label class="form-label">课程：</label>
+                <span class="text-primary"><a href="/books/@historyRecords.BookId/info" class="text-info">@historyRecords.Book.FriendlyName</a></span>
+            </td>
+            <td class="col-md-3">
+                <label class="form-label">教材：</label>
+                <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
+            </td>
+        </tr>
+        <tr class="form-group">
+            <td class="col-md-5">
+                <label class="form-label">来源：</label>
+                <span class="text-primary">@historyRecords.Source</span>
+            </td>
+            <td class="col-md-3">
+                <label class="form-label">单元：</label>
+                <span class="text-primary">@historyRecords.Unit</span>
+            </td>
+            <td class="col-md-2">
+                <label class="form-label"></label>
+                <a href="/books/@historyRecords?.BookId/words/@WordId/update" class="btn btn-outline-primary m-1">更新词条>></a>
+            </td>
+        </tr>
          @if (!string.IsNullOrEmpty(historyRecords.Details)){
          <tr class="form-group">
              <td class="m-2">
