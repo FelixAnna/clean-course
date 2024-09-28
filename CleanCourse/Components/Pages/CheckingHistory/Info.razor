@@ -29,7 +29,7 @@
             </td>
         </tr>
         <tr class="form-group">
-            <td class="col-md-5">
+            <td class="col-md-3">
                 <label class="form-label">来源：</label>
                 <span class="text-primary">@historyRecords.Source</span>
             </td>
@@ -38,8 +38,7 @@
                 <span class="text-primary">@historyRecords.Unit</span>
             </td>
             <td class="col-md-2">
-                <label class="form-label"></label>
-                <a href="/books/@historyRecords?.BookId/words/@WordId/update" class="btn btn-outline-primary m-1">更新词条>></a>
+                <a href="/books/@historyRecords?.BookId/words/@WordId/update" class="btn btn-primary m-1">更新词条>></a>
             </td>
         </tr>
          @if (!string.IsNullOrEmpty(historyRecords.Details)){

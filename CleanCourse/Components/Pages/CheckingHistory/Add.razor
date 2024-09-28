@@ -44,7 +44,12 @@
                 <td class="col-md-4">
                     <div>
                         <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
-                            复制词条
+                            复制词条(换行)
+                        </button>
+                    </div>
+                    <div>
+                        <button @onclick="@(e => CopyToWords())" class="btn btn-info m-2 btn-sm">
+                            复制词条(不换行)
                         </button>
                     </div>
                 </td>
@@ -59,9 +64,9 @@
                     } else {
                         <div>
                             <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
-                            复制全部内容
-                        </button>
-                    </div>
+                                复制全部内容
+                            </button>
+                        </div>
                     }
                 </td>
             </tr>
@@ -165,6 +170,7 @@ else
 
 @code {
     static string Splitter = ",";
+    static string TabSplitter = "\t";
     static string WordSplitter = Environment.NewLine;
     private SearchWordAndHistoryResult result;
 
@@ -246,6 +252,31 @@ else
         currentItems = result.Words.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
     }
 
+    private async Task CopyToWords()
+    {
+        var contentBuilder = new StringBuilder();
+        foreach (var word in result.Words)
+        {
+            if (word.Book.IsEnglish())
+            {
+                contentBuilder.Append(word.Explanation);
+            }
+            else if (word.IsMath())
+            {
+                contentBuilder.Append(word.Details);
+            }
+            else
+            {
+                contentBuilder.Append(word.Content);
+            }
+
+            contentBuilder.Append(TabSplitter);
+        }
+
+        await Clipboard.SetTextAsync(contentBuilder.ToString());
+        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+    }
+
     private async Task CopyWords()
     {
         var contentBuilder = new StringBuilder();
@@ -254,7 +285,8 @@ else
             if (word.Book.IsEnglish())
             {
                 contentBuilder.Append(word.Explanation);
-            }else if (word.IsMath())
+            }
+            else if (word.IsMath())
             {
                 contentBuilder.Append(word.Details);
             }
