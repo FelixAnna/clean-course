@@ -14,7 +14,7 @@ public class KidService(IKidRepository repository) : IKidService
         var results = kids.Select(x =>
         {
             return new KidModel(x);
-        }).ToList();
+        }).OrderByDescending(x=>x.Selected).ToList();
 
         return new SearchKidResult()
         {

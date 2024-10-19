@@ -44,9 +44,10 @@ public static class MetadataService
             { "1", "覆盖" }
         };
     }
+
     public static string[] GetDefaultSources()
     {
-        return [ "词语表" , "背诵" , "默写" , "扩展词汇","知识点", "生字表", "其它" ];
+        return [ "词语表" , "背诵" , "扩展词汇", "知识点", "生字表", "其它" ];
     }
 
     public static Dictionary<string, string> GetDefaultImportOption()

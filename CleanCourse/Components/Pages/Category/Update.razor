@@ -50,6 +50,6 @@
     private async Task Submit()
     {
         await service.UpdateAsync(id, Model);
-        navigationManager.NavigateTo("/bookCategories");
+        navigationManager.NavigateTo($"/bookCategories/{id}/info");
     }
 }

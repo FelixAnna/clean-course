@@ -93,6 +93,7 @@
       <Content Remove="Components\Pages\BookCategoryMappings\Add.razor" />
       <Content Remove="Components\Pages\Books\Info.razor" />
       <Content Remove="Components\Pages\Category\Info.razor" />
+      <Content Remove="Components\Pages\Kids\Info.razor" />
       <Content Remove="Components\Pages\Words\Add.razor" />
       <Content Remove="Components\Pages\Words\Addhoc.razor" />
       <Content Remove="Components\Pages\Words\Query.razor" />
@@ -106,6 +107,7 @@
       <None Include="Components\Pages\Books\Info.razor" />
       <None Include="Components\Pages\Books\Update.razor" />
       <None Include="Components\Pages\Category\Info.razor" />
+      <None Include="Components\Pages\Kids\Info.razor" />
       <None Include="Components\Pages\Words\Add.razor" />
       <None Include="Components\Pages\Words\Addhoc.razor" />
       <None Include="Components\Pages\Words\Query.razor" />

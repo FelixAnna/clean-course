@@ -89,6 +89,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
             x.Content.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
             || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
             || x.Explanation.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
+            || x.Source.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
             ).ToList();
         }
 

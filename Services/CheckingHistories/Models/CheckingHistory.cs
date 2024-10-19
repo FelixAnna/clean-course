@@ -36,6 +36,10 @@ public class CheckingHistory(CheckingHistoryEntity historyEntity)
                 return "拼音错误";
             case CheckingRemark.Word:
                 return "文字错误";
+            case CheckingRemark.WrittingCorrect:
+                return "默写正确";
+            case CheckingRemark.WrittingIncorrect:
+                return "默写错误";
             default:
                 break;
         }

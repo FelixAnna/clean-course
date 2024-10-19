@@ -15,7 +15,7 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
         await repository.UpdateAllAsync([.. tobeUpdated]);
         var result = await repository.AddAsync([.. tobeInserted]);
 
-        return new WordModel(result.First());
+        return  result != null ? new WordModel(result.First()) : new WordModel();
     }
 
     public async Task<IList<WordModel>> ImportWordsAsync(ImportWordsModel model)

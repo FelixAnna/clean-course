@@ -1,0 +1,82 @@
+﻿@page "/kids/{id:int}/info"
+@using Services.Kids
+@using Services.Kids.Models
+@inject IKidService service
+@inject IJSRuntime JSRuntime
+@inject AppState appState
+@inject NavigationManager navigationManager
+
+<h3>宝宝</h3>
+
+<p>宝宝信息。</p>
+
+<hr class="hr" />
+
+<div class="page">
+    <div class="col-md-5">
+        <label class="form-label">Id：</label>
+        <span class="text-primary">@Model.Id</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">昵称：</label>
+        <span class="text-primary">@Model.Name</span>
+    </div>
+    <div class="col-md-5">
+        <label class="form-label">默认：</label>
+        <span class="text-primary">@(Model.Selected == true ? "是" : "")</span>
+    </div>
+    <div class="col-md-5">
+        <a href="/kids/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
+        
+        @if (Model.Selected != true)
+        {
+            <button @onclick="@(e => Select(Model.Id, Model.Name))" class="btn btn-primary link-primary m-1">
+                设为默认
+            </button>
+            <button @onclick="@(e => Delete(Model.Id, Model.Name))" class="btn btn-outline-danger m-1">
+                取消登记
+            </button>
+        }
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    public KidModel Model { get; set; }
+
+    public Info()
+    {
+        Model = new KidModel(null)
+        {
+            Id = id,
+        };
+    }
+
+    protected override async void OnInitialized()
+    {
+        Model = await service.GetByIdAsync(id);
+    }
+
+    private async Task Delete(int id, string name)
+    {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除有关联字词的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
+            return;
+
+        if (await service.UnRegisterKidAsync(id))
+        {
+            navigationManager.NavigateTo($"/kids");
+        }
+    }
+
+    private async Task Select(int id, string name)
+    {
+        if (await service.SetDefaultAsync(id))
+        {
+            appState.KidId = id;
+            appState.KidName = name;
+
+            Model.Selected = true;
+        }
+    }
+}

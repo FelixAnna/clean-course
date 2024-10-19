@@ -37,7 +37,7 @@ else
                 <tr>
                     <td>@(x++)</td>
                     <td>
-                        @kid.Name
+                        <a href="/kids/@(kid.Id)/info">@kid.Name</a>
                         <span class="text-primary">@(kid.Selected == true ? "[默认]" : "")</span>
                     </td>
                     <td>@kid.StartSchoolYear</td>
@@ -49,13 +49,6 @@ else
                                 设为默认
                             </span>
                         }
-                        @if (kid.Selected != true)
-                        {
-                            <button @onclick="@(e => Delete(kid.Id, kid.Name))" class="btn btn-outline-danger m-1">
-                                取消登记
-                            </button>
-                        }
-
                     </td>
                 </tr>
             }
@@ -90,22 +83,6 @@ else
         pageSize = appState.DefaultPageSize;
         result = await service.GetAllAsync();
         Refresh(1);
-    }
-
-    private async Task Delete(int id, string name)
-    {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除有关联字词的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
-            return;
-
-        if (await service.UnRegisterKidAsync(id))
-        {
-            result = new SearchKidResult()
-                {
-                    Kids = result.Kids.Where(x => x.Id != id).ToArray(),
-                    Count = result.Count - 1,
-                };
-            Refresh(pageSize);
-        }
     }
 
     private async Task Select(int id, string name)

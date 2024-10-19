@@ -120,7 +120,7 @@
                 BookName = word.Book.ShortName,
                 Unit = word.Unit,
                 Overwrite = DuplicateOptions.First().Key,
-                Source = Sources.First()
+                Source = Sources.Where(x => x.Contains("扩展")).FirstOrDefault()
             };
     }
 

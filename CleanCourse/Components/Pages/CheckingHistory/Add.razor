@@ -123,6 +123,17 @@ else
                             <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning mx-2 btn-sm">
                                 错误
                             </button>
+
+                            if (word.Source.Contains("背诵"))
+                            {
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.WrittingCorrect))" class="btn btn-success mx-2 btn-sm">
+                                    默写正确
+                                </button>
+                                <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.WrittingIncorrect))" class="btn btn-warning mx-2 btn-sm">
+                                    默写错误
+                                </button>
+                            }
+
                             @if(word.IsLongText() && !word.IsMath())
                             {
                                 <a class="btn btn-danger mx-3 btn-sm" href="/books/@(word.BookId)/words/@(word.WordId)/addhoc">记录为新的错字</a>
@@ -210,7 +221,7 @@ else
             WordId = id,
             Remark = status.ToString(),
             CreatedTime = DateTime.Now,
-            IsCorrect = status == CheckingRemark.Correct
+            IsCorrect = status == CheckingRemark.Correct || status == CheckingRemark.WrittingCorrect
         });
 
         checkedWords.Add(id);

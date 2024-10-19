@@ -22,5 +22,9 @@ public enum CheckingRemark
     Translation,
 
     Word,
-    Pinyin
+    Pinyin,
+
+
+    WrittingCorrect,
+    WrittingIncorrect,
 }

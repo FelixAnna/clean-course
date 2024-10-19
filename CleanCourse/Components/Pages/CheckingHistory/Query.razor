@@ -92,6 +92,13 @@
                                     取消听写本页
                                 </button>
                             }
+                        </div>
+                    </div>
+                </td>
+                <td class="m-2">
+                    <div>
+                        <label class="form-label"></label>
+                        <div class="form-floating">
                             @if (toCheckedWords.Any())
                             {
                                 <a href="/history/add" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
@@ -230,8 +237,8 @@ else
         Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
-        Units = mappings.LinkedBooks.SelectMany(x => x.Units).Distinct().ToDictionary(x => x, y => $"第{y}课");
-        Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+        Units = mappings.LinkedBooks.SelectMany(x => x.Units).Distinct().OrderBy(x=>x).ToDictionary(x => x, y => $"第{y}课");
+        Units = Units.Prepend(new KeyValuePair<int, string>(Units.Min(x=>x.Key)-1, "全部")).ToDictionary();
 
         await Search();
     }
