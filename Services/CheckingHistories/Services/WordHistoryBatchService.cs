@@ -4,7 +4,6 @@ using Services.CheckingHistories.Models;
 using Services.CheckingHistories.Models.Admin;
 using Services.CheckingHistories.Repositories;
 using Services.Words.Repositories;
-using Shared;
 
 namespace Services.CheckingHistories.Services;
 
@@ -47,7 +46,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
         return results;
     }
 
-    private static string Encode(string value)
+    private static string Encode(string? value)
     {
         if (string.IsNullOrEmpty(value)) return string.Empty;
 
@@ -102,7 +101,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
 
         return toBeInserted.Select(x => new CheckingHistoryModel()
         {
-            BookId = model.BookId??0,
+            BookId = model.BookId,
             Book = x.Book,
             Content = x.Content,
             Explanation = x.Explanation,
@@ -126,7 +125,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
                 var wordParts = line.Split(splitter).Select(x => x.Trim()).ToArray();
                 if (AddWordHistoryModelConvertor.IsValid(wordParts))
                 {
-                    var addModel = AddWordHistoryModelConvertor.FromLine(model.BookId??0, wordParts);
+                    var addModel = AddWordHistoryModelConvertor.FromLine(model.BookId, wordParts);
                     providedWords.Add(addModel);
                 }
             }
@@ -142,7 +141,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
         var existingWords = await wordRepository.FindAsync(new SearchWordAndHistoryCriteria()
         {
             KidId = model.KidId,
-            BookId = model.BookId??0,
+            BookId = model.BookId,
             BookCategoryId = model.BookCategoryId,
         });
 
@@ -159,7 +158,7 @@ public class WordHistoryBatchService(ICheckingHistoryRepository repository, IWor
                              Unit = word.Unit,
                              Explanation = word.Explanation,
                              Source = word.Source,
-                             Details = word.Details,
+                             Details = word.Details ?? string.Empty,
                              Overwrite = history.Overwrite,
                              CheckingRecords = history.CheckingRecords,
                          }).ToList();

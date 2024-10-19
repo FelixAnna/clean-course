@@ -5,18 +5,11 @@ using Services.Books;
 
 namespace Services.BookCategoryMappings;
 
-public class BookCategoryMappingService : IBookCategoryMappingService
+public class BookCategoryMappingService(IBookCategoryMappingRepository repository, IBookCategoryService categoryService, IBookService bookService) : IBookCategoryMappingService
 {
-    private readonly IBookCategoryMappingRepository _repository;
-    private readonly IBookCategoryService _categoryService;
-    private readonly IBookService _bookService;
-
-    public BookCategoryMappingService(IBookCategoryMappingRepository repository, IBookCategoryService categoryService, IBookService bookService)
-    {
-        _repository = repository;
-        _categoryService = categoryService;
-        _bookService = bookService;
-    }
+    private readonly IBookCategoryMappingRepository _repository = repository;
+    private readonly IBookCategoryService _categoryService = categoryService;
+    private readonly IBookService _bookService = bookService;
 
     public async Task<BookCategoryMappingsForAddModel> GetByBookCategoryIdForAddAsync(int bookCategoryId, string keywords)
     {
@@ -32,7 +25,7 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         }
 
         result.BookCategory = new BookCategoryModel(mappings.First()!.BookCategory);
-        result.LinkedBooks = mappings.Select(x => new BookModel(x.Book)).ToList();
+        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book)).ToList();
         result.NewBooks = relatedBooks.Books.Where(x=> !result.LinkedBooks.Any(y=>x.BookId == y.BookId)).ToList();
         return result;
     }
@@ -60,7 +53,7 @@ public class BookCategoryMappingService : IBookCategoryMappingService
         }
 
         result.BookCategory = new BookCategoryModel(mappings.First()!.BookCategory);
-        result.LinkedBooks = mappings.Select(x => new BookModel(x.Book)).ToList();
+        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book)).ToList();
         return result;
     }
 }

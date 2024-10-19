@@ -9,7 +9,7 @@ public class WordCheckingHistoriesModel : AddWordModel
 
     public WordCheckingHistoriesModel() { }
 
-    public IList<CheckingResult> CheckingHistories => CheckingRecords?.Select(x => new CheckingResult(x)).ToArray();
+    public IList<CheckingResult> CheckingHistories => CheckingRecords?.Select(x => new CheckingResult(x)).ToList() ?? [];
 
     public record CheckingResult
     {

@@ -43,7 +43,7 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
             Unit = x.Unit,
             Explanation = x.Explanation,
             Source = x.Source,
-            Details = x.Details,
+            Details = x.Details?? string.Empty,
         })).Select(x => new WordModel()
         {
             BookId = x.BookId,
