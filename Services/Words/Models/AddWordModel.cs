@@ -174,7 +174,8 @@ public static class EngWordFromPdfHelper
                     Content = word[..splitIndex].Trim(),
                     Explanation = word[splitIndex..].Trim(),
                     Details = string.Empty,
-                    Unit = currentUnit
+                    Unit = currentUnit,
+                    Source = Constants.DefaultSource
                 };
 
                 tobeInsertedNewWords.Add(addModel);
