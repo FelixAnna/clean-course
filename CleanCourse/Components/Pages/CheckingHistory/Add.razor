@@ -81,6 +81,19 @@
 else
 {
 
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (pageIndex > 1)
+            {
+                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+            }
+            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+            @if (pageIndex < totalPage)
+            {
+                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+            }
+        </ul>
+    </nav>
     <table class="table">
         <thead class="thead-light">
             <tr>

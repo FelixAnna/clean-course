@@ -2,7 +2,6 @@
 
     <PropertyGroup>
       <TargetFrameworks>net8.0-android</TargetFrameworks>
-      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -46,7 +45,7 @@
         
         <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
         
-        <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+        <AppxSymbolPackageEnabled>True</AppxSymbolPackageEnabled>
         
         <GenerateTestArtifacts>True</GenerateTestArtifacts>
         
@@ -55,6 +54,7 @@
         <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
         
         <DefaultLanguage>zh-cn</DefaultLanguage>
+        
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
@@ -69,6 +69,11 @@
       <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
       <AndroidPackageFormat>aab</AndroidPackageFormat>
       <AndroidKeyStore>False</AndroidKeyStore>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+      <WindowsPackageType>MSIX</WindowsPackageType>
     </PropertyGroup>
 
     <ItemGroup>
@@ -118,9 +123,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.92" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="8.0.92" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -129,10 +134,6 @@
       <ProjectReference Include="..\Database.SQLite\Database.SQLite.csproj" />
       <ProjectReference Include="..\Services\Services.csproj" />
       <ProjectReference Include="..\Shared\Shared.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Update="Microsoft.Maui.Controls" Version="8.0.92" />
     </ItemGroup>
 
 </Project>
