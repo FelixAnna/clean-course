@@ -41,7 +41,7 @@
 
     private async Task Submit()
     {
-        await service.AddAsync(Model);
-        navigationManager.NavigateTo("/bookCategories");
+        var newCategory = await service.AddAsync(Model);
+        navigationManager.NavigateTo($"/bookCategories/{newCategory.Id}/info");
     }
 }

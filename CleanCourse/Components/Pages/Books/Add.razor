@@ -93,7 +93,7 @@
 
     private async Task Submit()
     {
-        await service.AddAsync(Model);
-        navigationManager.NavigateTo("/books");
+        var newBook = await service.AddAsync(Model);
+        navigationManager.NavigateTo($"/books/{newBook.BookId}/info");
     }
 }

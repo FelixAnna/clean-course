@@ -19,55 +19,63 @@
 }
 else
 {
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>教材名</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                int x = 1;
-            }
-            @foreach (var category in currentItems)
-            {
+    @if (currentItems.Count == 0)
+    {
+        <p>
+            <em>空空如也，您可以<a href="/bookCategories/add" class="link-primary">新增</a>教材</em>
+        </p>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@(x++)</td>
-                    <td>
-                        <a href="/bookCategories/@(category.Id)/info">@category.BookCategoryFullName</a>
-                        <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
-                    </td>
-                    <td>
-                        <a href="/bookCategories/@(category.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
-                        <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
-                        @if (!category.Selected)
-                        {
-                            <span class="px-1"></span>
-                            <button @onclick="@(e => Select(category.Id, category.Id, category.CategoryName))" class="btn btn-outline-info">
-                                设为默认
-                            </button>
-                        }
-                    </td>
+                    <th>#</th>
+                    <th>教材名</th>
+                    <th>操作</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @{
+                    int x = 1;
+                }
+                @foreach (var category in currentItems)
+                {
+                    <tr>
+                        <td>@(x++)</td>
+                        <td>
+                            <a href="/bookCategories/@(category.Id)/info">@category.BookCategoryFullName</a>
+                            <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
+                        </td>
+                        <td>
+                            <a href="/bookCategories/@(category.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
+                            <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
+                            @if (!category.Selected)
+                            {
+                                <span class="px-1"></span>
+                                <button @onclick="@(e => Select(category.Id, category.Id, category.CategoryName))" class="btn btn-outline-info">
+                                    设为默认
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            @if(pageIndex >1){
-                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
-            }
-            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
-            @if (pageIndex < totalPage)
-            {
-                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
-            }
-        </ul>
-    </nav>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @if(pageIndex >1){
+                    <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
+                }
+                <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
+                @if (pageIndex < totalPage)
+                {
+                    <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
+                }
+            </ul>
+        </nav>
+    }
 }
 
 @code {

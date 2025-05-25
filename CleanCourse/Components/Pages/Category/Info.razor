@@ -39,9 +39,9 @@
 <div class="col-md-10">
     <hr class="hr" />
 
-    @if (MappingModel.LinkedBooks == null)
+    @if (MappingModel.LinkedBooks.Count == 0)
     {
-        <p><em>您还没有添加任何课本。</em></p>
+        <p><em>您还没有添加任何课本。，您可以去<a href="/bookCategories/@(Model.Id)/mappings/add" class="link-primary">管理课本</a></em></p>
     }
     else
     {

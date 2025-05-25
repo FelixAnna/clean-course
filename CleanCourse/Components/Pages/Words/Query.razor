@@ -53,54 +53,63 @@
 }
 else
 {
-    <table class="table">
-        <thead class="thead-light">
-            <tr>
-                <th>#</th>
-                <th>词条</th>
-                <th>备注</th>
-                <th>来源</th>
-                <th>单元</th>
-                <th>课本</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                var x = 1;
-            }
-            @foreach (var word in currentItems)
-            {
+    @if (currentItems.Count == 0)
+    {
+        <p><em>空空如也，您可以从以下位置下载：<a href="https://www.metadlw.com/words" class="link-primary ">字库</a>并<a href="/books/@(bookId)/words/import" class="link-primary">导入</a></em></p>
+    }
+    else
+    {
+        <table class="table">
+            <thead class="thead-light">
                 <tr>
-                    <td>@(x++)</td>
-                    <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
-                    <td>@word.Explanation</td>
-                    <td>@word.Unit</td>
-                    <td>@word.Source</td>
-                    <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.ShortName</a></td>
-                    <td>
-                        <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
-                        <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
-                            删除
-                        </button>
-                    </td>
+                    <th>#</th>
+                    <th>词条</th>
+                    <th>备注</th>
+                    <th>来源</th>
+                    <th>单元</th>
+                    <th>课本</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            @if (Model.PageIndex > 1)
-            {
-                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex-1))">&lt;&lt;</text></li>
-            }
-            <li class="page-item"><text id="pg-@(Model.PageIndex)" class="page-link">第 @(Model.PageIndex)/@(totalPage) 页</text></li>
-            @if (Model.PageIndex < totalPage)
-            {
-                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex+1))">>></text></li>
-            }
-        </ul>
-    </nav>
+            </thead>
+            <tbody>
+           
+                @{
+                    var x = 1;
+                }
+                @foreach (var word in currentItems)
+                {
+                    <tr>
+                        <td>@(x++)</td>
+                        <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
+                        <td>@word.Explanation</td>
+                        <td>@word.Unit</td>
+                        <td>@word.Source</td>
+                        <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.ShortName</a></td>
+                        <td>
+                            <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">更新</a>
+                            <button @onclick="@(e => Delete(word.WordId, word.Content))" class="btn btn-outline-danger">
+                                删除
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                @if (Model.PageIndex > 1)
+                {
+                    <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex-1))">&lt;&lt;</text></li>
+                }
+                <li class="page-item"><text id="pg-@(Model.PageIndex)" class="page-link">第 @(Model.PageIndex)/@(totalPage) 页</text></li>
+                @if (Model.PageIndex < totalPage)
+                {
+                    <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(Model.PageIndex+1))">>></text></li>
+                }
+            </ul>
+        </nav>
+    }
 }
 
 @code {
