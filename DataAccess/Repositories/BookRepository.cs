@@ -10,9 +10,25 @@ public class BookRepository(AbstractCourseContext courseContext) : IBookReposito
 {
     private readonly AbstractCourseContext courseContext = courseContext;
 
-    public async Task<IEnumerable<BookEntity>> GetAllAsync()
+    public async Task<IEnumerable<BookEntity>> SearchBooks(SearchBookModel model)
     {
-        return await courseContext.Books.ToListAsync();
+        var books = courseContext.Books.AsQueryable();
+        if (!string.IsNullOrEmpty(model.BookName))
+        {
+            books = books.Where(x => x.BookName == model.BookName);
+        }
+        
+        if (!string.IsNullOrEmpty(model.Semester) &&　model.Semester != "全部")
+        {
+            books = books.Where(x => x.Semester == model.Semester);
+        }
+
+        if (!string.IsNullOrEmpty(model.Grade) && model.Grade != "全部")
+        {
+            books = books.Where(x => x.Grade == model.Grade);
+        }
+
+        return await books.ToListAsync();
     }
 
     public async Task<BookEntity?> GetByIdAsync(int bookId)

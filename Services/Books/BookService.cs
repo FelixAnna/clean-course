@@ -26,14 +26,14 @@ public class BookService(IBookRepository repository) : IBookService
         return await repository.RemoveAsync(bookId);
     }
 
-    public async Task<SearchBookResult> GetAllAsync()
+    public async Task<SearchBookResult> SearchBooks(SearchBookModel model)
     {
-        var categories = await repository.GetAllAsync();
+        var books = await repository.SearchBooks(model);
 
-        var results = categories.Select(x =>
+        var results = books.Select(x =>
         {
             return new BookModel(x);
-        }).OrderByDescending(x => x.AuditYear).ThenBy(x => x.BookName).ToList();
+        }).OrderBy(x => x.Grade).ThenBy(x=>x.Semester).ThenByDescending(x=>x.BookName).ThenBy(x => x.Version).ToList();
 
         return new SearchBookResult()
         {

@@ -25,8 +25,12 @@ public class BookCategoryMappingService(IBookCategoryMappingRepository repositor
         }
 
         result.BookCategory = new BookCategoryModel(mappings.First()!.BookCategory);
-        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book)).ToList();
-        result.NewBooks = relatedBooks.Books.Where(x=> !result.LinkedBooks.Any(y=>x.BookId == y.BookId)).ToList();
+        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book))
+            .OrderBy(x=>x.Grade).ThenBy(x=>x.Semester).ThenByDescending(x=>x.BookName).ThenBy(x=>x.Version)
+            .ToList();
+        result.NewBooks = relatedBooks.Books.Where(x=> !result.LinkedBooks.Any(y=>x.BookId == y.BookId))
+            .OrderBy(x => x.Grade).ThenBy(x => x.Semester).ThenByDescending(x => x.BookName).ThenBy(x => x.Version)
+            .ToList();
         return result;
     }
 
@@ -53,7 +57,9 @@ public class BookCategoryMappingService(IBookCategoryMappingRepository repositor
         }
 
         result.BookCategory = new BookCategoryModel(mappings.First()!.BookCategory);
-        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book)).ToList();
+        result.LinkedBooks = mappings.Select(x => new BookModel(x!.Book))
+            .OrderBy(x => x.Grade).ThenBy(x => x.Semester).ThenByDescending(x => x.BookName).ThenBy(x => x.Version)
+            .ToList();
         return result;
     }
 }

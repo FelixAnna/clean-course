@@ -238,7 +238,7 @@ else
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         Units = mappings.LinkedBooks.SelectMany(x => x.Units).Distinct().OrderBy(x=>x).ToDictionary(x => x, y => $"第{y}课");
-        Units = Units.Prepend(new KeyValuePair<int, string>(Units.Min(x=>x.Key)-1, "全部")).ToDictionary();
+        Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         await Search();
     }

@@ -16,7 +16,7 @@ public class CheckingHistoryService(ICheckingHistoryRepository repository, IWord
         var results = words.Select(x =>
         {
             return new CheckingHistoryModel(x, x.CheckingHistories);
-        }).OrderBy(x => x.BookId).ThenBy(x => x.Unit).ToList();
+        }).OrderBy(x => x.BookId).ThenBy(x => x.Unit).ThenBy(x=>x.WordId).ToList();
 
         return new SearchWordAndHistoryResult()
         {

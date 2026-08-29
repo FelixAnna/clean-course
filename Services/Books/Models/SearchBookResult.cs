@@ -2,7 +2,7 @@
 
 public class SearchBookResult
 {
-    public IEnumerable<BookModel> Books { get; set; }
+    public IList<BookModel> Books { get; set; }
 
     public int Count { get; set; }
 }

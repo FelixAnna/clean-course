@@ -1,6 +1,7 @@
 ﻿@page "/books"
 @using Services.Books
 @using Services.Books.Models
+@using Services.Metadata
 @inject IBookService service
 @inject IJSRuntime JSRuntime
 @inject AppState appState
@@ -19,6 +20,47 @@
 }
 else
 {
+
+    <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchBooks">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <table class="row gy-3 pe-1">
+            <tbody>
+                <tr class="form-group">
+                    <td>
+                        <label class="form-label">
+                            年级：
+                        </label>
+                        <select @bind="Model.Grade" class="form-select">
+                            @foreach (var grade in Grades)
+                            {
+                                <option value="@grade">@grade</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <label class="form-label">
+                            学期：
+                        </label>
+                        <select @bind="Model.Semester" class="form-select">
+                            @foreach (var semester in Semesters)
+                            {
+                                <option value="@semester">@semester</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <label class="form-label">课本：</label>
+                        <InputText @bind-Value="Model!.BookName" class="form-control rounded" />
+                    </td>
+                    <td>
+                        <label class="form-label"></label>
+                        <button type="submit" class="btn btn-primary form-control mx-3" data-mdb-ripple-init>查询</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </EditForm>
     <table class="table">
         <thead>
             <tr>
@@ -71,6 +113,12 @@ else
 
 @code {
 
+
+    [SupplyParameterFromForm]
+    public SearchBookModel Model { get; set; }
+
+    public string[] Grades;
+    public string[] Semesters;
     private SearchBookResult result;
 
     private int pageIndex;
@@ -78,10 +126,34 @@ else
     private int pageSize;
     private IList<BookModel> currentItems;
 
+    
+    public Query()
+    {
+        Grades = MetadataService.GetDefaultGrades();
+        Semesters = MetadataService.GetDefaultSemesters();
+        Grades = Grades.Prepend("全部").ToArray();
+        Semesters = Semesters.Prepend("全部").ToArray();
+
+        Model = new SearchBookModel()
+        {
+            BookName = string.Empty,
+            Grade = Grades.FirstOrDefault(),
+            Semester = Semesters.FirstOrDefault(),
+
+        };
+    }
+
     protected override async Task OnInitializedAsync()
     {
         pageSize = appState.DefaultPageSize;
-        result = await service.GetAllAsync();
+        result = await service.SearchBooks(Model);
+        Refresh(1);
+    }
+
+
+    private async Task Submit()
+    {
+        result = await service.SearchBooks(Model);
         Refresh(1);
     }
 

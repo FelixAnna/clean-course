@@ -5,7 +5,7 @@ namespace Services.Books.Repositories;
 
 public interface IBookRepository
 {
-    Task<IEnumerable<BookEntity>> GetAllAsync();
+    Task<IEnumerable<BookEntity>> SearchBooks(SearchBookModel model);
     Task<IEnumerable<BookEntity>> FindAsync(string keywords);
     Task<BookEntity?> GetByIdAsync(int bookId);
     Task<BookEntity> AddAsync(AddBookModel model);
