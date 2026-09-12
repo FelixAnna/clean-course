@@ -150,7 +150,7 @@ else
                     <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
                     <td>@word.Source</td>
-                    <td>@word.Book.BookName/@word.Unit</td>
+                    <td>@word.Book.FriendlyShortName/@word.Unit</td>
                     <td>
                         @word.CheckingHistorySummary
                 </td>
@@ -235,7 +235,7 @@ else
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
         var books = mappings.LinkedBooks.ToList();
-        Courses = books.Where(x => x.BookId > 0).Distinct().ToDictionary(x => x.BookId, y => y.BookName);
+        Courses = books.Where(x => x.BookId > 0).Distinct().ToDictionary(x => x.BookId, y => y.FriendlyShortName);
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         Units = books.SelectMany(x => x.Units).Where(x => x > 0).Distinct().OrderBy(x => x).ToDictionary(x => x, y => $"第{y}课");

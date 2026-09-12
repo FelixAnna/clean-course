@@ -158,7 +158,7 @@
         };
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
-        Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);
+        Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.FriendlyShortName);
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         pageSize = appState.DefaultPageSize;
