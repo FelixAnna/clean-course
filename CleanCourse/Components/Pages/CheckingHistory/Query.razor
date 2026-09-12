@@ -234,10 +234,11 @@ else
         }
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
-        Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.BookName);
+        var books = mappings.LinkedBooks.ToList();
+        Courses = books.Where(x => x.BookId > 0).Distinct().ToDictionary(x => x.BookId, y => y.BookName);
         Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
-        Units = mappings.LinkedBooks.SelectMany(x => x.Units).Distinct().OrderBy(x=>x).ToDictionary(x => x, y => $"第{y}课");
+        Units = books.SelectMany(x => x.Units).Where(x => x > 0).Distinct().OrderBy(x => x).ToDictionary(x => x, y => $"第{y}课");
         Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
 
         await Search();
