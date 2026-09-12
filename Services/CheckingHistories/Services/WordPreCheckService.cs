@@ -5,7 +5,7 @@ namespace Services.CheckingHistories.Services;
 
 public class WordPreCheckService : IWordPreCheckService
 {
-    private static Dictionary<int, List<CheckingHistoryModel>> _preCheckWordsForKids = [];
+    private readonly Dictionary<int, Dictionary<int, CheckingHistoryModel>> preCheckWordsByKid = [];
 
     private readonly IBookCategoryMappingService _bookCategoryMappingService;
 
@@ -16,10 +16,7 @@ public class WordPreCheckService : IWordPreCheckService
     
     public async Task<SearchWordAndHistoryResult> GetAllAsync(int kidId, int bookCategoryId)
     {
-        if (!_preCheckWordsForKids.ContainsKey(kidId))
-        {
-            _preCheckWordsForKids[kidId] = new List<CheckingHistoryModel>();
-        }
+        var preCheckWords = GetPreCheckWords(kidId);
 
         var books = await _bookCategoryMappingService.GetByBookCategoryIdAsync(bookCategoryId);
         if (books?.LinkedBooks == null || !books.LinkedBooks.Any())
@@ -32,7 +29,7 @@ public class WordPreCheckService : IWordPreCheckService
         }
 
         var bookIds = books.LinkedBooks.Select(x=>x.BookId).ToList();
-        var words = _preCheckWordsForKids[kidId].Where(x => bookIds.Contains(x.BookId) ).OrderByDescending(x => x.BookId).ThenBy(x => x.Unit).ThenBy(x => x.WordId).ToList();
+        var words = preCheckWords.Values.Where(x => bookIds.Contains(x.BookId)).OrderByDescending(x => x.BookId).ThenBy(x => x.Unit).ThenBy(x => x.WordId).ToList();
 
         return new SearchWordAndHistoryResult()
         {
@@ -43,19 +40,25 @@ public class WordPreCheckService : IWordPreCheckService
 
     public void Add(int kidId, CheckingHistoryModel word)
     {
-        if (!_preCheckWordsForKids.ContainsKey(kidId))
-        {
-            _preCheckWordsForKids[kidId] = new List<CheckingHistoryModel>();
-        }
-
-        _preCheckWordsForKids[kidId].Add(word);
+        GetPreCheckWords(kidId)[word.WordId] = word;
     }
 
     public void Remove(int kidId, int id)
     {
-        if (_preCheckWordsForKids.ContainsKey(kidId))
+        if (preCheckWordsByKid.TryGetValue(kidId, out var preCheckWords))
         {
-            _preCheckWordsForKids[kidId].RemoveAll(x => x.WordId == id);
+            preCheckWords.Remove(id);
         }
+    }
+
+    private Dictionary<int, CheckingHistoryModel> GetPreCheckWords(int kidId)
+    {
+        if (!preCheckWordsByKid.TryGetValue(kidId, out var words))
+        {
+            words = [];
+            preCheckWordsByKid[kidId] = words;
+        }
+
+        return words;
     }
 }

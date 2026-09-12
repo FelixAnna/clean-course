@@ -11,8 +11,8 @@ public static class SqlServerDependencyInjections
     {
         var courseDBConnectionString = configuration.GetConnectionString("CourseDBAzureSql");
 
-        services.AddDbContextFactory<SqlServerCourseContext>(opt => opt.UseSqlServer(courseDBConnectionString));
-        services.AddSingleton<AbstractCourseContext, SqlServerCourseContext>();
+        services.AddDbContext<SqlServerCourseContext>(opt => opt.UseSqlServer(courseDBConnectionString));
+        services.AddScoped<AbstractCourseContext>(x => x.GetRequiredService<SqlServerCourseContext>());
 
         return services;
     }

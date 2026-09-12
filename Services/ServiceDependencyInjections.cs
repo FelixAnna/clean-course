@@ -13,15 +13,15 @@ public static class ServiceDependencyInjections
 {
     public static IServiceCollection Register(IServiceCollection services)
     {
-        services.AddSingleton<IBookCategoryService, BookCategoryService>();
-        services.AddSingleton<IKidService, KidService>();
-        services.AddSingleton<ICheckingHistoryService, CheckingHistoryService>();
-        services.AddSingleton<IWordHistoryBatchService, WordHistoryBatchService>();
-        services.AddSingleton<IWordBatchService, WordBatchService>();
-        services.AddSingleton<IWordPreCheckService, WordPreCheckService>();
-        services.AddSingleton<IWordManageService, WordManageService>();
-        services.AddSingleton<IBookService, BookService>();
-        services.AddSingleton<IBookCategoryMappingService, BookCategoryMappingService>();
+        services.AddScoped<IBookCategoryService, BookCategoryService>();
+        services.AddScoped<IKidService, KidService>();
+        services.AddScoped<ICheckingHistoryService, CheckingHistoryService>();
+        services.AddScoped<IWordHistoryBatchService, WordHistoryBatchService>();
+        services.AddScoped<IWordBatchService, WordBatchService>();
+        services.AddScoped<IWordPreCheckService, WordPreCheckService>();
+        services.AddScoped<IWordManageService, WordManageService>();
+        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IBookCategoryMappingService, BookCategoryMappingService>();
 
         return services;
     }

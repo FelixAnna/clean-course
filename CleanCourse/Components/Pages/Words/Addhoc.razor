@@ -110,7 +110,7 @@
         word = new WordModel();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         word = await service.GetByIdAsync(id);
 

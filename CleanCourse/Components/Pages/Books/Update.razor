@@ -76,7 +76,7 @@
         Years = MetadataService.GetDefaultYears();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var book = await service.GetByIdAsync(id);
         Model = new AddBookModel()

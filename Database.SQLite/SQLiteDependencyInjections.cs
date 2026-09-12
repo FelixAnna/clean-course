@@ -10,8 +10,8 @@ public static class SQLiteDependencyInjections
     {
         SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 
-        services.AddDbContextFactory<SQLiteCourseContext>(opt => opt.UseSqlite($"Data Source={courseDBFileName}"));
-        services.AddSingleton<AbstractCourseContext, SQLiteCourseContext>();
+        services.AddDbContext<SQLiteCourseContext>(opt => opt.UseSqlite($"Data Source={courseDBFileName}"));
+        services.AddScoped<AbstractCourseContext>(x => x.GetRequiredService<SQLiteCourseContext>());
 
         return services;
     }

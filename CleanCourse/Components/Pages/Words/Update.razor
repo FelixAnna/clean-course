@@ -93,7 +93,7 @@
         Sources = MetadataService.GetDefaultSources();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var word = await service.GetByIdAsync(id);
         Model = new AddWordModel()

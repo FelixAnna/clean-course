@@ -100,19 +100,19 @@
         MappingModel = new BookCategoryMappingsResult();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Model = await service.GetByIdAsync(id);
         await RefreshMappingAsync(id);
     }
 
-    private async void DeleteMapping(int bookId)
+    private async Task DeleteMapping(int bookId)
     {
         await bookCategoryMappingService.RemoveAsync(id, bookId);
         await RefreshMappingAsync(id);
     }
 
-    private async void Delete()
+    private async Task Delete()
     {
         await service.DeleteAsync(id);
         navigationManager.NavigateTo($"/bookcategories");

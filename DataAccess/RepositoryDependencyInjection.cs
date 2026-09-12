@@ -12,14 +12,17 @@ namespace DataAccess;
 
 public static class RepositoryDependencyInjection
 {
-    public static IServiceCollection Register(IServiceCollection services, Func<int> checkingThreshold, Func<int> recentThreshold)
+    public static IServiceCollection Register(IServiceCollection services, Func<IServiceProvider, int> checkingThreshold, Func<IServiceProvider, int> recentThreshold)
     {
-        services.AddSingleton<IBookCategoryRepository, BookCategoryRepository>();
-        services.AddSingleton<IKidRepository, KidRepository>();
-        services.AddSingleton<IBookRepository, BookRepository>();
-        services.AddSingleton<IBookCategoryMappingRepository, BookCategoryMappingRepository>();
-        services.AddSingleton<IWordRepository>(x => new WordRepository(x.GetRequiredService<AbstractCourseContext>(), checkingThreshold, recentThreshold));
-        services.AddSingleton<ICheckingHistoryRepository, CheckingHistoryRepository>();
+        services.AddScoped<IBookCategoryRepository, BookCategoryRepository>();
+        services.AddScoped<IKidRepository, KidRepository>();
+        services.AddScoped<IBookRepository, BookRepository>();
+        services.AddScoped<IBookCategoryMappingRepository, BookCategoryMappingRepository>();
+        services.AddScoped<IWordRepository>(x => new WordRepository(
+            x.GetRequiredService<AbstractCourseContext>(),
+            () => checkingThreshold(x),
+            () => recentThreshold(x)));
+        services.AddScoped<ICheckingHistoryRepository, CheckingHistoryRepository>();
 
         return services;
     }

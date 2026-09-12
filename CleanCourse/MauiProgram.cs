@@ -24,20 +24,15 @@ namespace CleanCourse
             builder.Configuration.AddJsonFile(GetJsonConfigFile());
             builder.Services.RegisterAllServices(builder.Configuration);
 
-            MigrateDatabase(builder);
-
 #if DEBUG
             builder.Services.AddBlazorWebViewDeveloperTools();
             builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
-        }
-
-        private static void MigrateDatabase(MauiAppBuilder builder)
-        {
-            var dbContext = builder.Services.BuildServiceProvider().GetService<AbstractCourseContext>()!;
-            dbContext.Database.Migrate();
+            var app = builder.Build();
+            using var scope = app.Services.CreateScope();
+            scope.ServiceProvider.GetRequiredService<AbstractCourseContext>().Database.Migrate();
+            return app;
         }
 
         private static string GetJsonConfigFile()
@@ -45,7 +40,7 @@ namespace CleanCourse
             var configFileName = Path.Combine(FileSystem.Current.AppDataDirectory, "appsettings.json");
             if (!File.Exists(configFileName))
             {
-                var stream = Task.Run(() => FileSystem.Current.OpenAppPackageFileAsync("appsettings.json")).Result;
+                using var stream = FileSystem.Current.OpenAppPackageFileAsync("appsettings.json").GetAwaiter().GetResult();
                 using FileStream outputStream = File.Create(configFileName);
                 stream.CopyTo(outputStream);
             }

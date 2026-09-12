@@ -148,18 +148,18 @@
         Criteria = new BookSearchCriteria();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         await Refresh();
     }
 
-    private async void AttachBook(int bookId)
+    private async Task AttachBook(int bookId)
     {
         await service.AddAsync(id, bookId);
         await Refresh();
     }
 
-    private async void DetachBook(int bookId)
+    private async Task DetachBook(int bookId)
     {
         await service.RemoveAsync(id, bookId);
         await Refresh();

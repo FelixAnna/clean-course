@@ -68,12 +68,12 @@
             };
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         Model = await service.GetByIdAsync(id);
     }
 
-    private async void Delete()
+    private async Task Delete()
     {
         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联字词和宝宝的检查记录，您确定要删除课本： '{Model.FriendlyName}' 吗?"))
             return;

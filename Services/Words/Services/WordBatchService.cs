@@ -86,11 +86,11 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
             {
                 foreach (var existingWord in existingWords)
                 {
-                    var newWord = tobeInsertedNewWords.Where(nw => existingWord.BookId == nw.BookId && existingWord.Content == nw.Content).FirstOrDefault();
+                    var newWord = tobeInsertedNewWords.FirstOrDefault(nw => existingWord.BookId == nw.BookId && existingWord.Content == nw.Content);
                     if (newWord != null)
                     {
                         existingWord.Explanation = newWord.Explanation;
-                        existingWord.Source = existingWord.Source ?? newWord.Source;
+                        existingWord.Source ??= newWord.Source;
                         existingWord.Details = newWord.Details;
                         if (existingWord.Unit <= 0)
                         {
@@ -101,11 +101,11 @@ public class WordBatchService(IWordRepository repository) : IWordBatchService
                     }
                 }
 
-                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
+                tobeInsertedNewWords = [.. tobeInsertedNewWords.Where(x => !tobeUpdated.Any(y => y.BookId == x.BookId && y.Content == x.Content))];
             }
             else
             {
-                tobeInsertedNewWords = tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.BookId == y.BookId && y.Content == x.Content)).ToArray();
+                tobeInsertedNewWords = [.. tobeInsertedNewWords.Where(x => !existingWords.Any(y => y.BookId == x.BookId && y.Content == x.Content))];
             }
         }
 

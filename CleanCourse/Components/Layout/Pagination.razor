@@ -1,0 +1,29 @@
+@if (TotalPages > 1)
+{
+    <ul class="pagination">
+        @if (CurrentPage > 1)
+        {
+            <li class="page-item">
+                <button type="button" class="page-link" @onclick="() => PageChanged.InvokeAsync(CurrentPage - 1)">&lt;&lt;</button>
+            </li>
+        }
+        <li class="page-item"><span class="page-link">第 @CurrentPage/@TotalPages 页</span></li>
+        @if (CurrentPage < TotalPages)
+        {
+            <li class="page-item">
+                <button type="button" class="page-link" @onclick="() => PageChanged.InvokeAsync(CurrentPage + 1)">&gt;&gt;</button>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageChanged { get; set; }
+}

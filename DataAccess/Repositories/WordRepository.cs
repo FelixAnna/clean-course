@@ -30,7 +30,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
         {
             if (request.BookCategoryId > 0)
             {
-                var bookIds = courseContext.BookCategoryMappings.Where(x => x.BookCategoryId == request.BookCategoryId).Select(x => x.BookId).ToList();
+                var bookIds = courseContext.BookCategoryMappings.Where(x => x.BookCategoryId == request.BookCategoryId).Select(x => x.BookId);
                 words = words.Where(x => bookIds.Contains(x.BookId));
             }
         }
@@ -45,10 +45,14 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
             words =words.Where(x =>x.Source == request.Source);
         }
 
+        if (request.KidId > 0)
+        {
+            words = words.AsNoTracking().Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId));
+        }
+
         IList<WordEntity> results = await words.ToListAsync();
         if (request.KidId > 0)
         {
-            results = await words.AsNoTracking().Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId)).ToListAsync();
 
             if (request is SearchWordAndHistoryCriteria historyRequest)
             {
@@ -63,7 +67,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
                             results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.All(y => y.IsCorrect)).ToList();
                             break;
                         case ECheckingResult.LastFailed:
-                            results = results.Where(x => x.CheckingHistories.Any() && !x.CheckingHistories.Last().IsCorrect).ToList();
+                            results = results.Where(x => x.CheckingHistories.OrderByDescending(y => y.CreatedTime).FirstOrDefault() is { IsCorrect: false }).ToList();
                             break;
                         case ECheckingResult.UsedFailed:
                             results = results.Where(x => x.CheckingHistories.Any(y => !y.IsCorrect)).ToList();

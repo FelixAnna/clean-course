@@ -12,12 +12,14 @@ public static class DependencyInjections
     {
         services.AddSingleton<AppState>();
 
-        var state = services.BuildServiceProvider().GetService<AppState>();
-        RepositoryDependencyInjection.Register(services, () => state.DefaultCheckingThreshold, () => state.DefaultRecentThreshold);
+        RepositoryDependencyInjection.Register(
+            services,
+            provider => provider.GetRequiredService<AppState>().DefaultCheckingThreshold,
+            provider => provider.GetRequiredService<AppState>().DefaultRecentThreshold);
         ServiceDependencyInjections.Register(services);
 
         var courseDBFileName = configuration.GetConnectionString("CourseDB");
-        var fileName = Task.Run(() => CopyFileToAppDataDirectory(courseDBFileName)).Result;
+        var fileName = CopyFileToAppDataDirectory(courseDBFileName).GetAwaiter().GetResult();
         Preferences.Set(Constants.DBFileLocationKey, fileName);
 
         SQLiteDependencyInjections.Register(services, fileName);

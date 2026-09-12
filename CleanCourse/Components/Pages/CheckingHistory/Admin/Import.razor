@@ -45,6 +45,7 @@
             </td>
         </tr>
     </table>
+             <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />
     <div class="form-group">
         <label class="form-label">词条的历史记录：</label>
         <textarea @bind="Model!.Content" class="form-control rounded" rows="8" cols="100" placeholder="请从Excel/Csv复制多行粘贴到这里，每一行分别为：序号(可空)\t词语\t注音(翻译)\t详细(可空)\t单元\t课程（可空)\t1 / 其他数字 （1表示正确的听写记录，其他表示错误）\t1 / 其他数字\t。。。" />
@@ -113,19 +114,6 @@
             }
         </tbody>
     </table>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            @if (pageIndex > 1)
-            {
-                <li class="page-item"><text id="pg-0" class="page-link" @onclick="@(e => ChangePage(pageIndex-1))">&lt;&lt;</text></li>
-            }
-            <li class="page-item"><text id="pg-@(pageIndex)" class="page-link">第 @(pageIndex)/@(totalPage) 页</text></li>
-            @if (pageIndex < totalPage)
-            {
-                <li class="page-item"><text id="pg-99" class="page-link" @onclick="@(e => ChangePage(pageIndex+1))">>></text></li>
-            }
-        </ul>
-    </nav>
 }
 
 @code {
@@ -178,7 +166,7 @@
         }
 
         previewWords = await service.PreviewHistoryAsync(Model);
-        totalPage = (int)Math.Ceiling(previewWords.Count * 1.0 / pageSize);
+        totalPage = Math.Max(1, (int)Math.Ceiling(previewWords.Count * 1.0 / pageSize));
         ChangePage(1);
     }
 

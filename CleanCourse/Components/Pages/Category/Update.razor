@@ -38,7 +38,7 @@
         Model = MetadataService.GetDefaultBookCategory();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var category = await service.GetByIdAsync(id);
         Model = new AddBookCategoryModel()

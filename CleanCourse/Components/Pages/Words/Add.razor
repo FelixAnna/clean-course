@@ -106,7 +106,7 @@
         Sources = MetadataService.GetDefaultSources();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var book = await bookService.GetByIdAsync(bookId);
         Model = new AddWordModel()

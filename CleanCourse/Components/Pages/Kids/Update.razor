@@ -49,7 +49,7 @@
         Model = MetadataService.GetDefaultKid();
     }
 
-    protected override async void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         var kid = await service.GetByIdAsync(id);
         Model = new AddKidModel()
