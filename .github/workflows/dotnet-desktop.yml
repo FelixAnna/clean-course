@@ -35,11 +35,8 @@ jobs:
     - name: Install MAUI workload
       run: dotnet workload install maui-windows
 
-    - name: Restore
-      run: dotnet restore $env:Project_Path
-
     - name: Build Windows app
-      run: dotnet build $env:Project_Path --no-restore -f $env:Windows_Tfm -c $env:Configuration
+      run: dotnet build $env:Project_Path -f $env:Windows_Tfm -c $env:Configuration
       env:
         Configuration: ${{ matrix.configuration }}
 
@@ -47,4 +44,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: CleanCourse-Windows-${{ matrix.configuration }}
-        path: CleanCourse\bin\${{ matrix.configuration }}\${{ env.Windows_Tfm }}
+        path: CleanCourse\bin\${{ matrix.configuration }}\${{ env.Windows_Tfm }}\win-x64
