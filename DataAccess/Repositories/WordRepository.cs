@@ -15,12 +15,18 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
     public async Task<WordEntity?> GetByIdAsync(int id)
     {
-        return await courseContext.Words.FindAsync(id);
+        return await courseContext.Words
+            .Include(x => x.Book)
+            .Include(x => x.Extensions)
+            .FirstOrDefaultAsync(x => x.WordId == id);
     }
 
     public async Task<IList<WordEntity>> FindAsync(SearchWordsCriteria request)
     {
-        var words = courseContext.Words.Include(x=>x.Book).AsQueryable();
+        var words = courseContext.Words
+            .Include(x => x.Book)
+            .Include(x => x.Extensions)
+            .AsQueryable();
 
         if (request.BookId > 0)
         {
@@ -94,6 +100,8 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
             || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
             || x.Explanation.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
             || x.Source.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
+            || x.Extensions.Any(extension => extension.Name.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
+                || extension.Content.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
             ).ToList();
         }
 
@@ -113,6 +121,14 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
                 Details = model.Details,
                 Unit = model.Unit,
                 Source = model.Source,
+                Extensions = model.Extensions
+                    .Where(extension => !string.IsNullOrWhiteSpace(extension.Name) || !string.IsNullOrWhiteSpace(extension.Content))
+                    .Select(extension => new WordExtensionEntity
+                    {
+                        Name = extension.Name.Trim(),
+                        Content = extension.Content.Trim(),
+                    })
+                    .ToList(),
             });
 
             results.Add(result.Entity);
@@ -124,20 +140,35 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
     public async Task<WordEntity> UpdateAsync(int id, AddWordModel model)
     {
-        var word = await courseContext.Words.FirstAsync(x => x.WordId == id);
+        var word = await courseContext.Words
+            .Include(x => x.Extensions)
+            .FirstAsync(x => x.WordId == id);
         word.Content = model.Content;
         word.Explanation = model.Explanation;
         word.Details = model.Details;
         word.Unit = model.Unit;
         word.BookId = model.BookId;
         word.Source = model.Source;
+        courseContext.WordExtensions.RemoveRange(word.Extensions);
+        word.Extensions = model.Extensions
+            .Where(extension => !string.IsNullOrWhiteSpace(extension.Name) || !string.IsNullOrWhiteSpace(extension.Content))
+            .Select(extension => new WordExtensionEntity
+            {
+                WordId = word.WordId,
+                Name = extension.Name.Trim(),
+                Content = extension.Content.Trim(),
+            })
+            .ToList();
         await courseContext.SaveChangesAsync();
         return word;
     }
 
     public async Task<bool> RemoveAsync(int wordId)
     {
-        var word = await courseContext.Words.Include(x => x.CheckingHistories).FirstOrDefaultAsync(x => x.WordId == wordId);
+        var word = await courseContext.Words
+            .Include(x => x.CheckingHistories)
+            .Include(x => x.Extensions)
+            .FirstOrDefaultAsync(x => x.WordId == wordId);
         if (word != null)
         {
             courseContext.Words.Remove(word);

@@ -21,5 +21,7 @@ public class WordEntity
 
     public IList<CheckingHistoryEntity> CheckingHistories { get; set; }
 
+    public IList<WordExtensionEntity> Extensions { get; set; } = [];
+
     public BookEntity Book { get; set; }
 }

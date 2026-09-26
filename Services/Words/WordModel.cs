@@ -1,5 +1,6 @@
 ﻿using Entities.Entities;
 using Services.Books;
+using Services.Words.Models;
 using Shared.Models;
 
 namespace Services.Words;
@@ -17,7 +18,14 @@ public class WordModel : BaseWordModel
         Source = entity.Source;
         Details = entity.Details;
         Unit = entity.Unit;
+        Extensions = entity.Extensions.Select(x => new WordExtensionModel
+        {
+            Name = x.Name,
+            Content = x.Content,
+        }).ToList();
 
         Book = new BookModel(entity.Book);
     }
+
+    public List<WordExtensionModel> Extensions { get; set; } = [];
 }

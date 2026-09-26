@@ -19,6 +19,11 @@ public class CheckingHistoryModel : BaseWordModel
         Source = entity.Source;
         Details = entity.Details;
         Unit = entity.Unit;
+        Extensions = entity.Extensions.Select(x => new global::Services.Words.Models.WordExtensionModel
+        {
+            Name = x.Name,
+            Content = x.Content,
+        }).ToList();
 
         Histories = historyEntities.Select(x=>new CheckingHistory(x)).ToList(); 
         SetHistorySummary(historyEntities);
@@ -31,6 +36,8 @@ public class CheckingHistoryModel : BaseWordModel
     }
 
     public IEnumerable<CheckingHistory> Histories { get; set; }
+
+    public List<global::Services.Words.Models.WordExtensionModel> Extensions { get; set; } = [];
 
     public string? CheckingHistorySummary { get; set; }
 

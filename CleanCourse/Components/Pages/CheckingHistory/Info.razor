@@ -49,6 +49,15 @@
              </td>
          </tr>
          }
+         @if (historyRecords.Extensions.Count > 0)
+         {
+         <tr class="form-group">
+             <td class="m-2">
+                 <label class="form-label">词形扩展：</label>
+                 <div class="text-secondary">@string.Join("；", historyRecords.Extensions.Select(extension => $"{extension.Name}: {extension.Content}"))</div>
+             </td>
+         </tr>
+         }
      </table>
      <hr class="hr" />
      <table class="table">

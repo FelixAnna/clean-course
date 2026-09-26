@@ -23,6 +23,8 @@ public class AddWordModel : AddWordBaseModel
 
     [Required]
     public int Unit { get; set; }
+
+    public List<WordExtensionModel> Extensions { get; set; } = [];
 }
 public static class WordFromExcelHelper
 {

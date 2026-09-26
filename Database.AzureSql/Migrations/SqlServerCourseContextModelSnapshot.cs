@@ -144,6 +144,32 @@ namespace Database.AzureSql.Migrations
                     b.ToTable("Words");
                 });
 
+            modelBuilder.Entity("Entities.Entities.WordExtensionEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WordId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordId");
+
+                    b.ToTable("WordExtensions");
+                });
+
             modelBuilder.Entity("Entities.Entities.CheckingHistoryEntity", b =>
                 {
                     b.HasOne("Entities.Entities.KidEntity", "Kid")
@@ -163,6 +189,17 @@ namespace Database.AzureSql.Migrations
                     b.Navigation("Word");
                 });
 
+            modelBuilder.Entity("Entities.Entities.WordExtensionEntity", b =>
+                {
+                    b.HasOne("Entities.Entities.WordEntity", "Word")
+                        .WithMany("Extensions")
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Word");
+                });
+
             modelBuilder.Entity("Entities.Entities.KidEntity", b =>
                 {
                     b.Navigation("CheckingHistories");
@@ -171,6 +208,8 @@ namespace Database.AzureSql.Migrations
             modelBuilder.Entity("Entities.Entities.WordEntity", b =>
                 {
                     b.Navigation("CheckingHistories");
+
+                    b.Navigation("Extensions");
                 });
 #pragma warning restore 612, 618
         }

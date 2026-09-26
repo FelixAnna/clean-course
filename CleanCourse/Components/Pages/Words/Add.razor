@@ -45,6 +45,21 @@
             </td>
         </tr>
         <tr class="form-group">
+            <td class="m-2" colspan="2">
+                <label class="form-label">词形扩展：</label>
+                @for (var index = 0; index < Model.Extensions.Count; index++)
+                {
+                    var extensionIndex = index;
+                    <div class="input-group mb-2" @key="extensionIndex">
+                        <InputText @bind-Value="Model.Extensions[extensionIndex].Name" class="form-control" placeholder="扩展类型，例如：过去式" />
+                        <InputText @bind-Value="Model.Extensions[extensionIndex].Content" class="form-control" placeholder="变化后的形式，例如：went" />
+                        <button type="button" class="btn btn-outline-danger" @onclick="() => RemoveExtension(extensionIndex)">删除</button>
+                    </div>
+                }
+                <button type="button" class="btn btn-outline-secondary" @onclick="AddExtension">添加扩展</button>
+            </td>
+        </tr>
+        <tr class="form-group">
             <td>
                 <label class="form-label">
                     单元：
@@ -124,4 +139,8 @@
         await importService.AddWordAsync(Model);
         navigationManager.NavigateTo($"/books/{bookId}/words");
     }
+
+    private void AddExtension() => Model.Extensions.Add(new WordExtensionModel());
+
+    private void RemoveExtension(int index) => Model.Extensions.RemoveAt(index);
 }

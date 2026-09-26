@@ -175,6 +175,30 @@ namespace Database.SQLite.Migrations
                     b.ToTable("Words");
                 });
 
+            modelBuilder.Entity("Entities.Entities.WordExtensionEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("WordId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordId");
+
+                    b.ToTable("WordExtensions");
+                });
+
             modelBuilder.Entity("Entities.Entities.BookCategoryMappingsEntity", b =>
                 {
                     b.HasOne("Entities.Entities.BookCategoryEntity", "BookCategory")
@@ -224,6 +248,17 @@ namespace Database.SQLite.Migrations
                     b.Navigation("Book");
                 });
 
+            modelBuilder.Entity("Entities.Entities.WordExtensionEntity", b =>
+                {
+                    b.HasOne("Entities.Entities.WordEntity", "Word")
+                        .WithMany("Extensions")
+                        .HasForeignKey("WordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Word");
+                });
+
             modelBuilder.Entity("Entities.Entities.BookEntity", b =>
                 {
                     b.Navigation("BookCategoryMappings");
@@ -239,6 +274,8 @@ namespace Database.SQLite.Migrations
             modelBuilder.Entity("Entities.Entities.WordEntity", b =>
                 {
                     b.Navigation("CheckingHistories");
+
+                    b.Navigation("Extensions");
                 });
 #pragma warning restore 612, 618
         }

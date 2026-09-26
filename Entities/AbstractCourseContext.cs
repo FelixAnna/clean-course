@@ -11,6 +11,7 @@ public abstract class AbstractCourseContext : DbContext
     public DbSet<BookEntity> Books { get; set; }
     public DbSet<BookCategoryMappingsEntity> BookCategoryMappings { get; set; }
     public DbSet<WordEntity> Words { get; set; }
+    public DbSet<WordExtensionEntity> WordExtensions { get; set; }
 
     public DbSet<CheckingHistoryEntity> CheckingHistories { get; set; }
 
@@ -57,5 +58,12 @@ public abstract class AbstractCourseContext : DbContext
             .HasMany(e => e.CheckingHistories)
             .WithOne(e => e.Kid)
             .OnDelete(DeleteBehavior.ClientCascade);
+
+        modelBuilder
+            .Entity<WordExtensionEntity>()
+            .HasOne(e => e.Word)
+            .WithMany(e => e.Extensions)
+            .HasForeignKey(e => e.WordId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
