@@ -30,23 +30,51 @@ public static class DependencyInjections
 
     public static async Task<string> CopyFileToAppDataDirectory(string filename)
     {
-        var fullFileName = filename;
         if (Path.IsPathRooted(filename))
         {
-            return fullFileName;
+            return filename;
         }
 
-        fullFileName = Path.Combine(FileSystem.Current.AppDataDirectory, "Data", filename);
+        var fullFileName = Path.Combine(FileSystem.Current.AppDataDirectory, "Data", filename);
         if (File.Exists(fullFileName))
         {
             return fullFileName;
         }
 
-        Directory.CreateDirectory(fullFileName[..fullFileName.LastIndexOfAny(['\\', '/'])]);
-        using Stream inputStream = await FileSystem.Current.OpenAppPackageFileAsync(filename);
-        using FileStream outputStream = File.Create(fullFileName);
-        await inputStream.CopyToAsync(outputStream);
+        Directory.CreateDirectory(Path.GetDirectoryName(fullFileName)!);
+        var temporaryFileName = $"{fullFileName}.{Guid.NewGuid():N}.tmp";
 
-        return fullFileName;
+        try
+        {
+            await using Stream inputStream = await FileSystem.Current.OpenAppPackageFileAsync(filename);
+            await using (var outputStream = new FileStream(
+                temporaryFileName,
+                FileMode.CreateNew,
+                FileAccess.Write,
+                FileShare.None,
+                bufferSize: 81920,
+                useAsync: true))
+            {
+                await inputStream.CopyToAsync(outputStream);
+            }
+
+            try
+            {
+                // Never replace a database that was created by an earlier install.
+                File.Move(temporaryFileName, fullFileName);
+            }
+            catch (IOException) when (File.Exists(fullFileName))
+            {
+            }
+
+            return fullFileName;
+        }
+        finally
+        {
+            if (File.Exists(temporaryFileName))
+            {
+                File.Delete(temporaryFileName);
+            }
+        }
     }
 }

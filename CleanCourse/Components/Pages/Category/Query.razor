@@ -45,7 +45,10 @@ else
                         <td>@(x++)</td>
                         <td>
                             <a href="/bookCategories/@(category.Id)/info">@category.BookCategoryFullName</a>
-                            <span class="text-primary">@(category.Selected == true ? "[默认]" : "")</span>
+                            @if (category.Selected == true)
+                            {
+                                <span class="default-dot default-dot-book" title="当前默认教材" aria-label="当前默认教材"></span>
+                            }
                         </td>
                         <td>
                             <a href="/bookCategories/@(category.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
@@ -53,7 +56,7 @@ else
                             @if (!category.Selected)
                             {
                                 <span class="px-1"></span>
-                                <button @onclick="@(e => Select(category.Id, category.Id, category.CategoryName))" class="btn btn-outline-info">
+                                <button @onclick="@(e => Select(category.Id, category.Id, category.CategoryName))" class="btn btn-set-default m-1">
                                     设为默认
                                 </button>
                             }

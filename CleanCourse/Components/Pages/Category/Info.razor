@@ -23,6 +23,10 @@
     <div class="col-md-5">
         <label class="form-label">教材版本：</label>
         <span class="text-primary">@Model.CategoryName</span>
+        @if (Model.Selected)
+        {
+            <span class="default-dot default-dot-book" title="当前默认教材" aria-label="当前默认教材"></span>
+        }
     </div>
     <div class="col-md-5">
         <a href="/bookCategories/@(Model.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>

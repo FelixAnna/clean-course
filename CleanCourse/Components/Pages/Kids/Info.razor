@@ -23,14 +23,21 @@
     </div>
     <div class="col-md-5">
         <label class="form-label">默认：</label>
-        <span class="text-primary">@(Model.Selected == true ? "是" : "")</span>
+        @if (Model.Selected == true)
+        {
+            <span class="default-dot default-dot-kid" title="当前默认宝宝" aria-label="当前默认宝宝"></span>
+        }
+        else
+        {
+            <span class="text-muted">否</span>
+        }
     </div>
     <div class="col-md-5">
         <a href="/kids/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
         
         @if (Model.Selected != true)
         {
-            <button @onclick="@(e => Select(Model.Id, Model.Name))" class="btn btn-primary link-primary m-1">
+            <button type="button" @onclick="@(e => Select(Model.Id, Model.Name))" class="btn btn-set-default m-1">
                 设为默认
             </button>
             <button @onclick="@(e => Delete(Model.Id, Model.Name))" class="btn btn-outline-danger m-1">
@@ -60,7 +67,7 @@
 
     private async Task Delete(int id, string name)
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除有关联字词的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除关联词条的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
             return;
 
         if (await service.UnRegisterKidAsync(id))

@@ -1,50 +1,146 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">学习助手</a>
+@inject IJSRuntime JS
 
-        <a class="nav-justified" onclick="history.back()">返回</a>
-        <a class="nav-justified" onclick="history.forward()">前进</a>
+<header class="top-row">
+    <a class="brand" href="" aria-label="学习助手首页">
+        <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4.5 5.75A2.75 2.75 0 0 1 7.25 3H20v15H7.25A2.75 2.75 0 0 0 4.5 20.75v-15Z" />
+                <path d="M4.5 6v14.75A2.25 2.25 0 0 1 6.75 18.5H20M8 7h8M8 10.5h8" />
+            </svg>
+        </span>
+        <span class="brand-copy">
+            <strong>学习助手</strong>
+            <small>记录每一步进步</small>
+        </span>
+    </a>
+
+    <div class="header-actions">
+        <div class="history-actions" role="group" aria-label="页面历史">
+            <button type="button" aria-label="返回上一页" title="返回" @onclick="GoBackAsync">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 14 4 9l5-5M4 9h10a6 6 0 0 1 0 12h-2" />
+                </svg>
+            </button>
+            <button type="button" aria-label="前进到下一页" title="前进" @onclick="GoForwardAsync">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m15 14 5-5-5-5m5 5H10a6 6 0 0 0 0 12h2" />
+                </svg>
+            </button>
+        </div>
+
+        <button type="button"
+                class="navbar-toggler"
+                aria-controls="primary-navigation"
+                aria-expanded="@_isMobileMenuOpen"
+                aria-label="@(_isMobileMenuOpen ? "关闭导航菜单" : "打开导航菜单")"
+                @onclick="ToggleMobileMenu">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                @if (_isMobileMenuOpen)
+                {
+                    <path d="m6 6 12 12M18 6 6 18" />
+                }
+                else
+                {
+                    <path d="M4 6h16M4 12h16M4 18h16" />
+                }
+            </svg>
+        </button>
     </div>
-</div>
+</header>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+<div id="primary-navigation" class="nav-scrollable @(_isMobileMenuOpen ? "is-open" : null)">
+    <nav aria-label="主导航" @onclick="CloseMobileMenu">
+        <section class="nav-group" aria-labelledby="learning-navigation">
+            <h2 id="learning-navigation" class="nav-section-label">学习管理</h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m3.5 10 8.5-7 8.5 7v10a1 1 0 0 1-1 1h-5.25v-6.5h-4.5V21H4.5a1 1 0 0 1-1-1V10Z" />
+                            <path d="M2.5 10.5 12 2.75l9.5 7.75" />
+                        </svg>
+                        <span>我的</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="kids">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="9" cy="8" r="3.25" />
+                            <path d="M3.5 20v-1.5a5.5 5.5 0 0 1 11 0V20h-11ZM16 5.25a3 3 0 0 1 0 5.5M17 14a4.5 4.5 0 0 1 3.5 4.4V20h-3" />
+                        </svg>
+                        <span>宝宝</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="bookCategories">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z" />
+                            <path d="M4 6v14.5M8 7h8M8 10.5h8" />
+                        </svg>
+                        <span>教材</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="books">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5Z" />
+                            <path d="M7.5 7h7M7.5 10.5h7M4 19a2 2 0 0 1 2-2h13" />
+                        </svg>
+                        <span>课本</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="history">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M4 7.5h16M4 12h16M4 16.5h10" />
+                            <path d="M3 4.5h18v15H3z" />
+                            <path d="m17 16 1.5 1.5L21 15" />
+                        </svg>
+                        <span>检查记录</span>
+                    </NavLink>
+                </li>
+            </ul>
+        </section>
 
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 我的
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="kids">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 宝宝
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="bookCategories">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 教材
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="books">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 课本
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="history">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 字词
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="settings">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 设置
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="help">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> 帮助
-            </NavLink>
-        </div>
+        <section class="nav-group" aria-labelledby="other-navigation">
+            <h2 id="other-navigation" class="nav-section-label">其他</h2>
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="settings">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
+                            <path d="m19.4 15 .1.1 1.3 1-1.5 2.6-1.6-.6a7.8 7.8 0 0 1-1.5.9l-.3 1.7h-3l-.3-1.7a7.8 7.8 0 0 1-1.5-.9l-1.6.6-1.5-2.6 1.3-1a7 7 0 0 1 0-1.8l-1.3-1 1.5-2.6 1.6.6a7.8 7.8 0 0 1 1.5-.9l.3-1.7h3l.3 1.7a7.8 7.8 0 0 1 1.5.9l1.6-.6 1.5 2.6-1.3 1a7 7 0 0 1-.1 1.7Z" />
+                        </svg>
+                        <span>设置</span>
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="help">
+                        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M9.6 9a2.5 2.5 0 1 1 4.5 1.5c-.9 1.1-2.1 1.3-2.1 3M12 17.5v.1" />
+                        </svg>
+                        <span>帮助</span>
+                    </NavLink>
+                </li>
+            </ul>
+        </section>
     </nav>
+
+    <p class="sidebar-note">
+        <span class="note-sparkle" aria-hidden="true">✦</span>
+        <span>每天一点进步</span>
+    </p>
 </div>
+
+@code {
+    private bool _isMobileMenuOpen;
+
+    private void ToggleMobileMenu() => _isMobileMenuOpen = !_isMobileMenuOpen;
+
+    private void CloseMobileMenu() => _isMobileMenuOpen = false;
+
+    private async Task GoBackAsync() => await JS.InvokeVoidAsync("history.back");
+
+    private async Task GoForwardAsync() => await JS.InvokeVoidAsync("history.forward");
+}

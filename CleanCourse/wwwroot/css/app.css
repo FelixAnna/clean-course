@@ -1,15 +1,114 @@
 ﻿html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    min-height: 100%;
+    color: #25304a;
+    background: #f8f9fc;
+    font-family: Inter, "Segoe UI", "Microsoft YaHei", Helvetica, Arial, sans-serif;
 }
 
 a, .btn-link {
-    color: #006bb7;
+    color: #4f46e5;
+    text-underline-offset: 0.18em;
+    transition: color 160ms ease;
+}
+
+a:hover, .btn-link:hover {
+    color: #3730a3;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1e293b;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+h1 {
+    font-size: clamp(1.7rem, 3vw, 2.25rem);
+}
+
+h2 {
+    font-size: clamp(1.4rem, 2.4vw, 1.8rem);
+}
+
+h3 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #6366f1;
+    border-color: #6366f1;
+}
+
+.btn {
+    border-radius: 0.65rem;
+    font-weight: 600;
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.btn-primary:hover {
+    background-color: #5558df;
+    border-color: #5558df;
+    transform: translateY(-1px);
+}
+
+.btn-set-default {
+    color: #326b91;
+    background-color: #eaf6ff;
+    border-color: #b9ddf3;
+    box-shadow: 0 0.2rem 0.5rem rgba(91, 157, 199, 0.14);
+}
+
+.btn-set-default:hover {
+    color: #285d82;
+    background-color: #dff1fc;
+    border-color: #9fcde9;
+    transform: translateY(-1px);
+}
+
+.btn-set-default:focus-visible {
+    color: #285d82;
+    background-color: #dff1fc;
+    border-color: #8fc4e4;
+    box-shadow: 0 0 0 0.2rem rgba(116, 183, 222, 0.24);
+}
+
+.default-dot {
+    display: inline-flex;
+    width: 1.35rem;
+    height: 1.35rem;
+    margin-left: 0.45rem;
+    align-items: center;
+    justify-content: center;
+    vertical-align: -0.08em;
+    font-size: 1.3rem;
+    line-height: 1;
+    text-shadow: 0 0.1rem 0.25rem rgba(91, 157, 199, 0.2);
+}
+
+.default-dot::before {
+    content: "♥";
+}
+
+.default-dot-kid,
+.default-dot-book {
+    color: #8fc7e8;
+}
+
+.form-control, .form-select {
+    min-height: 2.65rem;
+    border-color: #d7deea;
+    border-radius: 0.65rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #818cf8;
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.14);
+}
+
+.card {
+    border-color: #e6eaf2;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(30, 41, 59, 0.045);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {

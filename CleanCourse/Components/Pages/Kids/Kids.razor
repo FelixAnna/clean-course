@@ -38,24 +38,26 @@ else
                     <td>@(x++)</td>
                     <td>
                         <a href="/kids/@(kid.Id)/info">@kid.Name</a>
-                        <span class="text-primary">@(kid.Selected == true ? "[默认]" : "")</span>
+                        @if (kid.Selected == true)
+                        {
+                            <span class="default-dot default-dot-kid" title="当前默认宝宝" aria-label="当前默认宝宝"></span>
+                        }
                     </td>
                     <td>@kid.StartSchoolYear</td>
                     <td>
                         <a href="/kids/@(kid.Id)/update" class="btn btn-outline-primary m-1">更新</a>
                         @if (kid.Selected != true)
                         {
-                            <span @onclick="@(e => Select(kid.Id, kid.Name))" class="btn btn-primary link-primary m-1">
-            <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />
+                            <button type="button" @onclick="@(e => Select(kid.Id, kid.Name))" class="btn btn-set-default m-1">
                                 设为默认
-                            </span>
+                            </button>
                         }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-
+    <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />
 }
 
 @code {
