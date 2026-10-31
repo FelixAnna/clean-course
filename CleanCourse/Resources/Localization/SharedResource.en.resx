@@ -107,9 +107,9 @@
   <data name="更多设置" xml:space="preserve"><value>More settings</value></data>
   <data name="首次使用指引" xml:space="preserve"><value>To get started,</value></data>
   <data name="创建课本" xml:space="preserve"><value>add a book</value></data>
-  <data name="然后下载导入字库" xml:space="preserve"><value>, then download and import its word list</value></data>
+  <data name="然后下载导入字库" xml:space="preserve"><value>, then download and import its word list.</value></data>
   <data name="创建教材" xml:space="preserve"><value>add a curriculum</value></data>
-  <data name="并管理课本即可开始使用" xml:space="preserve"><value>and manage its books to get started</value></data>
+  <data name="并管理课本即可开始使用" xml:space="preserve"><value>, and manage its books to get started.</value></data>
   <data name="首次使用" xml:space="preserve"><value>Getting started</value></data>
   <data name="恢复数据说明" xml:space="preserve"><value>Copy your backup file over the current data file. You may need to close the app first. Automatic restore will be supported in a future release.</value></data>
   <data name="备份成功说明" xml:space="preserve"><value>All data was backed up to the Downloads folder. File: {0}</value></data>
@@ -175,18 +175,18 @@
   <data name="字库导入标题" xml:space="preserve"><value>Import word lists:</value></data>
   <data name="语音工具标题" xml:space="preserve"><value>Text to speech:</value></data>
   <data name="帮助页面说明" xml:space="preserve"><value>Help information</value></data>
-  <data name="课本平台说明" xml:space="preserve"><value>Primary and secondary school textbooks are available from</value></data>
+  <data name="课本平台说明" xml:space="preserve"><value>Primary and secondary school textbooks are available from </value></data>
   <data name="平台课本说明" xml:space="preserve"><value>. The platform provides textbook PDFs. Copy the vocabulary list from a downloaded book and import it into this app.</value></data>
   <data name="国家中小学智慧教育平台" xml:space="preserve"><value>National Smart Education Platform</value></data>
   <data name="拼音转换说明" xml:space="preserve"><value>You can also use</value></data>
   <data name="汉字转拼音工具" xml:space="preserve"><value>Chinese-to-pinyin</value></data>
-  <data name="拼音转换结束" xml:space="preserve"><value>and Excel to convert and import the content yourself.</value></data>
+  <data name="拼音转换结束" xml:space="preserve"><value> and Excel to convert and import the content yourself.</value></data>
   <data name="文字转拼音工具" xml:space="preserve"><value>Text to Pinyin (ChineseConverter)</value></data>
-  <data name="语音合成说明" xml:space="preserve"><value>After selecting the words for practice, click</value></data>
-  <data name="复制词语按钮" xml:space="preserve"><value>Copy words</value></data>
-  <data name="语音合成后续说明" xml:space="preserve"><value>to copy them to the clipboard. Then use this website to generate standard pronunciations, download them, and share them with the learner:</value></data>
+  <data name="语音合成说明" xml:space="preserve"><value>After selecting the words for practice, click </value></data>
+  <data name="复制词语按钮" xml:space="preserve"><value>Copy entries</value></data>
+  <data name="语音合成后续说明" xml:space="preserve"><value> to copy them to the clipboard. Then use this website to generate standard pronunciations, download them, and share them with the learner:</value></data>
   <data name="文字转语音工具" xml:space="preserve"><value>Text to speech</value></data>
-  <data name="当前版本" xml:space="preserve"><value>Version: 2.0.9</value></data>
+  <data name="当前版本" xml:space="preserve"><value>Version: {0}</value></data>
   <data name="没有检查" xml:space="preserve"><value>Not practiced</value></data>
   <data name="检查全对" xml:space="preserve"><value>All correct</value></data>
   <data name="上次错误" xml:space="preserve"><value>Last attempt incorrect</value></data>
@@ -219,9 +219,9 @@
   <data name="查询词条及其检查记录。" xml:space="preserve"><value>Search entries and their practice records.</value></data>
   <data name="准备听写本页" xml:space="preserve"><value>Prepare this page for dictation</value></data>
   <data name="取消听写本页" xml:space="preserve"><value>Clear dictation selection on this page</value></data>
-  <data name="字库转换请求开头" xml:space="preserve"><value>Please provide the textbook</value></data>
+  <data name="字库转换请求开头" xml:space="preserve"><value>Please provide the textbook </value></data>
   <data name="出版商和出版年月" xml:space="preserve"><value>publisher and publication date</value></data>
-  <data name="字库转换请求科目" xml:space="preserve"><value> and</value></data>
+  <data name="字库转换请求科目" xml:space="preserve"><value>, and </value></data>
   <data name="科目" xml:space="preserve"><value>subject</value></data>
   <data name="字库转换请求后缀" xml:space="preserve"><value>, then add me on WeChat:</value></data>
   <data name="字库转换请求结尾" xml:space="preserve"><value>. I can then convert it to a word list supported by this app.</value></data>

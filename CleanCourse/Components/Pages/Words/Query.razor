@@ -30,7 +30,7 @@
                     <select @bind="Model.Unit" class="form-select">
                         @foreach (var unit in Units)
                         {
-                            <option value="@unit.Key">@T["第几课", unit.Value]</option>
+                            <option value="@unit.Key">@(unit.Key == 0 ? T["全部"].Value : T["第几课", unit.Value].Value)</option>
                         }
                     </select>
                 </td>
@@ -85,7 +85,7 @@ else
                         <td>@word.Explanation</td>
                         <td>@string.Join("；", word.Extensions.Select(extension => $"{extension.Name}: {extension.Content}"))</td>
                         <td>@T[word.Source]</td>
-                        <td>@T["第几课", word.Unit]</td>
+                        <td>@(word.Unit == 0 ? T["全部"].Value : T["第几课", word.Unit].Value)</td>
                         <td><a href="/books/@word.BookId/info" class="text-info">@word.Book.ShortName</a></td>
                         <td>
                             <a href="/books/@bookId/words/@(word.WordId)/update" class="btn btn-outline-primary m-1">@T["更新"]</a>

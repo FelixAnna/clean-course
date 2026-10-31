@@ -105,9 +105,9 @@
   <data name="更多设置" xml:space="preserve"><value>更多设置</value></data>
   <data name="首次使用指引" xml:space="preserve"><value>* 首次使用请先</value></data>
   <data name="创建课本" xml:space="preserve"><value>创建课本</value></data>
-  <data name="然后下载导入字库" xml:space="preserve"><value>，然后点击字库，按提示下载并导入</value></data>
+  <data name="然后下载导入字库" xml:space="preserve"><value>，然后点击字库，按提示下载并导入。</value></data>
   <data name="创建教材" xml:space="preserve"><value>创建教材</value></data>
-  <data name="并管理课本即可开始使用" xml:space="preserve"><value>，然后管理课本即可开始使用</value></data>
+  <data name="并管理课本即可开始使用" xml:space="preserve"><value>，然后管理课本即可开始使用。</value></data>
   <data name="首次使用" xml:space="preserve"><value>首次使用</value></data>
   <data name="恢复数据说明" xml:space="preserve"><value>请将备份的数据文件复制到当前数据文件位置并覆盖。覆盖时可能需要先退出程序；自动恢复功能将在后续版本支持。</value></data>
   <data name="备份成功说明" xml:space="preserve"><value>所有数据已备份到下载（Download）文件夹，文件名：{0}</value></data>
@@ -184,7 +184,7 @@
   <data name="复制词语按钮" xml:space="preserve"><value>复制词语</value></data>
   <data name="语音合成后续说明" xml:space="preserve"><value>按钮复制到剪贴板，然后使用以下网址自动转换为标准发音，再下载和发送给孩子听写：</value></data>
   <data name="文字转语音工具" xml:space="preserve"><value>文字转语音</value></data>
-  <data name="当前版本" xml:space="preserve"><value>当前版本：2.0.9</value></data>
+  <data name="当前版本" xml:space="preserve"><value>当前版本：{0}</value></data>
   <data name="没有检查" xml:space="preserve"><value>没有检查</value></data>
   <data name="检查全对" xml:space="preserve"><value>检查全对</value></data>
   <data name="上次错误" xml:space="preserve"><value>上次错误</value></data>
