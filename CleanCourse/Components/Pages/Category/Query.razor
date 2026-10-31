@@ -5,11 +5,11 @@
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 
-<h3>教材</h3>
+<h3>@T["教材"]</h3>
 
 <p>
-    这里显示所有已登记的教材信息。
-    <a href="/bookCategories/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
+    @T["管理教材说明"]
+    <a href="/bookCategories/add" class="btn btn-outline-primary" data-mdb-ripple-init>@T["新增"]</a>
 </p>
 <hr class="hr" />
 
@@ -22,7 +22,7 @@ else
     @if (currentItems.Count == 0)
     {
         <p>
-            <em>空空如也，您可以<a href="/bookCategories/add" class="link-primary">新增</a>教材</em>
+            <em>@T["空空如也"]，<a href="/bookCategories/add" class="link-primary">@T["新增"]</a> @T["教材。"]</em>
         </p>
     }
     else
@@ -31,8 +31,8 @@ else
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>教材名</th>
-                    <th>操作</th>
+                    <th>@T["教材名"]</th>
+                    <th>@T["操作"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -47,17 +47,17 @@ else
                             <a href="/bookCategories/@(category.Id)/info">@category.BookCategoryFullName</a>
                             @if (category.Selected == true)
                             {
-                                <span class="default-dot default-dot-book" title="当前默认教材" aria-label="当前默认教材"></span>
+                                <span class="default-dot default-dot-book" title="@T["当前默认教材"]" aria-label="@T["当前默认教材"]"></span>
                             }
                         </td>
                         <td>
-                            <a href="/bookCategories/@(category.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
-                            <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">更新</a>
+                            <a href="/bookCategories/@(category.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>@T["管理课本"]</a>
+                            <a href="/bookCategories/@(category.Id)/update" class="btn btn-outline-primary">@T["更新"]</a>
                             @if (!category.Selected)
                             {
                                 <span class="px-1"></span>
                                 <button @onclick="@(e => Select(category.Id, category.Id, category.CategoryName))" class="btn btn-set-default m-1">
-                                    设为默认
+                                    @T["设为默认"]
                                 </button>
                             }
                     <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />

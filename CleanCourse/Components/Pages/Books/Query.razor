@@ -6,17 +6,17 @@
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 
-<h3>课本</h3>
+<h3>@T["课本"]</h3>
 
 <p>
-    这里显示所有已登记的课本信息。
-    <a href="/books/add" class="btn btn-outline-primary" data-mdb-ripple-init>新增</a>
+    @T["管理课本说明"]
+    <a href="/books/add" class="btn btn-outline-primary" data-mdb-ripple-init>@T["新增"]</a>
 </p>
 <hr class="hr" />
 
 @if (result == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@T["加载中"]</em></p>
 }
 else
 {
@@ -29,33 +29,33 @@ else
                 <tr class="form-group">
                     <td>
                         <label class="form-label">
-                            年级：
+                            @T["年级"]
                         </label>
                         <select @bind="Model.Grade" class="form-select">
                             @foreach (var grade in Grades)
                             {
-                                <option value="@grade">@grade</option>
+                                <option value="@grade">@T[grade]</option>
                             }
                         </select>
                     </td>
                     <td>
                         <label class="form-label">
-                            学期：
+                            @T["学期"]
                         </label>
                         <select @bind="Model.Semester" class="form-select">
                             @foreach (var semester in Semesters)
                             {
-                                <option value="@semester">@semester</option>
+                                <option value="@semester">@T[semester]</option>
                             }
                         </select>
                     </td>
                     <td>
-                        <label class="form-label">课本：</label>
+                        <label class="form-label">@T["课本"]</label>
                         <InputText @bind-Value="Model!.BookName" class="form-control rounded" />
                     </td>
                     <td>
                         <label class="form-label"></label>
-                        <button type="submit" class="btn btn-primary form-control mx-3" data-mdb-ripple-init>查询</button>
+                        <button type="submit" class="btn btn-primary form-control mx-3" data-mdb-ripple-init>@T["查询"]</button>
                     </td>
                 </tr>
             </tbody>
@@ -65,12 +65,12 @@ else
         <thead>
             <tr>
                 <th>#</th>
-                <th>书名</th>
-                <th>版本</th>
-                <th>出版年份</th>
-                <th>年级</th>
-                <th>学期</th>
-                <th>操作</th>
+                <th>@T["书名"]</th>
+                <th>@T["版本"]</th>
+                <th>@T["出版年份"]</th>
+                <th>@T["年级"]</th>
+                <th>@T["学期"]</th>
+                <th>@T["操作"]</th>
             </tr>
         </thead>
         <tbody>
@@ -84,13 +84,13 @@ else
                     <td>
                         <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                     </td>
-                    <td>@book.Version</td>
+                    <td>@T[book.Version]</td>
                     <td>@book.AuditYear</td>
-                    <td>@book.Grade</td>
-                    <td>@book.Semester</td>
+                    <td>@T[book.Grade]</td>
+                    <td>@T[book.Semester]</td>
                     <td>
-                        <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
-                        <a href="/books/@(book.BookId)/update" class="btn btn-outline-primary">更新</a>
+                        <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>@T["字库"]</a>
+                        <a href="/books/@(book.BookId)/update" class="btn btn-outline-primary">@T["更新"]</a>
                     </td>
                 </tr>
             }

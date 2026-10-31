@@ -6,9 +6,8 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager navigationManager
 
-<h3>课本</h3>
-
-<p>课本信息。</p>
+<h3>@T["课本"]</h3>
+<p>@T["课本信息"]</p>
 
 <hr class="hr" />
 
@@ -18,30 +17,30 @@
         <span class="text-primary">@Model.BookId</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">书名：</label>
+        <label class="form-label">@T["书名"]</label>
         <span class="text-primary">@Model.ShortName</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">审核年份:</label>
+        <label class="form-label">@T["审核年份"]：</label>
         <span class="text-primary">@Model.AuditYear</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">版本:</label>
-        <span class="text-primary">@Model.Version</span>
+        <label class="form-label">@T["版本"]</label>
+        <span class="text-primary">@T[Model.Version]</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">年级:</label>
-        <span class="text-primary">@Model.Grade</span>
+        <label class="form-label">@T["年级"]</label>
+        <span class="text-primary">@T[Model.Grade]</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">学期:</label>
-        <span class="text-primary">@Model.Semester</span>
+        <label class="form-label">@T["学期"]</label>
+        <span class="text-primary">@T[Model.Semester]</span>
     </div>
     <div class="col-md-5">
-        <a href="/books/@(Model.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
-        <a href="/books/@(Model.BookId)/update" class="btn btn-outline-primary">更新</a>
+        <a href="/books/@(Model.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>@T["字库"]</a>
+        <a href="/books/@(Model.BookId)/update" class="btn btn-outline-primary">@T["更新"]</a>
         <button @onclick="@(e => Delete())" class="btn btn-outline-danger">
-            删除
+            @T["删除"]
         </button>
     </div>
 </div>
@@ -75,7 +74,7 @@
 
     private async Task Delete()
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"删除课本也会清除所有关联词条和宝宝的检查记录，您确定要删除课本： '{Model.FriendlyName}' 吗?"))
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", T["删除课本确认", Model.FriendlyName].Value))
             return;
 
         await service.DeleteAsync(id);

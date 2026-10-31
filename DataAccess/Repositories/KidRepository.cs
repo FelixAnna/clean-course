@@ -57,13 +57,15 @@ public class KidRepository(AbstractCourseContext courseContext) : IKidRepository
     public async Task<bool> SetDefaultAsync(int kidId)
     {
         var allKids = await courseContext.Kids.ToArrayAsync();
-        foreach (var kid in allKids)
+        if (allKids.All(kid => kid.KidId != kidId))
         {
-            if (kid.KidId == kidId) kid.Selected = true;
-            else kid.Selected = false;
+            return false;
         }
 
-        courseContext.Kids.UpdateRange(allKids);
+        foreach (var kid in allKids)
+        {
+            kid.Selected = kid.KidId == kidId;
+        }
 
         await courseContext.SaveChangesAsync();
         return true;

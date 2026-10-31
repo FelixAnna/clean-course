@@ -11,12 +11,12 @@
 @inject AppState appState
 @inject NavigationManager navigationManager
 
-<h3>检查记录</h3>
+<h3>@T["检查记录"]</h3>
 
 <p>
-    查询词条及其检查记录。
-    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>导入</a>
-    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>导出</a>
+    @T["查询词条及其检查记录。"]
+    <a href="/history/import" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>@T["导入"]</a>
+    <a href="/history/export" class="btn btn-outline-primary" data-mdb-ripple-init>@T["导出"]</a>
 </p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="SearchWords">
@@ -29,7 +29,7 @@
             <tr class="form-group">
                 <td class="m-2">
                     <div class="flex-row">
-                        <label class="form-label">课程：</label>
+                        <label class="form-label">@T["课程"]</label>
                         <select @bind="Model.BookId" class="form-select small">
                             @foreach (var course in Courses)
                             {
@@ -41,7 +41,7 @@
                 <td>
                     <div class="flex-row">
                         <label class="form-label">
-                            单元：
+                            @T["单元"]
                         </label>
                         <select @bind="Model.Unit" class="form-select">
                             @foreach (var unit in Units)
@@ -53,7 +53,7 @@
                 </td>
                 <td class="m-2">
                     <div class="flex-row">
-                        <label class="form-label">检查情况：</label>
+                        <label class="form-label">@T["检查情况"]</label>
 
                         <select @bind="Model.CheckingResult" class="form-select" aria-describedby="search-addon">
                             @{
@@ -61,7 +61,7 @@
                             }
                             @foreach (var status in CheckingStatuses)
                             {
-                                <option value="@index">@status</option>
+                                <option value="@index">@T[status]</option>
                                 index++;
                             }
                         </select>
@@ -71,7 +71,7 @@
             <tr class="form-group">
                 <td class="m-2">
                     <div>
-                        <label class="form-label">词条：</label>
+                        <label class="form-label">@T["词条"]</label>
                         <InputText @bind-Value="Model!.Keyword" class="form-control rounded" />
                     </div>
                 </td>
@@ -79,17 +79,17 @@
                     <div>
                         <label class="form-label"></label>
                         <div class="form-floating">
-                            <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
+                            <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>@T["查询"]</button>
                             @if (IsReadyToCheckAll)
                             {
                                 <button type="button" @onclick="@(e => ToCheckAll())" class="btn btn-outline-primary m-2">
-                                    准备听写本页
+                                    @T["准备听写本页"]
                                 </button>
                             }
                             else
                             {
                                 <button type="button" @onclick="@(e => ToUnCheckAll())" class="btn btn-secondary m-2">
-                                    取消听写本页
+                                    @T["取消听写本页"]
                                 </button>
                             }
                         </div>
@@ -101,7 +101,7 @@
                         <div class="form-floating">
                             @if (toCheckedWords.Any())
                             {
-                                <a href="/history/add" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>去听写</a>
+                                <a href="/history/add" class="btn btn-outline-primary mx-2" data-mdb-ripple-init>@T["去听写"]</a>
                             }
                         </div>
                     </div>
@@ -112,7 +112,7 @@
 </EditForm>
 @if (result == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@T["加载中"]</em></p>
 }
 else
 {
@@ -121,11 +121,11 @@ else
         <thead class="thead-light">
             <tr>
                 <th class="w-5">#</th>
-                <th class="w-20">词条</th>
-                <th class="w-20">备注</th>
-                <th class="w-10">来源</th>
-                <th class="w-20">课程/单元</th>
-                <th class="w-15">检查情况</th>
+                <th class="w-20">@T["词条"]</th>
+                <th class="w-20">@T["备注"]</th>
+                <th class="w-10">@T["来源列"]</th>
+                <th class="w-20">@T["课程"]/@T["单元"]</th>
+                <th class="w-15">@T["检查情况"]</th>
                 <th class="w-10"></th>
             </tr>
         </thead>
@@ -139,8 +139,8 @@ else
                     <td>@(x++)</td>
                     <td><a href="/history/@word.WordId/info" class="text-info">@word.Content</a></td>
                     <td>@word.Explanation</td>
-                    <td>@word.Source</td>
-                    <td>@word.Book.FriendlyShortName/@word.Unit</td>
+                    <td>@T[word.Source]</td>
+                    <td>@T[word.Book.BookName] (@T[word.Book.Grade] @T[word.Book.Semester])/@T["第几课", word.Unit]</td>
                     <td>
                         @word.CheckingHistorySummary
                 </td>
@@ -148,13 +148,13 @@ else
                         @if (!toCheckedWords.Contains(word.WordId))
                         {
                             <button @onclick="@(e => ToCheck(word.WordId))" class="btn btn-success btn-sm">
-                                准备
+                                @T["准备"]
                             </button>
                         }
                         else
                         {
                             <button @onclick="@(e => CancelCheck(word.WordId))" class="btn btn-secondary btn-sm">
-                                取消
+                                @T["取消"]
                             </button>
                         }
                     </td>
@@ -216,10 +216,10 @@ else
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
         var books = mappings.LinkedBooks.ToList();
         Courses = books.Where(x => x.BookId > 0).Distinct().ToDictionary(x => x.BookId, y => y.FriendlyShortName);
-        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, T["全部"].Value)).ToDictionary();
 
-        Units = books.SelectMany(x => x.Units).Where(x => x > 0).Distinct().OrderBy(x => x).ToDictionary(x => x, y => $"第{y}课");
-        Units = Units.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+        Units = books.SelectMany(x => x.Units).Where(x => x > 0).Distinct().OrderBy(x => x).ToDictionary(x => x, y => T["第几课", y].Value);
+        Units = Units.Prepend(new KeyValuePair<int, string>(-1, T["全部"].Value)).ToDictionary();
 
         await Search();
     }

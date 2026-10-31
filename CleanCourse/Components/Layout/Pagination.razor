@@ -7,7 +7,7 @@
                 <button type="button" class="page-link" @onclick="() => PageChanged.InvokeAsync(CurrentPage - 1)">&lt;&lt;</button>
             </li>
         }
-        <li class="page-item"><span class="page-link">第 @CurrentPage/@TotalPages 页</span></li>
+        <li class="page-item"><span class="page-link">@T["第几页", CurrentPage, TotalPages]</span></li>
         @if (CurrentPage < TotalPages)
         {
             <li class="page-item">

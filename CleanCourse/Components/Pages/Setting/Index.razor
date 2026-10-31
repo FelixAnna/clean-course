@@ -7,20 +7,20 @@
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 
-<h3>设置</h3>
+<h3>@T["设置"]</h3>
 
-<p>查看和修改设置</p>
+<p>@T["设置说明"]</p>
 <hr class="hr" />
 @if(string.IsNullOrEmpty(dataFileLocation))
 {
-    <p><em> Loading...</em></p>
+    <p><em>@T["加载中"]</em></p>
 }
 else
 {
     <table class= "row gy-3 pe-1">
         <tr class= "form-group">
             <td>
-                <label class= "col-form-label"> 每页显示：</label>
+                <label class="col-form-label">@T["每页显示"]</label>
             </td>
             <td>
                 <div class= "col-form-label">
@@ -32,14 +32,14 @@ else
                         +
                     </text>
                     <text class="text-info small">
-                        （表格每页最多显示条数）
+                        @T["表格每页最多显示条数"]
                     </text>
                 </div>
             </td>
         </tr>
         <tr class= "form-group">
             <td>
-                <label class= "col-form-label"> 最少检查：</label>
+                <label class="col-form-label">@T["最少检查"]</label>
             </td>
             <td>
                 <div class= "col-form-label">
@@ -51,14 +51,14 @@ else
                         +
                     </text>
                     <text class="text-info small">
-                        （每个词条最少要检查的次数）
+                        @T["每个词条最少要检查的次数"]
                     </text>
                 </div>
             </td>
         </tr>
         <tr class= "form-group">
             <td>
-                <label class="col-form-label"> 最近检查：</label>
+                <label class="col-form-label">@T["最近检查"]</label>
             </td>
             <td>
                 <div class= "col-form-label">
@@ -70,14 +70,14 @@ else
                         +
                     </text>
                     <text class="text-info small">
-                        （每个词条最近检查需要全对的次数）
+                        @T["最近检查全对次数"]
                     </text>
                 </div>
             </td>
         </tr>
         <tr class= "form-group row">
             <td>
-                <label class= "col-form-label"> 数据文件：</label>
+                <label class="col-form-label">@T["数据文件"]</label>
             </td>
             <td>
                 <div class= "col-form-label">
@@ -92,10 +92,10 @@ else
             <td>
                 <div class= "col-form-label">
                     <text @onclick = "@(e => Backup())" class= "btn btn-primary btn-sm">
-                        备份
+                        @T["备份"]
                     </text>
                     <text @onclick = "@(e => Restore())" class= "btn btn-secondary btn-sm">
-                        恢复
+                        @T["恢复"]
                     </text>
                 </div>
             </td>
@@ -111,10 +111,10 @@ else
 
     protected override void OnInitialized()
     {
-        dataFileLocation = Preferences.Get(Constants.DBFileLocationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
         pageSize = appState.DefaultPageSize;
-        checkingThreshold = appState.DefaultRecentThreshold;
+        checkingThreshold = appState.DefaultCheckingThreshold;
         recentThreshold = appState.DefaultRecentThreshold;
+        dataFileLocation = Preferences.Get(Constants.DBFileLocationKey, Path.Combine(FileSystem.Current.AppDataDirectory, Constants.DefaultDBFileName));
     }
 
     private void ChangePageSize(int delta)
@@ -167,7 +167,7 @@ else
 
     private async Task Restore()
     {
-        await JSRuntime.InvokeAsync<object>("alert", "复制之前备份的数据文件到目前的数据文件位置，重命名以覆盖其即可（覆盖时你可能需要暂时退出本程序，自动恢复后续会支持）。");
+        await JSRuntime.InvokeAsync<object>("alert", T["恢复数据说明"].Value);
     }
 
     private Stream GetFileStream()
@@ -187,7 +187,7 @@ else
         await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
 
         File.Delete(newFileName);
-        await JSRuntime.InvokeAsync<object>("alert", "已备份所有数据到下载(Download)文件夹, 文件名: " + fileName);
+        await JSRuntime.InvokeAsync<object>("alert", T["备份成功说明", fileName].Value);
     }
 }
 

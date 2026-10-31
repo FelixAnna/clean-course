@@ -11,9 +11,8 @@
 @inject NavigationManager navigationManager
 
 
-<h3>检查记录</h3>
-
-<p>为当前教材批量导入词条的检查记录。</p>
+<h3>@T["检查记录"]</h3>
+<p>@T["批量导入检查记录说明"]</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="ImportHistory">
     <DataAnnotationsValidator />
@@ -23,7 +22,7 @@
         <tr class="form-group">
             <td class="m-2">
                 <div class="flex-row">
-                    <label class="form-label">课程：</label>
+                    <label class="form-label">@T["课程"]</label>
                     <select @bind="Model.BookId" class="form-select small">
                         @foreach (var course in Courses)
                         {
@@ -34,12 +33,12 @@
             </td>
             <td>
                 <label class="form-label">
-                    处理方式：
+                    @T["处理方式"]
                 </label>
                 <select @bind="Model.Overwrite" class="form-select">
                     @foreach (var option in ImportOptions)
                     {
-                        <option value="@option.Key">@option.Value</option>
+                        <option value="@option.Key">@T[option.Value]</option>
                     }
                 </select>
             </td>
@@ -47,8 +46,8 @@
     </table>
              <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />
     <div class="form-group">
-        <label class="form-label">词条的检查记录：</label>
-        <textarea @bind="Model!.Content" class="form-control rounded" rows="8" cols="100" placeholder="请从Excel/Csv复制多行粘贴到这里，每一行分别为：序号(可空)\t词条\t注音(翻译)\t详细(可空)\t单元\t课程（可空)\t1 / 其他数字 （1表示正确的检查记录，其他表示错误）\t1 / 其他数字\t。。。" />
+        <label class="form-label">@T["词条检查记录"]</label>
+        <textarea @bind="Model!.Content" class="form-control rounded" rows="8" cols="100" placeholder="@T["检查记录导入说明"]" />
     </div>
     <table class="table">
         <tr class="form-group">
@@ -56,7 +55,7 @@
                 <label class="form-label"></label>
                 <div class="form-floating">
                     <button type="button" @onclick="@(e => Preview())" class="form-control btn btn-outline-info m-1">
-                        预览
+                        @T["预览"]
                     </button>
                 </div>
             </td>
@@ -66,7 +65,7 @@
                 <label class="form-label"></label>
                 <div class="form-floating">
                     <button type="button" @onclick="@(e => Clean())" class="form-control btn btn-outline-info m-2">
-                        清除
+                        @T["清除"]
                     </button>
                 </div>
             </td>
@@ -75,7 +74,7 @@
                 <label class="form-label"></label>
                 <div class="form-floating">
                     <button type="submit" class="form-control btn btn-outline-primary m-1" data-mdb-ripple-init>
-                        保存
+                        @T["保存"]
                     </button>
                 </div>
             </td>
@@ -90,11 +89,11 @@
         <thead class="thead-light">
             <tr>
                 <th>#</th>
-                <th>词条</th>
-                <th>备注</th>
-                <th>单元</th>
-                <th>课程</th>
-                <th>检查情况</th>
+                <th>@T["词条"]</th>
+                <th>@T["备注"]</th>
+                <th>@T["单元"]</th>
+                <th>@T["课程"]</th>
+                <th>@T["检查情况"]</th>
             </tr>
         </thead>
         <tbody>
@@ -107,7 +106,7 @@
                     <td>@(x++)</td>
                     <td>@word.Content</td>
                     <td>@word.Explanation</td>
-                    <td>@word.Unit</td>
+                    <td>@T["第几课", word.Unit]</td>
                     <td>@word.Book.FriendlyName</td>
                     <td>@word.CheckingHistorySummary</td>
                 </tr>
@@ -147,7 +146,7 @@
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
         Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.FriendlyShortName);
-        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, T["全部"].Value)).ToDictionary();
 
         pageSize = appState.DefaultPageSize;
     }

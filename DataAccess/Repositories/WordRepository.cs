@@ -24,6 +24,7 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
     public async Task<IList<WordEntity>> FindAsync(SearchWordsCriteria request)
     {
         var words = courseContext.Words
+            .AsNoTracking()
             .Include(x => x.Book)
             .Include(x => x.Extensions)
             .AsQueryable();
@@ -53,59 +54,87 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
         if (request.KidId > 0)
         {
-            words = words.AsNoTracking().Include(x => x.CheckingHistories.Where(y => y.KidId == request.KidId));
-        }
+            var kidId = request.KidId;
+            words = words.Include(x => x.CheckingHistories.Where(history => history.KidId == kidId));
 
-        IList<WordEntity> results = await words.ToListAsync();
-        if (request.KidId > 0)
-        {
-
-            if (request is SearchWordAndHistoryCriteria historyRequest)
+            if (request is SearchWordAndHistoryCriteria historyRequest
+                && Enum.IsDefined(typeof(ECheckingResult), historyRequest.CheckingResult)
+                && (ECheckingResult)historyRequest.CheckingResult != ECheckingResult.None)
             {
-                if ((ECheckingResult)historyRequest.CheckingResult != ECheckingResult.None)
-                {
-                    switch ((ECheckingResult)historyRequest.CheckingResult)
-                    {
-                        case ECheckingResult.Unchecked:
-                            results = results.Where(x => !x.CheckingHistories.Any()).ToList();
-                            break;
-                        case ECheckingResult.Success:
-                            results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.All(y => y.IsCorrect)).ToList();
-                            break;
-                        case ECheckingResult.LastFailed:
-                            results = results.Where(x => x.CheckingHistories.OrderByDescending(y => y.CreatedTime).FirstOrDefault() is { IsCorrect: false }).ToList();
-                            break;
-                        case ECheckingResult.UsedFailed:
-                            results = results.Where(x => x.CheckingHistories.Any(y => !y.IsCorrect)).ToList();
-                            break;
-                        case ECheckingResult.InFrequent:
-                            var threshold = CheckingThreshold();
-                            results = results.Where(x => x.CheckingHistories.Count <= threshold && x.CheckingHistories.Count > 0).ToList();
-                            break;
-                        case ECheckingResult.RecentFailed:
-                            var threshold2 = RecentThreshold();
-                            results = results.Where(x => x.CheckingHistories.Any() && x.CheckingHistories.OrderByDescending(y => y.CreatedTime).Take(threshold2).Any(z => !z.IsCorrect)).ToList();
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                words = FilterByCheckingResult(
+                    words,
+                    kidId,
+                    (ECheckingResult)historyRequest.CheckingResult);
             }
         }
 
         if (!string.IsNullOrEmpty(request.Keyword))
         {
-            results = results.Where(x =>
-            x.Content.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
-            || (!string.IsNullOrEmpty(x.Details) && x.Details!.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
-            || x.Explanation.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
-            || x.Source.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
-            || x.Extensions.Any(extension => extension.Name.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase)
-                || extension.Content.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
-            ).ToList();
+            var pattern = $"%{EscapeLikePattern(request.Keyword)}%";
+            words = words.Where(word =>
+                EF.Functions.Like(word.Content, pattern, "\\")
+                || (word.Details != null && EF.Functions.Like(word.Details, pattern, "\\"))
+                || (word.Explanation != null && EF.Functions.Like(word.Explanation, pattern, "\\"))
+                || (word.Source != null && EF.Functions.Like(word.Source, pattern, "\\"))
+                || word.Extensions.Any(extension =>
+                    EF.Functions.Like(extension.Name, pattern, "\\")
+                    || EF.Functions.Like(extension.Content, pattern, "\\")));
         }
 
-        return results.ToList();
+        return await words.ToListAsync();
+    }
+
+    private IQueryable<WordEntity> FilterByCheckingResult(
+        IQueryable<WordEntity> words,
+        int kidId,
+        ECheckingResult checkingResult)
+    {
+        return checkingResult switch
+        {
+            ECheckingResult.Unchecked => words.Where(word =>
+                !word.CheckingHistories.Any(history => history.KidId == kidId)),
+            ECheckingResult.Success => words.Where(word =>
+                word.CheckingHistories.Any(history => history.KidId == kidId)
+                && !word.CheckingHistories.Any(history => history.KidId == kidId && !history.IsCorrect)),
+            ECheckingResult.LastFailed => words.Where(word =>
+                word.CheckingHistories
+                    .Where(history => history.KidId == kidId)
+                    .OrderByDescending(history => history.CreatedTime)
+                    .Select(history => (bool?)history.IsCorrect)
+                    .FirstOrDefault() == false),
+            ECheckingResult.UsedFailed => words.Where(word =>
+                word.CheckingHistories.Any(history => history.KidId == kidId && !history.IsCorrect)),
+            ECheckingResult.InFrequent => FilterInfrequentlyChecked(words, kidId),
+            ECheckingResult.RecentFailed => FilterRecentFailures(words, kidId),
+            _ => words,
+        };
+    }
+
+    private IQueryable<WordEntity> FilterInfrequentlyChecked(IQueryable<WordEntity> words, int kidId)
+    {
+        var checkingThreshold = CheckingThreshold();
+        return words.Where(word =>
+            word.CheckingHistories.Count(history => history.KidId == kidId) <= checkingThreshold
+            && word.CheckingHistories.Any(history => history.KidId == kidId));
+    }
+
+    private IQueryable<WordEntity> FilterRecentFailures(IQueryable<WordEntity> words, int kidId)
+    {
+        var recentThreshold = Math.Max(0, RecentThreshold());
+        return words.Where(word =>
+            word.CheckingHistories
+                .Where(history => history.KidId == kidId)
+                .OrderByDescending(history => history.CreatedTime)
+                .Take(recentThreshold)
+                .Any(history => !history.IsCorrect));
+    }
+
+    private static string EscapeLikePattern(string value)
+    {
+        return value
+            .Replace("\\", "\\\\")
+            .Replace("%", "\\%")
+            .Replace("_", "\\_");
     }
 
     public async Task<IEnumerable<WordEntity>> AddAsync(params AddWordModel[] models)
@@ -181,7 +210,6 @@ public class WordRepository(AbstractCourseContext courseContext, Func<int> check
 
     public async Task UpdateAllAsync(params WordEntity[] entities)
     {
-        courseContext.Words.AttachRange(entities);
         courseContext.Words.UpdateRange(entities);
         await courseContext.SaveChangesAsync();
     }

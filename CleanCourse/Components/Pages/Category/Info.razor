@@ -9,9 +9,8 @@
 @inject IJSRuntime JSRuntime
 @inject NavigationManager navigationManager
 
-<h3>教材</h3>
-
-<p>教材信息。</p>
+<h3>@T["教材"]</h3>
+<p>@T["教材信息"]</p>
 
 <hr class="hr" />
 
@@ -21,20 +20,20 @@
         <span class="text-primary">@Model.Id</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">教材版本：</label>
+        <label class="form-label">@T["教材版本"]</label>
         <span class="text-primary">@Model.CategoryName</span>
         @if (Model.Selected)
         {
-            <span class="default-dot default-dot-book" title="当前默认教材" aria-label="当前默认教材"></span>
+            <span class="default-dot default-dot-book" title="@T["当前默认教材"]" aria-label="@T["当前默认教材"]"></span>
         }
     </div>
     <div class="col-md-5">
-        <a href="/bookCategories/@(Model.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>管理课本</a>
-        <a href="/bookCategories/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
+        <a href="/bookCategories/@(Model.Id)/mappings/add" class="btn btn-outline-primary" data-mdb-ripple-init>@T["管理课本"]</a>
+        <a href="/bookCategories/@(Model.Id)/update" class="btn btn-outline-primary">@T["更新"]</a>
         @if (!Model.Selected)
         {
             <button @onclick="@(e => Delete())" class="btn btn-outline-danger">
-                删除
+                @T["删除"]
             </button>
         }
     </div>
@@ -45,7 +44,7 @@
 
     @if (MappingModel.LinkedBooks.Count == 0)
     {
-        <p><em>您还没有添加任何课本。，您可以去<a href="/bookCategories/@(Model.Id)/mappings/add" class="link-primary">管理课本</a></em></p>
+        <p><em>@T["您还没有添加任何课本。"] <a href="/bookCategories/@(Model.Id)/mappings/add" class="link-primary">@T["管理课本"]</a></em></p>
     }
     else
     {
@@ -53,12 +52,12 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>书名</th>
-                    <th>版本</th>
-                    <th>出版年份</th>
-                    <th>年级</th>
-                    <th>学期</th>
-                    <th>操作</th>
+                    <th>@T["书名"]</th>
+                    <th>@T["版本"]</th>
+                    <th>@T["出版年份"]</th>
+                    <th>@T["年级"]</th>
+                    <th>@T["学期"]</th>
+                    <th>@T["操作"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,14 +71,14 @@
                         <td>
                             <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                         </td>
-                        <td>@book.Version</td>
+                        <td>@T[book.Version]</td>
                         <td>@book.AuditYear</td>
-                        <td>@book.Grade</td>
-                        <td>@book.Semester</td>
+                        <td>@T[book.Grade]</td>
+                        <td>@T[book.Semester]</td>
                         <td>
-                            <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>字库</a>
+                            <a href="/books/@(book.BookId)/words" class="btn btn-outline-primary" data-mdb-ripple-init>@T["字库"]</a>
                                     <button @onclick="@(e => DeleteMapping(book.BookId))" class="btn btn-outline-danger">
-                                删除
+                                @T["删除"]
                             </button>
                         </td>
                     </tr>

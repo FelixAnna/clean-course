@@ -7,10 +7,10 @@
 
  @if (historyRecords == null)
  {
-     <h3>检查记录</h3>
-    <p>这里显示当前词条的检查记录。</p>
+     <h3>@T["检查记录"]</h3>
+    <p>@T["这里显示当前词条的检查记录。"]</p>
      <hr class="hr" />
-     <p><em>Loading...</em></p>
+     <p><em>@T["加载中"]</em></p>
  }
  else
  {
@@ -20,31 +20,31 @@
      <table class="row gy-3 pe-1">
         <tr class="form-group">
             <td class="col-md-5">
-                <label class="form-label">课程：</label>
-                <span class="text-primary"><a href="/books/@historyRecords.BookId/info" class="text-info">@historyRecords.Book.FriendlyName</a></span>
+                <label class="form-label">@T["课程"]</label>
+                <span class="text-primary"><a href="/books/@historyRecords.BookId/info" class="text-info">@GetLocalizedBookDisplayName()</a></span>
             </td>
             <td class="col-md-3">
-                <label class="form-label">教材：</label>
+                <label class="form-label">@T["教材"]</label>
                 <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
             </td>
         </tr>
         <tr class="form-group">
             <td class="col-md-3">
-                <label class="form-label">来源：</label>
-                <span class="text-primary">@historyRecords.Source</span>
+                <label class="form-label">@T["来源"]</label>
+                <span class="text-primary">@T[historyRecords.Source]</span>
             </td>
             <td class="col-md-3">
-                <label class="form-label">单元：</label>
-                <span class="text-primary">@historyRecords.Unit</span>
+                <label class="form-label">@T["单元"]</label>
+                <span class="text-primary">@T["第几课", historyRecords.Unit]</span>
             </td>
             <td class="col-md-2">
-                <a href="/books/@historyRecords?.BookId/words/@WordId/update" class="btn btn-primary m-1">更新词条>></a>
+                <a href="/books/@historyRecords?.BookId/words/@WordId/update" class="btn btn-primary m-1">@T["更新词条"]</a>
             </td>
         </tr>
          @if (!string.IsNullOrEmpty(historyRecords.Details)){
          <tr class="form-group">
              <td class="m-2">
-                 <label class="form-label">详细描述：</label>
+                 <label class="form-label">@T["详细描述"]</label>
                  <div class="text-secondary">@historyRecords.Details</div>
              </td>
          </tr>
@@ -53,7 +53,7 @@
          {
          <tr class="form-group">
              <td class="m-2">
-                 <label class="form-label">词形扩展：</label>
+                 <label class="form-label">@T["词形扩展"]</label>
                  <div class="text-secondary">@string.Join("；", historyRecords.Extensions.Select(extension => $"{extension.Name}: {extension.Content}"))</div>
              </td>
          </tr>
@@ -64,10 +64,10 @@
          <thead class="thead-dark">
              <tr>
                  <th scope="col">#</th>
-                 <th scope="col">宝宝</th>
-                 <th scope="col">结果</th>
-                 <th scope="col">备注</th>
-                 <th scope="col">记录时间</th>
+                 <th scope="col">@T["宝宝"]</th>
+                 <th scope="col">@T["结果"]</th>
+                 <th scope="col">@T["备注"]</th>
+                 <th scope="col">@T["记录时间"]</th>
                  <th></th>
              </tr>
          </thead>
@@ -80,12 +80,12 @@
                  <tr>
                      <td>@(x++)</td>
                      <td>@history.Kid.Name</td>
-                     <td>@(history.IsCorrect?"正确":"错误")</td>
-                     <td>@history.GetFormattedRemark()</td>
+                     <td>@(history.IsCorrect ? T["正确"].Value : T["错误"].Value)</td>
+                     <td>@T[history.GetFormattedRemark()]</td>
                      <td>@history.CreatedTime</td>
                      <td>
                          <button @onclick="@(e => Delete(history.Id))" class="btn btn-outline-danger">
-                             删除
+                             @T["删除"]
                          </button>
              <Pagination CurrentPage="@pageIndex" TotalPages="@totalPage" PageChanged="ChangePage" />
                      </td>
@@ -116,7 +116,7 @@
 
      private async Task Delete(int id)
      {
-         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"您确定要删除检查记录： 'No={id}' 吗?"))
+         if (!await JSRuntime.InvokeAsync<bool>("confirm", T["检查记录详情确认删除", id].Value))
              return;
 
          if (await service.DeleteAsync(id))
@@ -125,6 +125,12 @@
              Refresh(pageIndex);
          }
      }
+
+      private string GetLocalizedBookDisplayName()
+      {
+          var book = historyRecords.Book;
+          return $"{T[book.Grade].Value} {T[book.BookName].Value} {T[book.Semester].Value}({T[book.Version].Value})";
+      }
 
      private void Refresh(int page)
      {

@@ -5,13 +5,12 @@
 @inject IBookCategoryMappingService service
 @inject NavigationManager navigationManager
 
-<h3>管理课本</h3>
-
-<p>添加新的课本到当前教材里。</p>
+<h3>@T["管理课本"]</h3>
+<p>@T["添加新的课本到当前教材里。"]</p>
 
 <div class="page">
     <div class="col-md-10">
-        <label class="form-label">教材：</label>
+        <label class="form-label">@T["教材"]</label>
         <span class="text-primary"><a href="/bookCategories/@(Model.BookCategory.Id)/info">@Model.BookCategory.BookCategoryFullName</a></span>
     </div>
     
@@ -20,7 +19,7 @@
 
         @if (Model.NewBooks == null || !Model.NewBooks.Any())
         {
-            <p><em>没有可以添加的课本。</em></p>
+            <p><em>@T["没有可以添加的课本。"]</em></p>
         }
         else
         {
@@ -32,13 +31,13 @@
                         <tbody>
                             <tr class="form-group">
                                 <td class="m-2">
-                                    <label class="text-decoration-underline w-100">可添加课本列表:</label>
+                                    <label class="text-decoration-underline w-100">@T["可添加课本列表"]</label>
                                 </td>
                                 <td class="m-2">
                                     <InputText @bind-Value="Criteria!.Keywords" class="form-control roundedm m-2" />
                                 </td>
                                 <td class="m-2">
-                                    <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>查询</button>
+                                    <button type="submit" class="btn btn-primary m-3" data-mdb-ripple-init>@T["查询"]</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -49,12 +48,12 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>书名</th>
-                        <th>版本</th>
-                        <th>出版年份</th>
-                        <th>年级</th>
-                        <th>学期</th>
-                        <th>操作</th>
+                        <th>@T["书名"]</th>
+                        <th>@T["版本"]</th>
+                        <th>@T["出版年份"]</th>
+                        <th>@T["年级"]</th>
+                        <th>@T["学期"]</th>
+                        <th>@T["操作"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,13 +67,13 @@
                             <td>
                                 <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                             </td>
-                            <td>@book.Version</td>
+                            <td>@T[book.Version]</td>
                             <td>@book.AuditYear</td>
-                            <td>@book.Grade</td>
-                            <td>@book.Semester</td>
+                            <td>@T[book.Grade]</td>
+                            <td>@T[book.Semester]</td>
                             <td>
                                 <button @onclick="@(e => AttachBook(book.BookId))" class="btn btn-outline-primary">
-                                    添加
+                                    @T["添加"]
                                 </button>
                             </td>
                         </tr>
@@ -89,21 +88,21 @@
 
         @if (Model.LinkedBooks == null)
         {
-            <p><em>您还没有添加任何课本。</em></p>
+            <p><em>@T["您还没有添加任何课本。"]</em></p>
         }
         else
         {
-            <label class="text-decoration-underline">已添加课本列表:</label>
+            <label class="text-decoration-underline">@T["已添加课本列表"]</label>
             <table class="table">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>书名</th>
-                        <th>版本</th>
-                        <th>出版年份</th>
-                        <th>年级</th>
-                        <th>学期</th>
-                        <th>操作</th>
+                        <th>@T["书名"]</th>
+                        <th>@T["版本"]</th>
+                        <th>@T["出版年份"]</th>
+                        <th>@T["年级"]</th>
+                        <th>@T["学期"]</th>
+                        <th>@T["操作"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,13 +116,13 @@
                             <td>
                                 <a href="/books/@book.BookId/info" class="text-info">@book.ShortName</a>
                             </td>
-                            <td>@book.Version</td>
+                            <td>@T[book.Version]</td>
                             <td>@book.AuditYear</td>
-                            <td>@book.Grade</td>
-                            <td>@book.Semester</td>
+                            <td>@T[book.Grade]</td>
+                            <td>@T[book.Semester]</td>
                             <td>
                                 <button @onclick="@(e => DetachBook(book.BookId))" class="btn btn-outline-danger">
-                                    删除
+                                    @T["删除"]
                                 </button>
                             </td>
                         </tr>

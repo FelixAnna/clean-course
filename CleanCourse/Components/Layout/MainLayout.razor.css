@@ -6,6 +6,8 @@
 
 .sidebar {
     z-index: 3;
+    display: flex;
+    flex-direction: column;
     color: #fff;
     background:
         radial-gradient(ellipse at 12% 0%, rgba(165, 180, 252, 0.25), transparent 40%),

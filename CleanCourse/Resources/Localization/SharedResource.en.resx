@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="学习助手" xml:space="preserve"><value>Study Companion</value></data>
+  <data name="记录每一步进步" xml:space="preserve"><value>Track every step forward</value></data>
+  <data name="学习管理" xml:space="preserve"><value>LEARNING</value></data>
+  <data name="我的" xml:space="preserve"><value>Home</value></data>
+  <data name="宝宝" xml:space="preserve"><value>Children</value></data>
+  <data name="教材" xml:space="preserve"><value>Curricula</value></data>
+  <data name="课本" xml:space="preserve"><value>Books</value></data>
+  <data name="检查记录" xml:space="preserve"><value>Practice Records</value></data>
+  <data name="其他" xml:space="preserve"><value>MORE</value></data>
+  <data name="设置" xml:space="preserve"><value>Settings</value></data>
+  <data name="帮助" xml:space="preserve"><value>Help</value></data>
+  <data name="每天一点进步" xml:space="preserve"><value>A little progress every day</value></data>
+  <data name="打开导航菜单" xml:space="preserve"><value>Open navigation menu</value></data>
+  <data name="关闭导航菜单" xml:space="preserve"><value>Close navigation menu</value></data>
+  <data name="页面历史" xml:space="preserve"><value>Page history</value></data>
+  <data name="返回上一页" xml:space="preserve"><value>Go to previous page</value></data>
+  <data name="前进到下一页" xml:space="preserve"><value>Go to next page</value></data>
+  <data name="设置说明" xml:space="preserve"><value>View and change settings</value></data>
+  <data name="语言" xml:space="preserve"><value>Language:</value></data>
+  <data name="中文" xml:space="preserve"><value>简体中文</value></data>
+  <data name="英语" xml:space="preserve"><value>English</value></data>
+  <data name="语文" xml:space="preserve"><value>Chinese</value></data>
+  <data name="数学" xml:space="preserve"><value>Math</value></data>
+  <data name="每页显示" xml:space="preserve"><value>Rows per page:</value></data>
+  <data name="表格每页最多显示条数" xml:space="preserve"><value>(Maximum rows shown per table page)</value></data>
+  <data name="最少检查" xml:space="preserve"><value>Minimum practices:</value></data>
+  <data name="每个词条最少要检查的次数" xml:space="preserve"><value>(Minimum practice count for each entry)</value></data>
+  <data name="最近检查" xml:space="preserve"><value>Recent practices:</value></data>
+  <data name="最近检查全对次数" xml:space="preserve"><value>(Number of recent practices that must all be correct)</value></data>
+  <data name="数据文件" xml:space="preserve"><value>Data file:</value></data>
+  <data name="备份" xml:space="preserve"><value>Back up</value></data>
+  <data name="恢复" xml:space="preserve"><value>Restore</value></data>
+  <data name="保存" xml:space="preserve"><value>Save</value></data>
+  <data name="新增" xml:space="preserve"><value>Add</value></data>
+  <data name="更新" xml:space="preserve"><value>Edit</value></data>
+  <data name="删除" xml:space="preserve"><value>Delete</value></data>
+  <data name="查询" xml:space="preserve"><value>Search</value></data>
+  <data name="导入" xml:space="preserve"><value>Import</value></data>
+  <data name="导出" xml:space="preserve"><value>Export</value></data>
+  <data name="操作" xml:space="preserve"><value>Actions</value></data>
+  <data name="备注" xml:space="preserve"><value>Notes</value></data>
+  <data name="单元" xml:space="preserve"><value>Unit:</value></data>
+  <data name="来源" xml:space="preserve"><value>Source:</value></data>
+  <data name="词条" xml:space="preserve"><value>Entry</value></data>
+  <data name="词条库" xml:space="preserve"><value>Word Bank</value></data>
+  <data name="当前默认宝宝" xml:space="preserve"><value>Current default child</value></data>
+  <data name="当前默认教材" xml:space="preserve"><value>Current default curriculum</value></data>
+  <data name="设为默认" xml:space="preserve"><value>Set as default</value></data>
+  <data name="全部" xml:space="preserve"><value>All</value></data>
+  <data name="教材名" xml:space="preserve"><value>Curriculum</value></data>
+  <data name="教材信息" xml:space="preserve"><value>Curriculum details.</value></data>
+  <data name="教材版本" xml:space="preserve"><value>Curriculum version:</value></data>
+  <data name="管理课本" xml:space="preserve"><value>Manage books</value></data>
+  <data name="书名" xml:space="preserve"><value>Title</value></data>
+  <data name="版本" xml:space="preserve"><value>Version:</value></data>
+  <data name="出版年份" xml:space="preserve"><value>Publication year:</value></data>
+  <data name="审核年份" xml:space="preserve"><value>Edition year</value></data>
+  <data name="年级" xml:space="preserve"><value>Grade:</value></data>
+  <data name="学期" xml:space="preserve"><value>Semester:</value></data>
+  <data name="课本信息" xml:space="preserve"><value>Book details.</value></data>
+  <data name="昵称" xml:space="preserve"><value>Name:</value></data>
+  <data name="名字" xml:space="preserve"><value>Name</value></data>
+  <data name="入学" xml:space="preserve"><value>School year</value></data>
+  <data name="入学年龄" xml:space="preserve"><value>Starting school year:</value></data>
+  <data name="默认" xml:space="preserve"><value>Default:</value></data>
+  <data name="是" xml:space="preserve"><value>Yes</value></data>
+  <data name="否" xml:space="preserve"><value>No</value></data>
+  <data name="取消登记" xml:space="preserve"><value>Unregister</value></data>
+  <data name="管理宝宝说明" xml:space="preserve"><value>All registered children are listed here.</value></data>
+  <data name="管理课本说明" xml:space="preserve"><value>All registered books are listed here.</value></data>
+  <data name="管理教材说明" xml:space="preserve"><value>All registered curricula are listed here.</value></data>
+  <data name="空空如也" xml:space="preserve"><value>Nothing here yet</value></data>
+  <data name="详细描述" xml:space="preserve"><value>Details:</value></data>
+  <data name="词形扩展" xml:space="preserve"><value>Word forms:</value></data>
+  <data name="扩展类型例如过去式" xml:space="preserve"><value>Form type, e.g. past tense</value></data>
+  <data name="变化后的形式例如went" xml:space="preserve"><value>Changed form, e.g. went</value></data>
+  <data name="添加扩展" xml:space="preserve"><value>Add form</value></data>
+  <data name="重复处理" xml:space="preserve"><value>Duplicate handling:</value></data>
+  <data name="预览" xml:space="preserve"><value>Preview</value></data>
+  <data name="清除" xml:space="preserve"><value>Clear</value></data>
+  <data name="课程" xml:space="preserve"><value>Course:</value></data>
+  <data name="检查情况" xml:space="preserve"><value>Practice status</value></data>
+  <data name="记录时间" xml:space="preserve"><value>Date</value></data>
+  <data name="结果" xml:space="preserve"><value>Result</value></data>
+  <data name="正确" xml:space="preserve"><value>Correct</value></data>
+  <data name="错误" xml:space="preserve"><value>Incorrect</value></data>
+  <data name="听写" xml:space="preserve"><value>Practice</value></data>
+  <data name="准备" xml:space="preserve"><value>Select</value></data>
+  <data name="取消" xml:space="preserve"><value>Cancel</value></data>
+  <data name="去听写" xml:space="preserve"><value>Start practice</value></data>
+  <data name="帮助标题" xml:space="preserve"><value>Help</value></data>
+  <data name="加载中" xml:space="preserve"><value>Loading...</value></data>
+  <data name="第几页" xml:space="preserve"><value>Page {0} of {1}</value></data>
+  <data name="第几课" xml:space="preserve"><value>Lesson {0}</value></data>
+  <data name="切换语言后立即生效" xml:space="preserve"><value>Changes take effect immediately and are saved for your next session.</value></data>
+  <data name="确认删除检查记录" xml:space="preserve"><value>Delete practice record 'No={0}'?</value></data>
+  <data name="复制成功" xml:space="preserve"><value>Copied successfully.</value></data>
+  <data name="好好学习，劳逸结合。" xml:space="preserve"><value>Study well, and remember to take breaks.</value></data>
+  <data name="已选宝宝：" xml:space="preserve"><value>Selected child:</value></data>
+  <data name="已选教材：" xml:space="preserve"><value>Selected curriculum:</value></data>
+  <data name="更多设置" xml:space="preserve"><value>More settings</value></data>
+  <data name="首次使用指引" xml:space="preserve"><value>To get started,</value></data>
+  <data name="创建课本" xml:space="preserve"><value>add a book</value></data>
+  <data name="然后下载导入字库" xml:space="preserve"><value>, then download and import its word list</value></data>
+  <data name="创建教材" xml:space="preserve"><value>add a curriculum</value></data>
+  <data name="并管理课本即可开始使用" xml:space="preserve"><value>and manage its books to get started</value></data>
+  <data name="首次使用" xml:space="preserve"><value>Getting started</value></data>
+  <data name="恢复数据说明" xml:space="preserve"><value>Copy your backup file over the current data file. You may need to close the app first. Automatic restore will be supported in a future release.</value></data>
+  <data name="备份成功说明" xml:space="preserve"><value>All data was backed up to the Downloads folder. File: {0}</value></data>
+  <data name="添加新的课本。" xml:space="preserve"><value>Add a new book.</value></data>
+  <data name="修改课本信息。" xml:space="preserve"><value>Edit book details.</value></data>
+  <data name="添加新的教材。" xml:space="preserve"><value>Add a new curriculum.</value></data>
+  <data name="修改教材信息。" xml:space="preserve"><value>Edit curriculum details.</value></data>
+  <data name="添加新的宝宝。" xml:space="preserve"><value>Add a child.</value></data>
+  <data name="登记新的宝宝，以便管理学习记录。" xml:space="preserve"><value>Register a child to manage their learning records.</value></data>
+  <data name="修改宝宝信息。" xml:space="preserve"><value>Edit child details.</value></data>
+  <data name="字库" xml:space="preserve"><value>Word list</value></data>
+  <data name="空空如也，您可以" xml:space="preserve"><value>Nothing here yet. You can</value></data>
+  <data name="教材。" xml:space="preserve"><value>a curriculum.</value></data>
+  <data name="添加新的课本到当前教材里。" xml:space="preserve"><value>Add books to this curriculum.</value></data>
+  <data name="没有可以添加的课本。" xml:space="preserve"><value>No books are available to add.</value></data>
+  <data name="可添加课本列表" xml:space="preserve"><value>Available books:</value></data>
+  <data name="已添加课本列表" xml:space="preserve"><value>Added books:</value></data>
+  <data name="添加" xml:space="preserve"><value>Add</value></data>
+  <data name="您还没有添加任何课本。" xml:space="preserve"><value>You haven't added any books yet.</value></data>
+  <data name="为当前课本添加词条。" xml:space="preserve"><value>Add an entry to this book.</value></data>
+  <data name="为当前教材添加词条。" xml:space="preserve"><value>Add an entry to this curriculum.</value></data>
+  <data name="添加临时词条" xml:space="preserve"><value>Add a temporary entry to this book.</value></data>
+  <data name="查询当前课本中的词条" xml:space="preserve"><value>Search entries in the current book ({0}).</value></data>
+  <data name="关键字" xml:space="preserve"><value>Keyword:</value></data>
+  <data name="来源列" xml:space="preserve"><value>Source</value></data>
+  <data name="课本列" xml:space="preserve"><value>Book</value></data>
+  <data name="从字库下载并导入" xml:space="preserve"><value>Nothing here yet. Download a word list from:</value></data>
+  <data name="删除词条确认" xml:space="preserve"><value>Deleting this entry also removes its practice records. Delete '{0}'?</value></data>
+  <data name="取消登记宝宝确认" xml:space="preserve"><value>Unregistering this child removes related practice records. Unregister '{0}'?</value></data>
+  <data name="删除课本确认" xml:space="preserve"><value>Deleting this book also removes its entries and practice records. Delete '{0}'?</value></data>
+  <data name="删除教材确认" xml:space="preserve"><value>Delete this curriculum?</value></data>
+  <data name="新增听写信息。" xml:space="preserve"><value>Add practice records.</value></data>
+  <data name="复制词条换行" xml:space="preserve"><value>Copy entries (with line breaks)</value></data>
+  <data name="复制词条不换行" xml:space="preserve"><value>Copy entries (without line breaks)</value></data>
+  <data name="复制错误内容" xml:space="preserve"><value>Copy incorrect entries</value></data>
+  <data name="复制全部内容" xml:space="preserve"><value>Copy all entries</value></data>
+  <data name="主题" xml:space="preserve"><value>Entry</value></data>
+  <data name="默写正确" xml:space="preserve"><value>Correct from memory</value></data>
+  <data name="默写错误" xml:space="preserve"><value>Incorrect from memory</value></data>
+  <data name="记录为新的错字" xml:space="preserve"><value>Record as a new misspelled entry</value></data>
+  <data name="拼写错误" xml:space="preserve"><value>Spelling error</value></data>
+  <data name="翻译错误" xml:space="preserve"><value>Translation error</value></data>
+  <data name="文字错误" xml:space="preserve"><value>Text error</value></data>
+  <data name="拼音错误" xml:space="preserve"><value>Pinyin error</value></data>
+  <data name="这里显示当前词条的检查记录。" xml:space="preserve"><value>Practice records for this entry are shown here.</value></data>
+  <data name="更新词条" xml:space="preserve"><value>Edit entry &gt;&gt;</value></data>
+  <data name="检查记录详情确认删除" xml:space="preserve"><value>Delete practice record 'No={0}'?</value></data>
+  <data name="批量导入词条说明" xml:space="preserve"><value>Import entries in bulk for the current book ({0}).</value></data>
+  <data name="导入类型" xml:space="preserve"><value>Import type:</value></data>
+  <data name="从PDF复制后导入" xml:space="preserve"><value>Import copied content from PDF</value></data>
+  <data name="从Excel复制后导入" xml:space="preserve"><value>Import copied content from Excel</value></data>
+  <data name="选填内容" xml:space="preserve"><value>Optional</value></data>
+  <data name="批量导入检查记录说明" xml:space="preserve"><value>Import practice records for entries in the current curriculum.</value></data>
+  <data name="处理方式" xml:space="preserve"><value>Handling:</value></data>
+  <data name="词条检查记录" xml:space="preserve"><value>Practice records for entries:</value></data>
+  <data name="下载PDF说明" xml:space="preserve"><value>Download a book from the National Smart Education Platform (https://basic.smartedu.cn/) and copy its vocabulary list. For Excel/CSV, each row contains: optional index, word, pronunciation/translation, optional details, unit, and course.</value></data>
+  <data name="检查记录导入说明" xml:space="preserve"><value>Paste rows copied from Excel/CSV. Each row contains: optional index, entry, pronunciation/translation, optional details, unit, optional course, then one or more result values (1 = correct; other numbers = incorrect).</value></data>
+  <data name="字数" xml:space="preserve"><value>Details (length)</value></data>
+  <data name="批量导出检查记录说明" xml:space="preserve"><value>Export practice records for entries in bulk.</value></data>
+  <data name="导出结果说明" xml:space="preserve"><value>Exported content appears here and can be pasted into Excel or a CSV file.</value></data>
+  <data name="拼音工具标题" xml:space="preserve"><value>Convert text to pinyin:</value></data>
+  <data name="下载字库标题" xml:space="preserve"><value>Download word lists:</value></data>
+  <data name="字库导入标题" xml:space="preserve"><value>Import word lists:</value></data>
+  <data name="语音工具标题" xml:space="preserve"><value>Text to speech:</value></data>
+  <data name="帮助页面说明" xml:space="preserve"><value>Help information</value></data>
+  <data name="课本平台说明" xml:space="preserve"><value>Primary and secondary school textbooks are available from</value></data>
+  <data name="平台课本说明" xml:space="preserve"><value>. The platform provides textbook PDFs. Copy the vocabulary list from a downloaded book and import it into this app.</value></data>
+  <data name="国家中小学智慧教育平台" xml:space="preserve"><value>National Smart Education Platform</value></data>
+  <data name="拼音转换说明" xml:space="preserve"><value>You can also use</value></data>
+  <data name="汉字转拼音工具" xml:space="preserve"><value>Chinese-to-pinyin</value></data>
+  <data name="拼音转换结束" xml:space="preserve"><value>and Excel to convert and import the content yourself.</value></data>
+  <data name="文字转拼音工具" xml:space="preserve"><value>Text to Pinyin (ChineseConverter)</value></data>
+  <data name="语音合成说明" xml:space="preserve"><value>After selecting the words for practice, click</value></data>
+  <data name="复制词语按钮" xml:space="preserve"><value>Copy words</value></data>
+  <data name="语音合成后续说明" xml:space="preserve"><value>to copy them to the clipboard. Then use this website to generate standard pronunciations, download them, and share them with the learner:</value></data>
+  <data name="文字转语音工具" xml:space="preserve"><value>Text to speech</value></data>
+  <data name="当前版本" xml:space="preserve"><value>Version: 2.0.9</value></data>
+  <data name="没有检查" xml:space="preserve"><value>Not practiced</value></data>
+  <data name="检查全对" xml:space="preserve"><value>All correct</value></data>
+  <data name="上次错误" xml:space="preserve"><value>Last attempt incorrect</value></data>
+  <data name="部分错误" xml:space="preserve"><value>Some incorrect</value></data>
+  <data name="较少检查（可在设置里修改）" xml:space="preserve"><value>Practiced fewer times (configurable in Settings)</value></data>
+  <data name="最近有错（可在设置里修改）" xml:space="preserve"><value>Recent errors (configurable in Settings)</value></data>
+  <data name="跳过" xml:space="preserve"><value>Skip</value></data>
+  <data name="覆盖" xml:space="preserve"><value>Overwrite</value></data>
+  <data name="追加" xml:space="preserve"><value>Append</value></data>
+  <data name="一年级" xml:space="preserve"><value>Grade 1</value></data>
+  <data name="二年级" xml:space="preserve"><value>Grade 2</value></data>
+  <data name="三年级" xml:space="preserve"><value>Grade 3</value></data>
+  <data name="四年级" xml:space="preserve"><value>Grade 4</value></data>
+  <data name="五年级" xml:space="preserve"><value>Grade 5</value></data>
+  <data name="六年级" xml:space="preserve"><value>Grade 6</value></data>
+  <data name="七年级" xml:space="preserve"><value>Grade 7</value></data>
+  <data name="八年级" xml:space="preserve"><value>Grade 8</value></data>
+  <data name="九年级" xml:space="preserve"><value>Grade 9</value></data>
+  <data name="人教版" xml:space="preserve"><value>People's Education Press</value></data>
+  <data name="苏教版" xml:space="preserve"><value>Jiangsu Education Press</value></data>
+  <data name="上学期" xml:space="preserve"><value>First semester</value></data>
+  <data name="下学期" xml:space="preserve"><value>Second semester</value></data>
+  <data name="词语表" xml:space="preserve"><value>Vocabulary list</value></data>
+  <data name="背诵" xml:space="preserve"><value>Memorization</value></data>
+  <data name="扩展词汇" xml:space="preserve"><value>Extended vocabulary</value></data>
+  <data name="知识点" xml:space="preserve"><value>Key concepts</value></data>
+  <data name="生字表" xml:space="preserve"><value>New characters</value></data>
+  <data name="其它" xml:space="preserve"><value>Other</value></data>
+  <data name="宝宝信息" xml:space="preserve"><value>Child details.</value></data>
+  <data name="查询词条及其检查记录。" xml:space="preserve"><value>Search entries and their practice records.</value></data>
+  <data name="准备听写本页" xml:space="preserve"><value>Prepare this page for dictation</value></data>
+  <data name="取消听写本页" xml:space="preserve"><value>Clear dictation selection on this page</value></data>
+  <data name="字库转换请求开头" xml:space="preserve"><value>Please provide the textbook</value></data>
+  <data name="出版商和出版年月" xml:space="preserve"><value>publisher and publication date</value></data>
+  <data name="字库转换请求科目" xml:space="preserve"><value> and</value></data>
+  <data name="科目" xml:space="preserve"><value>subject</value></data>
+  <data name="字库转换请求后缀" xml:space="preserve"><value>, then add me on WeChat:</value></data>
+  <data name="字库转换请求结尾" xml:space="preserve"><value>. I can then convert it to a word list supported by this app.</value></data>
+  <data name="Windows应用" xml:space="preserve"><value>Windows &gt;&gt;</value></data>
+  <data name="天气" xml:space="preserve"><value>Weather</value></data>
+  <data name="该组件演示数据展示。" xml:space="preserve"><value>This component demonstrates displaying data.</value></data>
+  <data name="日期" xml:space="preserve"><value>Date</value></data>
+  <data name="温度摄氏度" xml:space="preserve"><value>Temperature (°C)</value></data>
+  <data name="温度华氏度" xml:space="preserve"><value>Temperature (°F)</value></data>
+  <data name="摘要" xml:space="preserve"><value>Summary</value></data>
+  <data name="Freezing" xml:space="preserve"><value>Freezing</value></data>
+  <data name="Bracing" xml:space="preserve"><value>Bracing</value></data>
+  <data name="Chilly" xml:space="preserve"><value>Chilly</value></data>
+  <data name="Cool" xml:space="preserve"><value>Cool</value></data>
+  <data name="Mild" xml:space="preserve"><value>Mild</value></data>
+  <data name="Warm" xml:space="preserve"><value>Warm</value></data>
+  <data name="Balmy" xml:space="preserve"><value>Balmy</value></data>
+  <data name="Hot" xml:space="preserve"><value>Hot</value></data>
+  <data name="Sweltering" xml:space="preserve"><value>Sweltering</value></data>
+  <data name="Scorching" xml:space="preserve"><value>Scorching</value></data>
+</root>

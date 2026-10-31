@@ -5,9 +5,8 @@
 @inject IBookCategoryService service
 @inject NavigationManager navigationManager
 
-<h3>教材</h3>
-
-<p>修改教材信息。</p>
+<h3>@T["教材"]</h3>
+<p>@T["修改教材信息。"]</p>
 
 <hr class="hr" />
 
@@ -16,13 +15,13 @@
     <ValidationSummary />
     <div class="gy-5">
         <div class="col-md-5">
-            <label class="form-label">教材版本：</label>
+            <label class="form-label">@T["教材版本"]</label>
             <InputText @bind-Value="Model!.CategoryName" class="form-control rounded" />
         </div>
     </div>
     <div class="col-md-5">
         <label class="form-label"></label>
-        <button type="submit" class="form-control btn btn-outline-primary" data-mdb-ripple-init>保存</button>
+        <button type="submit" class="form-control btn btn-outline-primary" data-mdb-ripple-init>@T["保存"]</button>
     </div>
 </EditForm>
 

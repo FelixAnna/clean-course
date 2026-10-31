@@ -5,9 +5,8 @@
 @inject IKidService service
 @inject NavigationManager navigationManager
 
-<h3>宝宝</h3>
-
-<p>修改宝宝信息。</p>
+<h3>@T["宝宝"]</h3>
+<p>@T["修改宝宝信息。"]</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="UpdateKid">
     <DataAnnotationsValidator />
@@ -16,11 +15,11 @@
         <tbody>
             <tr class="form-group">
                 <td class="m-2">
-                    <label class="form-label">昵称：</label>
+                    <label class="form-label">@T["昵称"]</label>
                     <InputText @bind-Value="Model!.Name" class="form-control rounded" />
                 </td>
                 <td class="m-2">
-                    <label class="form-label">入学年龄：</label>
+                    <label class="form-label">@T["入学年龄"]</label>
                     <select @bind="Model.StartSchoolYear" class="form-select">
                         @foreach (var year in Years)
                         {
@@ -31,7 +30,7 @@
             </tr>
         </tbody>
     </table>
-    <button type="submit" class="btn btn-primary my-2">保存</button>
+    <button type="submit" class="btn btn-primary my-2">@T["保存"]</button>
 </EditForm>
 
 @code {

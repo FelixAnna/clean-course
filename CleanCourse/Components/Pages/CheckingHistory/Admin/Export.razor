@@ -13,9 +13,8 @@
 @inject NavigationManager navigationManager
 
 
-<h3>检查记录</h3>
-
-<p>批量导出词条的检查记录。</p>
+<h3>@T["检查记录"]</h3>
+<p>@T["批量导出检查记录说明"]</p>
 <hr class="hr" />
 <EditForm Model="@Model" OnValidSubmit="@Submit" FormName="ExportHistory">
     <DataAnnotationsValidator />
@@ -25,7 +24,7 @@
         <tr class="form-group">
             <td class="m-2">
                 <div class="flex-row">
-                    <label class="form-label">课程：</label>
+                    <label class="form-label">@T["课程"]</label>
                     <select @bind="Model.BookId" class="form-select small">
                         @foreach (var course in Courses)
                         {
@@ -37,14 +36,14 @@
             <td>
                 <label class="form-label"></label>
                 <button type="submit" class="form-control btn btn-outline-primary m-1" data-mdb-ripple-init>
-                    保存
+                    @T["保存"]
                 </button>
             </td>
         </tr>
     </table>
     <div class="form-group">
-        <label class="form-label">词条的检查记录：</label>
-        <textarea @bind="Content" class="form-control rounded" rows="8" cols="100" placeholder="导出的结果会在这里，可以直接粘贴到Excel 或 CSV文件里" />
+        <label class="form-label">@T["词条检查记录"]</label>
+        <textarea @bind="Content" class="form-control rounded" rows="8" cols="100" placeholder="@T["导出结果说明"]" />
     </div>
 </EditForm>
 @code {
@@ -70,7 +69,7 @@
 
         var mappings = await mappingService.GetByBookCategoryIdAsync(Model.BookCategoryId);
         Courses = mappings.LinkedBooks.Distinct().ToDictionary(x => x.BookId, y => y.FriendlyShortName);
-        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, "全部")).ToDictionary();
+        Courses = Courses.Prepend(new KeyValuePair<int, string>(-1, T["全部"].Value)).ToDictionary();
     }
 
     private async Task Submit()

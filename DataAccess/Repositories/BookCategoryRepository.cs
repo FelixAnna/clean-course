@@ -69,12 +69,16 @@ public class BookCategoryRepository(AbstractCourseContext courseContext) : IBook
     public async Task<bool> SetDefaultAsync(int categoryId)
     {
         var allCategories = await courseContext.BookCategories.ToArrayAsync();
+        if (allCategories.All(category => category.Id != categoryId))
+        {
+            return false;
+        }
+
         foreach (var category in allCategories)
         {
             category.Selected = category.Id == categoryId;
         }
 
-        courseContext.BookCategories.UpdateRange(allCategories);
         await courseContext.SaveChangesAsync();
         return true;
     }

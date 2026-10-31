@@ -6,9 +6,8 @@
 @inject AppState appState
 @inject NavigationManager navigationManager
 
-<h3>宝宝</h3>
-
-<p>宝宝信息。</p>
+<h3>@T["宝宝"]</h3>
+<p>@T["宝宝信息"]</p>
 
 <hr class="hr" />
 
@@ -18,30 +17,30 @@
         <span class="text-primary">@Model.Id</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">昵称：</label>
+        <label class="form-label">@T["昵称"]</label>
         <span class="text-primary">@Model.Name</span>
     </div>
     <div class="col-md-5">
-        <label class="form-label">默认：</label>
+        <label class="form-label">@T["默认"]</label>
         @if (Model.Selected == true)
         {
-            <span class="default-dot default-dot-kid" title="当前默认宝宝" aria-label="当前默认宝宝"></span>
+            <span class="default-dot default-dot-kid" title="@T["当前默认宝宝"]" aria-label="@T["当前默认宝宝"]"></span>
         }
         else
         {
-            <span class="text-muted">否</span>
+            <span class="text-muted">@T["否"]</span>
         }
     </div>
     <div class="col-md-5">
-        <a href="/kids/@(Model.Id)/update" class="btn btn-outline-primary">更新</a>
+        <a href="/kids/@(Model.Id)/update" class="btn btn-outline-primary">@T["更新"]</a>
         
         @if (Model.Selected != true)
         {
             <button type="button" @onclick="@(e => Select(Model.Id, Model.Name))" class="btn btn-set-default m-1">
-                设为默认
+                @T["设为默认"]
             </button>
             <button @onclick="@(e => Delete(Model.Id, Model.Name))" class="btn btn-outline-danger m-1">
-                取消登记
+                @T["取消登记"]
             </button>
         }
     </div>
@@ -67,7 +66,7 @@
 
     private async Task Delete(int id, string name)
     {
-        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"取消登记会清除关联词条的检查记录，您确定要为宝宝： '{name}' 取消登记吗?"))
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", T["取消登记宝宝确认", name].Value))
             return;
 
         if (await service.UnRegisterKidAsync(id))

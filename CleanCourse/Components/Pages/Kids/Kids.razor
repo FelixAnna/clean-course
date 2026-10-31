@@ -5,11 +5,11 @@
 @inject IJSRuntime JSRuntime
 @inject AppState appState
 
-<h3>宝宝</h3>
+<h3>@T["宝宝"]</h3>
 
 <p>
-    这里显示所有已登记的宝宝信息。
-    <a href="/kids/add" class="btn btn-outline-primary" >新增</a>
+    @T["管理宝宝说明"]
+    <a href="/kids/add" class="btn btn-outline-primary">@T["新增"]</a>
 </p>
 <hr class="hr" />
 @if (result == null)
@@ -22,9 +22,9 @@ else
         <thead class="thead-light">
             <tr>
                 <th>#</th>
-                <th>名字</th>
-                <th>入学</th>
-                <th>操作</th>
+                <th>@T["名字"]</th>
+                <th>@T["入学"]</th>
+                <th>@T["操作"]</th>
             </tr>
         </thead>
         <tbody>
@@ -40,16 +40,16 @@ else
                         <a href="/kids/@(kid.Id)/info">@kid.Name</a>
                         @if (kid.Selected == true)
                         {
-                            <span class="default-dot default-dot-kid" title="当前默认宝宝" aria-label="当前默认宝宝"></span>
+                            <span class="default-dot default-dot-kid" title="@T["当前默认宝宝"]" aria-label="@T["当前默认宝宝"]"></span>
                         }
                     </td>
                     <td>@kid.StartSchoolYear</td>
                     <td>
-                        <a href="/kids/@(kid.Id)/update" class="btn btn-outline-primary m-1">更新</a>
+                        <a href="/kids/@(kid.Id)/update" class="btn btn-outline-primary m-1">@T["更新"]</a>
                         @if (kid.Selected != true)
                         {
                             <button type="button" @onclick="@(e => Select(kid.Id, kid.Name))" class="btn btn-set-default m-1">
-                                设为默认
+                                @T["设为默认"]
                             </button>
                         }
                     </td>

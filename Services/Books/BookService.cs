@@ -9,16 +9,8 @@ public class BookService(IBookRepository repository) : IBookService
 
     public async Task<BookModel> AddAsync(AddBookModel model)
     {
-        try
-        {
-            var result = await repository.AddAsync(model);
-            return new BookModel(result);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-            throw;
-        }
+        var result = await repository.AddAsync(model);
+        return new BookModel(result);
     }
 
     public async Task<bool> DeleteAsync(int bookId)

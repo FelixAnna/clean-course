@@ -1,14 +1,38 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@inject AppLocalization Localization
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<CascadingValue Value="Localization.CultureName">
+    <div class="page" @key="Localization.CultureName">
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+
+        <main>
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
     </div>
+</CascadingValue>
 
-    <main>
+@code {
+    protected override void OnInitialized()
+    {
+        Localization.CultureChanged += OnCultureChanged;
+    }
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+    private void OnCultureChanged()
+    {
+        _ = InvokeAsync(() =>
+        {
+            Localization.ApplyCurrentCulture();
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        Localization.CultureChanged -= OnCultureChanged;
+    }
+}

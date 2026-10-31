@@ -10,9 +10,9 @@
 @inject AppState appState
 @inject NavigationManager navigationManager
 
-<h3>听写</h3>
+<h3>@T["听写"]</h3>
 
-<p>新增听写信息。</p>
+<p>@T["新增听写信息。"]</p>
 <hr class="hr" />
 <table class="row gy-3 pe-1">
     <thead>
@@ -25,14 +25,14 @@
         <tr class="form-group">
             <td class="col-md-4">
                 <div >
-                    <label class="form-label">宝宝：</label>
+                    <label class="form-label">@T["宝宝"]</label>
                     <span class="text-primary">@appState.KidName</span>
                 </div>
             </td>
             <td class="col-md-4">
                 <div>
                     <label class="form-label">
-                        教材：
+                        @T["教材"]
                     </label>
                     <span class="text-primary"><a href="/bookCategories/@(appState.BookCategoryId)/info">@appState.BookCategoryFullName</a></span>
                 </div>
@@ -44,12 +44,12 @@
                 <td class="col-md-4">
                     <div>
                         <button @onclick="@(e => CopyWords())" class="btn btn-info m-2 btn-sm">
-                            复制词条(换行)
+                            @T["复制词条换行"]
                         </button>
                     </div>
                     <div>
                         <button @onclick="@(e => CopyToWords())" class="btn btn-info m-2 btn-sm">
-                            复制词条(不换行)
+                            @T["复制词条不换行"]
                         </button>
                     </div>
                 </td>
@@ -58,13 +58,13 @@
                     {
                         <div>
                             <button @onclick="@(e => CopyErrorWords())" class="btn btn-secondary m-2 btn-sm">
-                                复制错误内容
+                                @T["复制错误内容"]
                             </button>
                         </div>
                     } else {
                         <div>
                             <button @onclick="@(e => CopyAll())" class="btn btn-secondary m-2 btn-sm">
-                                复制全部内容
+                                @T["复制全部内容"]
                             </button>
                         </div>
                     }
@@ -76,7 +76,7 @@
 <hr class="hr" />
 @if (result == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>@T["加载中"]</em></p>
 }
 else
 {
@@ -86,10 +86,10 @@ else
         <thead class="thead-light">
             <tr>
                 <th class="w-auto">#</th>
-                <th class="w-auto">主题</th>
-                <th class="w-auto">备注</th>
-                <th class="w-auto">课程/单元</th>
-                <th class="w-auto">检查情况</th>
+                <th class="w-auto">@T["主题"]</th>
+                <th class="w-auto">@T["备注"]</th>
+                <th class="w-auto">@T["课程"]/@T["单元"]</th>
+                <th class="w-auto">@T["检查情况"]</th>
                 <th class="w-auto"></th>
             </tr>
         </thead>
@@ -119,46 +119,46 @@ else
                     @if (!checkedWords.Contains(word.WordId))
                         {
                             <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Correct))" class="btn btn-success mx-2 btn-sm">
-                                正确
+                                @T["正确"]
                             </button>
                             <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Incorrect))" class="btn btn-warning mx-2 btn-sm">
-                                错误
+                                @T["错误"]
                             </button>
 
                             if (word.Source.Contains("背诵"))
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.WrittingCorrect))" class="btn btn-success mx-2 btn-sm">
-                                    默写正确
+                                    @T["默写正确"]
                                 </button>
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.WrittingIncorrect))" class="btn btn-warning mx-2 btn-sm">
-                                    默写错误
+                                    @T["默写错误"]
                                 </button>
                             }
 
                             @if(word.IsLongText() && !word.IsMath())
                             {
-                                <a class="btn btn-danger mx-3 btn-sm" href="/books/@(word.BookId)/words/@(word.WordId)/addhoc">记录为新的错字</a>
+                                <a class="btn btn-danger mx-3 btn-sm" href="/books/@(word.BookId)/words/@(word.WordId)/addhoc">@T["记录为新的错字"]</a>
                             }else if (word.IsEnglish())
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Writing))" class="btn btn-danger mx-3 btn-sm">
-                                    拼写 错误
+                                    @T["拼写错误"]
                                 </button>
 
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Translation))" class="btn btn-danger mx-1 btn-sm">
-                                    翻译 错误
+                                    @T["翻译错误"]
                                 </button>
                             }
                             else if (word.IsChinese())
                             {
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Word))" class="btn btn-danger mx-3 btn-sm">
-                                    文字 错误
+                                    @T["文字错误"]
                                 </button>
                                 <button @onclick="@(e => SaveCheckingStatus(word.WordId, CheckingRemark.Pinyin))" class="btn btn-danger mx-1 btn-sm">
-                                    拼音 错误
+                                    @T["拼音错误"]
                                 </button>
                             }
                             <button @onclick="@(e => CancelChecking(word.WordId))" class="btn btn-secondary mx-3 btn-sm">
-                                取消
+                                @T["取消"]
                             </button>
                         }
                     </td>
@@ -275,7 +275,7 @@ else
         }
 
         await Clipboard.SetTextAsync(contentBuilder.ToString());
-        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+        await JSRuntime.InvokeAsync<object>("alert", T["复制成功"].Value);
     }
 
     private async Task CopyWords()
@@ -299,7 +299,7 @@ else
         }
 
         await Clipboard.SetTextAsync(contentBuilder.ToString());
-        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+        await JSRuntime.InvokeAsync<object>("alert", T["复制成功"].Value);
     }
 
     private async Task CopyAll()
@@ -317,7 +317,7 @@ else
         }
 
         await Clipboard.SetTextAsync(contentBuilder.ToString());
-        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+        await JSRuntime.InvokeAsync<object>("alert", T["复制成功"].Value);
     }
 
     private async Task CopyErrorWords()
@@ -336,6 +336,6 @@ else
         }
 
         await Clipboard.SetTextAsync(contentBuilder.ToString());
-        await JSRuntime.InvokeAsync<object>("alert", "复制成功。");
+        await JSRuntime.InvokeAsync<object>("alert", T["复制成功"].Value);
     }
 }
